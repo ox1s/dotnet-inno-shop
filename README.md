@@ -1,8 +1,8 @@
 # InnoShop
 
-<img src="images/architecture.png" alt="Architecture" align="center" height="150">
+<img src="images/architecture.png" alt="Architecture" align="center" width="700">
 
-<img src="images/entities.png" alt="Domain" align="center" height="300">
+<img src="images/entities.png" alt="Domain" align="center" width="700">
 
 
 # ТЗ

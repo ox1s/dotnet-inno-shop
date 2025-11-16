@@ -1,6 +1,6 @@
 # InnoShop
 
-<img src="images/Architecture.png" alt="Architecture" align="center" width="700">
+<img src="images/architecture.png" alt="Architecture" align="center" width="700">
 
 <img src="images/UI.png" alt="UI" align="center" width="700">
 <img src="images/ProductManagement.png" alt="ProductManagement" align="center" width="700">

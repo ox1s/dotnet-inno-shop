@@ -1,10 +1,13 @@
 # InnoShop
 
-<img src="images/architecture.png" alt="Architecture" align="center" width="700">
+<img src="images/Architecture.png" alt="Architecture" align="center" width="700">
 
-<img src="images/entities.png" alt="Domain" align="center" width="700">
+<img src="images/UI.png" alt="UI" align="center" width="700">
+<img src="images/ProductManagement.png" alt="ProductManagement" align="center" width="700">
+<img src="images/UserManagement.png" alt="UserManagement" align="center" width="700">
 
-
+Система для Userов выглядит так
+<img src="images/UserReq.png" alt="UserReq" align="center" width="700">
 # ТЗ
 ## 1. Введение
    Проект "Inno_Shop" представляет собой систему, состоящую из двух микросервисов, предназначенных для управления пользователями и их продуктами. Эти микросервисы должны быть разработаны с использованием ASP.NET Core и взаимодействовать через API.

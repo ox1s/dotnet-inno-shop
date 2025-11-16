@@ -2,8 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\InnoShop",
-    "\\InnoShop\\src"
+    "\\InnoShop\\src",
+    "\\InnoShop\\src\\InnoShop.UserManagement",
+    "\\InnoShop\\src\\InnoShop.UserManagement\\src",
+    "\\InnoShop\\src\\InnoShop.UserManagement\\src\\UserManagement.Domain"
   ],
-  "SelectedNode": "\\InnoShop\\InnoShop.slnx",
+  "SelectedNode": "\\InnoShop\\src\\InnoShop.UserManagement\\src\\UserManagement.Domain\\UserProfileErrors.cs",
   "PreviewInSolutionExplorer": false
 }

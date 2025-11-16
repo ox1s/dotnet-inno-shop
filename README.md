@@ -1,3 +1,11 @@
+# InnoShop
+
+<img src="images/architecture.png" alt="Architecture" align="center" height="150">
+
+<img src="images/entities.png" alt="Domain" align="center" height="300">
+
+
+# ТЗ
 ## 1. Введение
    Проект "Inno_Shop" представляет собой систему, состоящую из двух микросервисов, предназначенных для управления пользователями и их продуктами. Эти микросервисы должны быть разработаны с использованием ASP.NET Core и взаимодействовать через API.
 
@@ -56,3 +64,5 @@
 
 
 ## 5. Будет БОЛЬШИМ плюсом наличие FrontEnd
+
+

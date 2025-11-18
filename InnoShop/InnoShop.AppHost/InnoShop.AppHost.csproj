@@ -1,0 +1,18 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.0.0">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>b7edbfe4-9e37-42b8-99a2-f3a0bc37cb2f</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Docker" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="13.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InnoShop.Users\src\InnoShop.Users.Api\InnoShop.Users.Api.csproj" />
+    <ProjectReference Include="..\InnoShop.Products\src\InnoShop.Products.Api\InnoShop.Products.Api.csproj" />
+  </ItemGroup>
+</Project>

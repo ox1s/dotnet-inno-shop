@@ -1,6 +1,0 @@
-<Solution>
-  <Project Path="src/InnoShop.AppHost/InnoShop.AppHost.csproj" />
-  <Project Path="src/InnoShop.ServiceDefaults/InnoShop.ServiceDefaults.csproj" Id="ab160ae5-5898-4f08-9367-231f9d07c825" />
-  <Project Path="src/InnoShop.UserManagement/src/UserManagement.Domain.UnitTests/UserManagement.Domain.UnitTests.csproj" />
-  <Project Path="src/InnoShop.UserManagement/src/UserManagement.Domain/UserManagement.Domain.csproj" />
-</Solution>

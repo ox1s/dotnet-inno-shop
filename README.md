@@ -17,7 +17,7 @@
 Проект реализован с использованием **.NET Aspire** для оркестрации. Система состоит из двух независимых микросервисов, общающихся асинхронно через RabbitMQ.
 
 <div align="center">
-  <img src="images/Architecture.png" alt="Architecture Diagram" width="800">
+  <img src="images/architecture.png" alt="Architecture Diagram" width="800">
 </div>
 
 ---
@@ -34,7 +34,7 @@
 
 <div style="width: 100%;">
   <div style="width: 50%; float: left;">Структура агрегатов и сущностей для каждого микросервиса:</div>
-  <div style="width: 50%; float: right;"><img src="images/UserManagementDomain.png" alt="User Management Domain" width="700"></div>
+  <div style="width: 50%; float: right;"><img src="images/Domain.png" alt="User Management Domain" width="700"></div>
 </div>
 
 ### 👤 User Management Service

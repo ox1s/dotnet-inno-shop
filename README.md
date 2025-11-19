@@ -32,9 +32,16 @@
 
 ## 🧩 Проектирование Домена (DDD)
 
-<div style="width: 100%;">
-  <div style="width: 50%; float: left;">Структура агрегатов и сущностей для каждого микросервиса:</div>
-  <div style="width: 50%; float: right;"><img src="images/Domain.png" alt="User Management Domain" width="700"></div>
+<div style="display: flex; align-items: flex-start; width: 100%; gap: 20px;">
+
+  <div style="flex: 1;">
+    <h2>Структура агрегатов и сущностей для каждого микросервиса:</h2>
+  </div>
+
+  <div style="flex: 1; text-align: right;">
+    <img src="images/Domain.png" alt="Domain Structure" style="max-width: 100%; height: auto;">
+  </div>
+
 </div>
 
 ### 👤 User Management Service

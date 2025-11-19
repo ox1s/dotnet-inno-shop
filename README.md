@@ -32,16 +32,26 @@
 
 ## 🧩 Проектирование Домена (DDD)
 
-<div style="display: flex; align-items: flex-start; width: 100%; gap: 20px;">
-  <div style="flex: 1;">
-    <br>Структура агрегатов и сущностей для каждого микросервиса:<br>
+<div style="
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 20px;
+  flex-wrap: nowrap;
+">
+  <div style="flex: 1; min-width: 200px;">
+    <h3>Структура агрегатов и сущностей для каждого микросервиса:</h3>
   </div>
-  <div style="flex: 1; text-align: right;">
+
+  <div style="flex: 1; min-width: 300px; text-align: right;">
     <img src="images/Domain.png" alt="Domain Structure" style="max-width: 100%; height: auto;">
   </div>
+
 </div>
 
-### 👤 User Management Service
+#### 👤 User Management Service
 
 Отвечает за аутентификацию, профили пользователей и рейтинговую систему.
 
@@ -49,7 +59,7 @@
   <img src="images/UserManagementDomain.png" alt="User Management Domain" width="700">
 </div>
 
-### 📦 Product Management Service
+#### 📦 Product Management Service
 
 Отвечает за каталог товаров, категории, фильтрацию и избранное. Хранит реплику данных продавца для быстрого чтения.
 

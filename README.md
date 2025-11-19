@@ -32,9 +32,13 @@
 
 ## 🧩 Проектирование Домена (DDD)
 
-Структура агрегатов и сущностей для каждого микросервиса:
+<div style="width: 100%;">
+  <div style="width: 50%; float: left;">Структура агрегатов и сущностей для каждого микросервиса:</div>
+  <div style="width: 50%; float: right;"><img src="images/UserManagementDomain.png" alt="User Management Domain" width="700"></div>
+</div>
 
 ### 👤 User Management Service
+
 Отвечает за аутентификацию, профили пользователей и рейтинговую систему.
 
 <div align="center">
@@ -42,6 +46,7 @@
 </div>
 
 ### 📦 Product Management Service
+
 Отвечает за каталог товаров, категории, фильтрацию и избранное. Хранит реплику данных продавца для быстрого чтения.
 
 <div align="center">
@@ -52,14 +57,14 @@
 
 ## 🚀 Технический стек
 
-*   **Backend:** ASP.NET Core 10 Web API
-*   **Orchestration:** .NET Aspire
-*   **Communication:** REST (Sync), RabbitMQ (Async/Event-Driven)
-*   **Database:** PostgreSQL (Database-per-service)
-*   **Caching:** Redis
-*   **Storage:** MinIO (S3 compatible) for images
-*   **Mail:** MailKit + Mailpit (SMTP testing)
-*   **Architecture:** Clean Architecture, CQRS (MediatR), DDD
+- **Backend:** ASP.NET Core 10 Web API
+- **Orchestration:** .NET Aspire
+- **Communication:** REST (Sync), RabbitMQ (Async/Event-Driven)
+- **Database:** PostgreSQL (Database-per-service)
+- **Caching:** Redis
+- **Storage:** MinIO (S3 compatible) for images
+- **Mail:** MailKit + Mailpit (SMTP testing)
+- **Architecture:** Clean Architecture, CQRS (MediatR), DDD
 
 ## 📄 Техническое задание
 

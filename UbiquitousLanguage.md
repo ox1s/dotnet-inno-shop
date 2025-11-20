@@ -51,10 +51,12 @@
     *   **Ownership:** Owned by a single `User` (the Seller).
     *   **Visibility:** Can be `Visible` or `Hidden` (Soft Deleted).
     *   **Data:** Contains a `SellerSnapshot` to display seller info quickly.
+    *   **Audit:** Must track the Creation Date (`CreatedAt`) to sort items by novelty. 
 *   <span>&#x1F1F7;&#x1F1FA;</span> Предмет, выставленный на продажу (Корень Агрегата).
     *   **Владение:** Принадлежит одному `Пользователю` (Продавцу).
     *   **Видимость:** Может быть `Видимым` или `Скрытым` (Мягкое удаление).
     *   **Данные:** Содержит `Слепок Продавца` для быстрого отображения информации о владельце.
+    *   **Аудит:** Необходимо отслеживать дату создания (`CreatedAt`) для сортировки элементов по новизне.
 
 ### **SellerSnapshot / Слепок Продавца**
 *   <span>&#x1F1FA;&#x1F1F8;</span> A read-only copy (Value Object) of the Seller's essential info (Name, Avatar, Rating) stored directly within the `Product`.

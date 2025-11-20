@@ -1,6 +1,6 @@
 using ErrorOr;
 
-namespace InnoShop.Users.Domain.Users;
+namespace InnoShop.Users.Domain.UserAggregate;
 
 public record Email
 {

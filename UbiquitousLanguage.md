@@ -1,47 +1,79 @@
-# 📖 Ubiquitous Language - InnoShop Project
+# 📖 Ubiquitous Language / Единый Язык
 
+## 👤 User Context (User Management)
 
-### **User**
+### **User / Пользователь**
+*   <span>&#x1F1FA;&#x1F1F8;</span> A registered person in the system. The core entity (Aggregate Root).
+    *   **Identity:** Uniquely identified by an ID.
+    *   **Role:** Can be a standard `User` or an `Admin`.
+    *   **State:** Can be `Active` or `Deactivated` (Banned).
+    *   **Capabilities:** Can create `Products` (only if they have a `UserProfile`) and write `Reviews`.
+*   <span>&#x1F1F7;&#x1F1FA;</span> Зарегистрированный человек в системе. Основная сущность (Корень Агрегата).
+    *   **Идентификация:** Уникально определяется по ID.
+    *   **Роль:** Может быть обычным `Пользователем` или `Админом`.
+    *   **Состояние:** Может быть `Активен` или `Деактивирован` (Забанен).
+    *   **Возможности:** Может создавать `Продукты` (только при наличии `Профиля`) и писать `Отзывы`.
 
-*   A registered person in the system. A `User` is the core entity that interacts with the application
-    *   Can have a role, such as a customer or an `Admin`
-    *   Can have only one `UserProfile`
-    *   Can create `Products` and write `Reviews`
+### **UserProfile / Профиль Пользователя**
+*   <span>&#x1F1FA;&#x1F1F8;</span> The public face of a `User`. Contains detailed information (Avatar, Phone, Bio) visible to other buyers.
+    *   **Requirement:** A `User` **must** create a `UserProfile` before they can post any `Products`.
+    *   **Relationship:** Strictly one-to-one with a `User`.
+*   <span>&#x1F1F7;&#x1F1FA;</span> Публичное лицо `Пользователя`. Содержит детальную информацию (Аватар, Телефон, О себе), видимую покупателям.
+    *   **Требование:** `Пользователь` **обязан** создать `Профиль`, прежде чем сможет выкладывать `Продукты`.
+    *   **Связь:** Строго один-к-одному с `Пользователем`.
 
-### **UserProfile**
+### **Review / Отзыв**
+*   <span>&#x1F1FA;&#x1F1F8;</span> Feedback left by one `User` (the **Reviewer**) regarding another `User` (the **Seller**).
+    *   **Components:** Includes a rating (1-5 stars) and a text comment.
+    *   **Constraint:** A `User` cannot write a `Review` for themselves.
+*   <span>&#x1F1F7;&#x1F1FA;</span> Обратная связь, оставленная одним `Пользователем` (**Ревьюером**) другому `Пользователю` (**Продавцу**).
+    *   **Состав:** Включает рейтинг (1-5 звезд) и текстовый комментарий.
+    *   **Ограничение:** `Пользователь` не может написать `Отзыв` самому себе.
 
-*   Contains detailed personal information about a `User` that is visible to others in the system
-    *   A `UserProfile` is created by a `User` to gain the ability to post `Products`
-    *   It has a strict one-to-one relationship with a `User`
+### **Admin / Админ**
+*   <span>&#x1F1FA;&#x1F1F8;</span> A `User` with elevated privileges responsible for platform moderation.
+    *   **Authority:** Can `Deactivate` users who violate rules.
+*   <span>&#x1F1F7;&#x1F1FA;</span> `Пользователь` с расширенными правами, ответственный за модерацию платформы.
+    *   **Полномочия:** Может `Деактивировать` пользователей, нарушающих правила.
 
-### **Product**
+### **Deactivate (Ban) / Деактивация (Бан)**
+*   <span>&#x1F1FA;&#x1F1F8;</span> An action performed by an `Admin` to suspend a `User`'s access.
+    *   **Side Effect:** When a `User` is deactivated, a domain event is triggered to **Hide** all their `Products` in the Product Catalog.
+*   <span>&#x1F1F7;&#x1F1FA;</span> Действие, выполняемое `Админом` для приостановки доступа `Пользователя`.
+    *   **Побочный эффект:** Когда `Пользователь` деактивирован, срабатывает доменное событие, которое **Скрывает** все его `Продукты` в каталоге.
 
-*   An item for sale created by a `User`
-    *   Each `Product` is owned by a single `User`
-    *   Must be assigned to exactly one `Category`
-    *   Can be hidden from view using `Soft Delete`
+---
 
-### **Category**
+## 📦 Product Context (Product Management)
 
-*   A classification for a `Product`, used for grouping and filtering
+### **Product / Продукт (Товар)**
+*   <span>&#x1F1FA;&#x1F1F8;</span> An item listed for sale (Aggregate Root).
+    *   **Ownership:** Owned by a single `User` (the Seller).
+    *   **Visibility:** Can be `Visible` or `Hidden` (Soft Deleted).
+    *   **Data:** Contains a `SellerSnapshot` to display seller info quickly.
+*   <span>&#x1F1F7;&#x1F1FA;</span> Предмет, выставленный на продажу (Корень Агрегата).
+    *   **Владение:** Принадлежит одному `Пользователю` (Продавцу).
+    *   **Видимость:** Может быть `Видимым` или `Скрытым` (Мягкое удаление).
+    *   **Данные:** Содержит `Слепок Продавца` для быстрого отображения информации о владельце.
 
-### **Review**
+### **SellerSnapshot / Слепок Продавца**
+*   <span>&#x1F1FA;&#x1F1F8;</span> A read-only copy (Value Object) of the Seller's essential info (Name, Avatar, Rating) stored directly within the `Product`.
+    *   **Purpose:** Allows displaying the product card without querying the User Context.
+    *   **Sync:** Updated automatically via events when the `User` updates their `UserProfile`.
+*   <span>&#x1F1F7;&#x1F1FA;</span> Доступная только для чтения копия (Объект-значение) основной информации о Продавце (Имя, Аватар, Рейтинг), хранящаяся прямо в `Продукте`.
+    *   **Цель:** Позволяет отображать карточку товара без запросов в Контекст Пользователя.
+    *   **Синхронизация:** Обновляется автоматически через события, когда `Пользователь` меняет свой `Профиль`.
 
-*   Feedback from one `User` (the `Reviewer`) to another (the `Target User`), which includes a rating and a comment
-    *   A `User` cannot write a `Review` for themselves
+### **Category / Категория**
+*   <span>&#x1F1FA;&#x1F1F8;</span> A classification group for `Products` (e.g., "Phones", "Laptops"). Used for filtering the catalog.
+*   <span>&#x1F1F7;&#x1F1FA;</span> Группа классификации для `Продуктов` (например, "Телефоны", "Ноутбуки"). Используется для фильтрации каталога.
 
-### **Admin**
+### **Wishlist / Избранное**
+*   <span>&#x1F1FA;&#x1F1F8;</span> A personal collection of `Products` that a `User` has marked as "Favorite" for future reference.
+*   <span>&#x1F1F7;&#x1F1FA;</span> Личная коллекция `Продуктов`, которые `Пользователь` отметил как "Любимые" для быстрого доступа.
 
-*   A `User` with a special role that grants privileges to manage other `Users` and system content
-    *   Performs `Activate / Deactivate` actions on `User` accounts
-    *   Moderates content such as `Products` and `Reviews`
-
-### **Activate / Deactivate**
-
-*   The actions an `Admin` performs on a `User`'s account to manage their access and visibility within the system.
-*   Deactivating a `User` must hide all of their `Products` from public view.
-
-### **Soft Delete**
-
-*   A mechanism for hiding a `Product` from public view without permanently deleting it from the database.
-*   This is used when a `User` is `Deactivated`, allowing their `Products` to be easily restored if the `User` is `Activated` again.
+### **Soft Delete (Hide) / Мягкое Удаление (Скрытие)**
+*   <span>&#x1F1FA;&#x1F1F8;</span> The technical mechanism for removing a `Product` from the public catalog without erasing data from the database.
+    *   **Triggers:** Can be triggered by the Seller (deleting their own product) or automatically by the System (when the Seller is `Deactivated`).
+*   <span>&#x1F1F7;&#x1F1FA;</span> Технический механизм удаления `Продукта` из публичного каталога без физического стирания данных из базы.
+    *   **Триггеры:** Может быть вызвано Продавцом (удаление своего товара) или автоматически Системой (когда Продавец `Деактивирован`).

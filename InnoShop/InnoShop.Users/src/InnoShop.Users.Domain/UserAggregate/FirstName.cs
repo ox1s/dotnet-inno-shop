@@ -1,6 +1,4 @@
 namespace InnoShop.Users.Domain.UserAggregate;
 
 
-public record FirstName
-{
-}
+public record FirstName(string Value);

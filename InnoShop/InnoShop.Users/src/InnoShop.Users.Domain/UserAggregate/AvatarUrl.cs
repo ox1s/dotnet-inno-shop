@@ -1,5 +1,3 @@
 namespace InnoShop.Users.Domain.UserAggregate;
 
-public class AvatarUrl
-{
-}
+public record AvatarUrl(string Value);

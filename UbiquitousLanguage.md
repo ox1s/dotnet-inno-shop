@@ -16,19 +16,30 @@
 
 ### **UserProfile / Профиль Пользователя**
 *   <span>&#x1F1FA;&#x1F1F8;</span> The public face of a `User`. Contains detailed information (Avatar, Phone, Bio) visible to other buyers.
-    *   **Requirement:** A `User` **must** create a `UserProfile` before they can post any `Products`.
+    *   **Requirement:** A `User` **must** create a `UserProfile` before they can post any `Products`. A `UserProfile` must be from Belarus.
     *   **Relationship:** Strictly one-to-one with a `User`.
 *   <span>&#x1F1F7;&#x1F1FA;</span> Публичное лицо `Пользователя`. Содержит детальную информацию (Аватар, Телефон, О себе), видимую покупателям.
     *   **Требование:** `Пользователь` **обязан** создать `Профиль`, прежде чем сможет выкладывать `Продукты`.
     *   **Связь:** Строго один-к-одному с `Пользователем`.
 
 ### **Review / Отзыв**
-*   <span>&#x1F1FA;&#x1F1F8;</span> Feedback left by one `User` (the **Reviewer**) regarding another `User` (the **Seller**).
-    *   **Components:** Includes a rating (1-5 stars) and a text comment.
-    *   **Constraint:** A `User` cannot write a `Review` for themselves.
-*   <span>&#x1F1F7;&#x1F1FA;</span> Обратная связь, оставленная одним `Пользователем` (**Ревьюером**) другому `Пользователю` (**Продавцу**).
-    *   **Состав:** Включает рейтинг (1-5 звезд) и текстовый комментарий.
-    *   **Ограничение:** `Пользователь` не может написать `Отзыв` самому себе.
+
+* 🇺🇸 **Feedback left by one `User` (the Reviewer) regarding another `User` (the Seller).**
+    * **Components:** Includes a rating (1–5 stars) and a text comment.
+    * **Constraint:** A `User` cannot write a `Review` for themselves.
+    * **Relation to UserProfile:**  
+        A `Review` can be created **only by a User who has a valid `UserProfile`**, and can be left **only for a User who also has a `UserProfile`**.  
+        The `UserProfile` represents the public identity (name, avatar, etc.), which is the actual subject of user feedback.  
+        However, `Review` entities belong to the **User aggregate**, not the `UserProfile`, because `UserProfile` is a Value Object and cannot own entities.
+
+* 🇷🇺 **Обратная связь, оставленная одним `Пользователем` (Ревьюером) другому `Пользователю` (Продавцу).**
+    * **Состав:** Включает рейтинг (1–5 звёзд) и текстовый комментарий.
+    * **Ограничение:** `Пользователь` не может написать `Отзыв` самому себе.
+    * **Связь с UserProfile:**  
+        Отзыв может оставить только тот пользователь, у которого есть заполненный `UserProfile`, и получить отзыв тоже может только пользователь с `UserProfile`.  
+        `UserProfile` отражает публичную личность пользователя (имя, аватар и т. д.), к которой фактически и относится обратная связь.  
+        Тем не менее, `Review` хранится внутри **агрегата User**, а не в `UserProfile`, так как `UserProfile` — это Value Object и не должен содержать сущности.
+
 
 ### **Admin / Админ**
 *   <span>&#x1F1FA;&#x1F1F8;</span> A `User` with elevated privileges responsible for platform moderation.

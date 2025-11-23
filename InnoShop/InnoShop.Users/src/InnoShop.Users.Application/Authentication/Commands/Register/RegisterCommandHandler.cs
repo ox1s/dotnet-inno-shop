@@ -39,7 +39,7 @@ public class RegisterCommandHandler(
             hashPasswordResult.Value);
 
         await _usersRepository.AddUserAsync(user, cancellationToken);
-        await _unitOfWork.CommitChangesAsync();
+        await _unitOfWork.CommitChangesAsync(cancellationToken);
 
         var token = _jwtTokenGenerator.GenerateToken(user);
         return new AuthenticationResult(user, token);

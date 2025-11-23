@@ -101,6 +101,14 @@ public class User : AggregateRoot
     {
         return IsActive && UserProfile is not null;
     }
+    public void ChangeRating(double rating)
+    {
+        AverageRating = rating;
+    }
+    public void ChangeReviewsCount(int count)
+    {
+        ReviewCount = count;
+    }
     private User() { }
 
 }

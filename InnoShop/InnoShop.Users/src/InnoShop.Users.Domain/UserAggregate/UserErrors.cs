@@ -4,6 +4,9 @@ namespace InnoShop.Users.Domain.UserAggregate;
 
 public class UserErrors
 {
+    public static readonly Error NotFound = Error.NotFound(
+        "User.UserNotFound",
+        "User not found");
     public static readonly Error UserCannotReviewTwice = Error.Conflict(
         "User.UserCannotReviewTwice",
         "A User cannot add review to one user profile twice");

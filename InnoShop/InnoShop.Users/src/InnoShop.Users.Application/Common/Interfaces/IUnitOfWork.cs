@@ -2,5 +2,5 @@ namespace InnoShop.Users.Application.Common.Interfaces;
 
 public interface IUnitOfWork
 {
-    Task CommitChangesAsync();
+    Task CommitChangesAsync(CancellationToken cancellationToken = default);
 }

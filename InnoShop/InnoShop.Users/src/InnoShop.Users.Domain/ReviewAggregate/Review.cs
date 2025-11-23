@@ -14,6 +14,9 @@ public sealed class Review : AggregateRoot
     public Comment? Comment { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public bool IsDeleted { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
+
 
 
     private Review(
@@ -46,7 +49,7 @@ public sealed class Review : AggregateRoot
         {
             return UserErrors.UserCannotWriteAReviewForThemselves;
         }
-        
+
         // _domainEvents.Add(new ReviewCreatedEvent(review.Id));
         return new Review(
             targetUserId,
@@ -67,6 +70,18 @@ public sealed class Review : AggregateRoot
         // _domainEvents.Add(new ReviewUpdatedEvent(review.Id));
 
         return Result.Success;
+    }
+    public ErrorOr<Deleted> Delete(IDateTimeProvider dateTimeProvider)
+    {
+        if (IsDeleted)
+        {
+            return ReviewErrors.ReviewAlreadyDeleted;
+        }
+
+        IsDeleted = true;
+        DeletedAt = dateTimeProvider.UtcNow;
+        // _domainEvents.Add(new ReviewDeletedEvent(this.Id, this.TargetUserId, this.Rating));
+        return Result.Deleted;
     }
 
     public Review()

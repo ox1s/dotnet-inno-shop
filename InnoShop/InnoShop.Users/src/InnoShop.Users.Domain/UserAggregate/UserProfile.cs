@@ -29,35 +29,20 @@ public record UserProfile
         FirstName firstName,
         LastName lastName,
         AvatarUrl avatarUrl,
-        string rawPhoneNumber,
-        string countryName,
-        string state,
-        string? city)
+        PhoneNumber phoneNumber,
+        Location location)
     {
-        var locationResult = Location.Create(countryName, state, city);
-        if (locationResult.IsError)
-        {
-            return locationResult.Errors;
-        }
-        var location = locationResult.Value;
 
         if (!Country.AllowedCountries.Contains(location.Country))
         {
             return UserErrors.UserProfileMustBeInAllowedCountry;
         }
 
-        var phoneNumberResult = PhoneNumber.Create(rawPhoneNumber, location.Country);
-        if (phoneNumberResult.IsError)
-        {
-            return phoneNumberResult.Errors;
-        }
-        var phoneNubmer = phoneNumberResult.Value;
-
         return new UserProfile(
             firstName,
             lastName,
             avatarUrl,
-            phoneNubmer,
+            phoneNumber,
             location);
     }
 

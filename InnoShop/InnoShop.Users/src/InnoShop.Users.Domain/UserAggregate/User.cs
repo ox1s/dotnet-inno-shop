@@ -13,9 +13,9 @@ public class User : AggregateRoot
 
     public bool IsActive { get; private set; } = true;
     public bool IsEmailConfirmed { get; private set; } = false;
+    public double? AverageRating { get; private set; }
+    public int? ReviewCount { get; private set; }
 
-    private readonly List<Review> _reviews = new();
-    public IReadOnlyList<Review> Reviews => _reviews.AsReadOnly();
 
     private readonly string _passwordHash = null!;
 
@@ -37,138 +37,40 @@ public class User : AggregateRoot
         return passwordHasher.IsCorrectPassword(password, _passwordHash);
     }
 
-    public static User CreateUser(
-        Email email,
-        string passwordHash)
+    public static User CreateUser(Email email, string passwordHash)
     {
         return new(email, passwordHash, Role.User);
     }
 
-
-    public static User CreateAdmin(
-        Email email,
-        string passwordHash)
+    public static User CreateAdmin(Email email, string passwordHash)
     {
         return new(email, passwordHash, Role.Admin);
     }
 
-    public ErrorOr<Success> CreateUserProfile(
-       FirstName firstName,
-       LastName lastName,
-       AvatarUrl avatarUrl,
-       string rawPhoneNumber,
-       string country,
-       string state,
-       string? city = null)
+    public ErrorOr<Success> CreateUserProfile(UserProfile userProfile)
     {
         if (UserProfile is not null)
         {
             return UserErrors.CannotCreateMoreThanOneProfile;
         }
 
-        var createdProfileResult = UserProfile.Create(
-             firstName, lastName, avatarUrl, rawPhoneNumber,
-             country, state, city);
-
-
-        if (createdProfileResult.IsError)
-        {
-            return createdProfileResult.Errors;
-        }
-
-        UserProfile = createdProfileResult.Value;
+        UserProfile = userProfile;
 
         //_domainEvents.Add(new UserProfileUpdatedEvent(Id));
 
         return Result.Success;
     }
 
-    public ErrorOr<Success> UpdateUserProfile(
-            FirstName firstName,
-       LastName lastName,
-       AvatarUrl avatarUrl,
-       string rawPhoneNumber,
-       string country,
-       string state,
-       string? city = null)
+    public ErrorOr<Success> UpdateUserProfile(UserProfile updatedUserProfile)
     {
         if (UserProfile is null)
         {
             return UserErrors.UserMustCreateAUserProfile;
         }
 
-        var updatedProfileResult = UserProfile.Create(
-            firstName, lastName, avatarUrl, rawPhoneNumber,
-            country, state, city);
-
-        if (updatedProfileResult.IsError)
-        {
-            return updatedProfileResult.Errors;
-        }
-
-        UserProfile = updatedProfileResult.Value;
+        UserProfile = updatedUserProfile;
 
         //_domainEvents.Add(new UserProfileCreatedEvent(Id));
-
-        return Result.Success;
-    }
-
-    public ErrorOr<Success> CreateReview(
-        Guid authorId,
-        int rawRating,
-        string? comment,
-        IDateTimeProvider dateTimeProvider)
-    {
-        if (UserProfile is null)
-        {
-            return UserErrors.UserMustCreateAUserProfile;
-        }
-        if (authorId == Id)
-        {
-            return UserErrors.UserCannotWriteAReviewForThemselves;
-        }
-        var createdReviewResult = Review.Create(
-            authorId,
-            rawRating,
-            comment,
-            dateTimeProvider);
-
-        if (createdReviewResult.IsError)
-        {
-            return createdReviewResult.Errors;
-        }
-        var review = createdReviewResult.Value;
-
-        _reviews.Add(review);
-        // _domainEvents.Add(new UserReviewCreatedEvent(Id, review));
-        return Result.Success;
-    }
-    public ErrorOr<Success> UpdateReview(
-        Guid reviewId,
-        Guid authorId,
-        int newRating,
-        string? newComment,
-        IDateTimeProvider dateTimeProvider)
-    {
-        var review = _reviews.FirstOrDefault(r => r.Id == reviewId);
-
-        if (review is null)
-        {
-            return UserErrors.ReviewNotFound;
-        }
-
-        if (review.AuthorId != authorId)
-        {
-            return UserErrors.NotTheReviewAuthor;
-        }
-
-        var updatedReviewResult = review.Update(newRating, newComment, dateTimeProvider);
-        if (updatedReviewResult.IsError)
-        {
-            return updatedReviewResult.Errors;
-        }
-
-        // _domainEvents.Add(new UserReviewUpdatedEvent(Id, review));
 
         return Result.Success;
     }
@@ -192,7 +94,7 @@ public class User : AggregateRoot
         }
         IsActive = false;
 
-        // _domainEvents.Add(new UserDeactivated(Id));
+        // _domainEvents.Add(new UserDeactivatedEvent(Id));
         return Result.Success;
     }
     public bool CanSell()

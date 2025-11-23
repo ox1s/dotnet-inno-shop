@@ -9,5 +9,6 @@
     <PackageReference Include="ErrorOr" />
     <PackageReference Include="libphonenumber-csharp" />
     <PackageReference Include="MediatR" />
+    <PackageReference Include="Throw" />
   </ItemGroup>
 </Project>

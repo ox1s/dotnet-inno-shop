@@ -6,19 +6,14 @@ public static partial class Constants
 {
     public static class UserProfile
     {
-        public static readonly FirstName FirstName = FirstName.Create("Гоголь").Value;
-        public static readonly LastName LastName = LastName.Create("Моголь").Value;
-        public static readonly AvatarUrl AvatarUrl = AvatarUrl.Create("https/images").Value;
-        public static readonly string ValidPhoneNumberBelarus = "+375291112233";
-        public static readonly string ValidPhoneNumberUsa = "+12125550199";
+        public static readonly FirstName FirstName = new("First");
+        public static readonly LastName LastName = new("Last");
+        public static readonly Email Email = new("test@test.com");
+        public static readonly AvatarUrl AvatarUrl = new("https/images");
+        public static readonly PhoneNumber ValidPhoneNumberBelarus = new PhoneNumber("+375291112233");
+        public static readonly PhoneNumber ValidPhoneNumberUsa = new PhoneNumber("+12125550199");
+        public static readonly Location ValidLocationBelarus = new Location(Country.Belarus, "Витебск", null);
+        public static readonly Location ValidLocationUsa = new Location(Country.USA, "New Yourk", null);
 
-
-        public static readonly string BelarusCountryName = "Belarus";
-        public static readonly string BelarusState = "Витебская область";
-        public static readonly string BelarusCity = "Витебск";
-
-        public static readonly string UsaCountryName = "USA";
-        public static readonly string UsaState = "New York";
-        public static readonly string UsaCity = "New York";
     }
 }

@@ -9,6 +9,7 @@ using InnoShop.Users.Application.Common.Behaviours;
 using InnoShop.Users.Application.Authentication.Common;
 using InnoShop.Users.Application.Authentication.Commands.Register;
 using InnoShop.Users.Domain.UserAggregate;
+using InnoShop.Users.TestCommon.TestConstants;
 
 
 namespace InnoShop.Users.Application.UnitTests.Common.Behaviours;
@@ -32,7 +33,11 @@ public class ValidationBehaviorTests
     {
         // Arrange
         var registerUserRequest = UserCommandFactory.CreateRegisterCommand();
-        var user = UserFactory.CreateTestUser();
+        var user = User.CreateUser(
+            Constants.User.Email,
+            Constants.User.PasswordHash
+        );
+
         var authResult = new AuthenticationResult(user, "jwt_token");
 
         _mockValidator
@@ -70,7 +75,7 @@ public class ValidationBehaviorTests
         result.FirstError.Code.Should().Be("foo");
         result.FirstError.Description.Should().Be("bad foo");
 
-        await _mockNextBehavior.DidNotReceive().Invoke(); 
+        await _mockNextBehavior.DidNotReceive().Invoke();
     }
     [Fact]
     public async Task InvokeBehavior_WhenValidatorIsNull_ShouldInvokeNextBehavior()

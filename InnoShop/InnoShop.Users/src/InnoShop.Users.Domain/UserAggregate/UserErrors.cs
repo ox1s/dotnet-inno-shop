@@ -4,6 +4,9 @@ namespace InnoShop.Users.Domain.UserAggregate;
 
 public class UserErrors
 {
+    public static readonly Error UserCannotReviewTwice = Error.Conflict(
+        "User.UserCannotReviewTwice",
+        "A User cannot add review to one user profile twice");
     public static readonly Error UserMustCreateAUserProfile = Error.Conflict(
         "User.UserMustCreateAUserProfile",
         "A User must create a User Profile for this");
@@ -28,4 +31,11 @@ public class UserErrors
     public static readonly Error NotTheReviewAuthor = Error.Forbidden(
         "User.NotTheReviewAuthor",
         "You are not allowed to edit a review that is not yours.");
+    public static readonly Error NotFoundByEmail = Error.NotFound(
+        "Users.NotFoundByEmail",
+        "The user with the specified email was not found");
+
+    public static readonly Error UserAlreadyExist = Error.Conflict(
+        "Users.UserAlreadyExist",
+        "User with this email already exist");
 }

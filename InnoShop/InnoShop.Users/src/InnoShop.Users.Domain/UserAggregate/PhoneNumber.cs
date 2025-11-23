@@ -3,12 +3,8 @@ using PhoneNumbers;
 
 namespace InnoShop.Users.Domain.UserAggregate;
 
-public sealed record PhoneNumber
+public sealed record PhoneNumber(string Value)
 {
-    public string Value { get; }
-
-    private PhoneNumber(string value) => Value = value;
-
     public static ErrorOr<PhoneNumber> Create(string rawNumber, Country country)
     {
         var phoneUtil = PhoneNumberUtil.GetInstance();
@@ -16,18 +12,20 @@ public sealed record PhoneNumber
         {
             var parsed = phoneUtil.Parse(rawNumber, country.IsoCode);
             if (!phoneUtil.IsValidNumber(parsed))
-                return Error.Validation("PhoneNumber.Invalid", "Invalid phone number for country.");
-
+            {
+                return PhoneNumberErrors.Invalid;
+            }
             var actualRegion = phoneUtil.GetRegionCodeForNumber(parsed);
             if (actualRegion != country.IsoCode)
-                return Error.Validation("PhoneNumber.WrongCountry", "Phone number does not match the specified country.");
-
+            {
+                return PhoneNumberErrors.WrongCountry;
+            }
             var normalized = phoneUtil.Format(parsed, PhoneNumberFormat.E164);
             return new PhoneNumber(normalized);
         }
         catch (NumberParseException)
         {
-            return Error.Validation("PhoneNumber.ParseError", "Could not parse phone number.");
+            return PhoneNumberErrors.ParseError;
         }
     }
 

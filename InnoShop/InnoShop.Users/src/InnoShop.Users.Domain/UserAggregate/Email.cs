@@ -3,29 +3,23 @@ using System.Net.Mail;
 
 namespace InnoShop.Users.Domain.UserAggregate;
 
-public sealed record Email
+public sealed record Email(string Value)
 {
-    public string Value { get; }
-    public string OriginalValue { get; }
-
-    private Email(string originalValue, string normalizedValue)
-    {
-        OriginalValue = originalValue;
-        Value = normalizedValue;
-    }
-
     public static ErrorOr<Email> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            return Error.Validation("Email.Empty", "Email cannot be empty.");
-
+        {
+            return EmailErrors.Empty;
+        }
         if (value.Length > 254)
-            return Error.Validation("Email.TooLong", "Email must be under 254 characters.");
-
+        {
+            return EmailErrors.TooLong;
+        }
         if (!MailAddress.TryCreate(value, out _))
-            return Error.Validation("Email.InvalidFormat", "Invalid email format.");
+        {
+            return EmailErrors.InvalidFormat;
+        }
 
-        var normalized = value.ToLowerInvariant();
-        return new Email(value, normalized);
+        return new Email(value);
     }
 }

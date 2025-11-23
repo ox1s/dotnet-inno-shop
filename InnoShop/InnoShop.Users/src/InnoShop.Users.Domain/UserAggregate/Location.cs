@@ -2,36 +2,30 @@ using ErrorOr;
 
 namespace InnoShop.Users.Domain.UserAggregate;
 
-public record Location
+public sealed record Location
 {
-    private Location(
-        Country country,
-        string state,
-        string? city)
+    public Country Country { get; }
+    public string State { get; }
+    public string? City { get; }
+
+    private Location(Country country, string state, string? city)
     {
         Country = country;
         State = state;
         City = city;
     }
 
-    public Country Country { get; }
-    public string State { get; }
-    public string? ZipCode { get; }
-    public string? City { get; }
-    public string? Street { get; }
-
-    public static ErrorOr<Location> Create(
-        string countryName,
-        string state,
-        string? city)
+    public static ErrorOr<Location> Create(string countryName, string state, string? city)
     {
         if (!Country.TryFromName(countryName, ignoreCase: true, out var parsedCountry))
-        {
-            return Error.Validation(
-                code: "Location.InvalidCountry",
-                description: $"Country '{countryName}' is not supported.");
-        }
+            return Error.Validation("Location.InvalidCountry", $"Country '{countryName}' is not supported.");
+
+        if (string.IsNullOrWhiteSpace(state) || state.Length > 100)
+            return Error.Validation("Location.InvalidState", "State must be 1-100 characters.");
+
+        if (city is not null && (string.IsNullOrWhiteSpace(city) || city.Length > 100))
+            return Error.Validation("Location.InvalidCity", "City must be 1-100 characters if provided.");
+
         return new Location(parsedCountry, state, city);
     }
-
 }

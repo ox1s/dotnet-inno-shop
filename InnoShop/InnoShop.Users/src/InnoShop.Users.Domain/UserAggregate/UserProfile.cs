@@ -41,9 +41,9 @@ public record UserProfile
         }
         var location = locationResult.Value;
 
-        if (!location.Country.Equals(Country.Belarus))
+        if (!Country.AllowedCountries.Contains(location.Country))
         {
-            return UserErrors.UserProfileMustBeInBelarus;
+            return UserErrors.UserProfileMustBeInAllowedCountry;
         }
 
         var phoneNumberResult = PhoneNumber.Create(rawPhoneNumber, location.Country);

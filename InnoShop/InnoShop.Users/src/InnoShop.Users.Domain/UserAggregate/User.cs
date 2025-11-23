@@ -5,7 +5,7 @@ using InnoShop.Users.Domain.UserAggregate.Events;
 
 namespace InnoShop.Users.Domain.UserAggregate;
 
-public partial class User : AggregateRoot
+public class User : AggregateRoot
 {
     public Email Email { get; private set; } = null!;
     public Role Role { get; private set; } = null!;
@@ -116,7 +116,7 @@ public partial class User : AggregateRoot
     public ErrorOr<Success> CreateReview(
         Guid authorId,
         int rawRating,
-        string comment,
+        string? comment,
         IDateTimeProvider dateTimeProvider)
     {
         if (UserProfile is null)
@@ -138,7 +138,7 @@ public partial class User : AggregateRoot
             return createdReviewResult.Errors;
         }
         var review = createdReviewResult.Value;
-        
+
         _reviews.Add(review);
         // _domainEvents.Add(new UserReviewCreatedEvent(Id, review));
         return Result.Success;
@@ -146,8 +146,8 @@ public partial class User : AggregateRoot
     public ErrorOr<Success> UpdateReview(
         Guid reviewId,
         Guid authorId,
-        Rating newRating,
-        string newComment,
+        int newRating,
+        string? newComment,
         IDateTimeProvider dateTimeProvider)
     {
         var review = _reviews.FirstOrDefault(r => r.Id == reviewId);
@@ -162,7 +162,11 @@ public partial class User : AggregateRoot
             return UserErrors.NotTheReviewAuthor;
         }
 
-        review.Update(newRating, newComment, dateTimeProvider);
+        var updatedReviewResult = review.Update(newRating, newComment, dateTimeProvider);
+        if (updatedReviewResult.IsError)
+        {
+            return updatedReviewResult.Errors;
+        }
 
         // _domainEvents.Add(new UserReviewUpdatedEvent(Id, review));
 

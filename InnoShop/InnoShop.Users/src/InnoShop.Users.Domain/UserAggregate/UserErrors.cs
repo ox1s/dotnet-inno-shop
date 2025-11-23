@@ -16,9 +16,9 @@ public class UserErrors
     public static readonly Error UserAlreadyDeactivated = Error.Conflict(
         "User.UserAlreadyDseactivated",
         "The user is already deactivated");
-    public static readonly Error UserProfileMustBeInBelarus = Error.Validation(
-        "User.UserProfileMustBeInBelarus",
-        "Selling is currently restricted to users located in Belarus.");
+    public static readonly Error UserProfileMustBeInAllowedCountry = Error.Validation(
+        "User.UserProfileMustBeInAllowedCountry",
+        "Selling is currently restricted to users located in allowed country.");
     public static readonly Error CannotCreateMoreThanOneProfile = Error.Conflict(
         "User.CannotCreateMoreThanOneProfile",
         "A user can create only one profile.");

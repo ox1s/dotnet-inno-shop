@@ -4,16 +4,16 @@ using InnoShop.Users.Domain.Common.Interfaces;
 
 namespace InnoShop.Users.Domain.UserAggregate;
 
-public class Review : AuditableEntity
+public sealed class Review : AuditableEntity
 {
     public Guid AuthorId { get; private set; }
-    public Rating Rating { get; private set; }
-    public string Comment { get; private set; }
+    public Rating Rating { get; private set; } = null!;
+    public Comment? Comment { get; private set; }
 
     internal Review(
         Guid authorId,
         Rating rating,
-        string comment,
+        Comment? comment,
         IDateTimeProvider dateTimeProvider,
         Guid? id = null) :
          base(id ?? Guid.NewGuid())
@@ -21,14 +21,15 @@ public class Review : AuditableEntity
         AuthorId = authorId;
         Rating = rating;
         Comment = comment;
-        CreatedAt = dateTimeProvider.UtcNow;
-        UpdatedAt = dateTimeProvider.UtcNow;
+        var now = dateTimeProvider.UtcNow;
+        CreatedAt = now;
+        UpdatedAt = now;
     }
 
     public static ErrorOr<Review> Create(
         Guid authorId,
         int rawRating,
-        string comment,
+        string? rawComment,
         IDateTimeProvider dateTimeProvider
     )
     {
@@ -39,23 +40,50 @@ public class Review : AuditableEntity
         }
         var rating = ratingResult.Value;
 
+        Comment? comment = null;
+        if (!string.IsNullOrWhiteSpace(rawComment))
+        {
+            var commentResult = Comment.Create(rawComment);
+            if (commentResult.IsError)
+            {
+                return commentResult.Errors;
+            }
+            comment = commentResult.Value;
+        }
+
         return new Review(
             authorId,
             rating,
             comment,
-            dateTimeProvider
-        );
+            dateTimeProvider);
     }
 
-
-    internal void Update(
-        Rating rating,
-        string comment,
+    public ErrorOr<Success> Update(
+        int newRawRating,
+        string? newRawComment,
         IDateTimeProvider dateTimeProvider)
     {
-        Rating = rating;
+        var ratingResult = Rating.Create(newRawRating);
+        if (ratingResult.IsError)
+        {
+            return ratingResult.Errors;
+        }
+
+        Comment? comment = null;
+        if (!string.IsNullOrWhiteSpace(newRawComment))
+        {
+            var commentResult = Comment.Create(newRawComment);
+            if (commentResult.IsError)
+            {
+                return commentResult.Errors;
+            }
+            comment = commentResult.Value;
+        }
+
+        Rating = ratingResult.Value;
         Comment = comment;
         UpdatedAt = dateTimeProvider.UtcNow;
+        return Result.Success;
     }
 
     public Review()

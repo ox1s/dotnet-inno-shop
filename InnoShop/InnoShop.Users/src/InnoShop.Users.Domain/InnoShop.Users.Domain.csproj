@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.SmartEnum" />
     <PackageReference Include="ErrorOr" />
+    <PackageReference Include="libphonenumber-csharp" />
     <PackageReference Include="MediatR" />
   </ItemGroup>
 </Project>

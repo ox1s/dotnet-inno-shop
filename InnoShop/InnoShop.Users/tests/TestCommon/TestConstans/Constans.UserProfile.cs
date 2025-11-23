@@ -6,9 +6,9 @@ public static partial class Constants
 {
     public static class UserProfile
     {
-        public static readonly FirstName FirstName = new FirstName("Гоголь");
-        public static readonly LastName LastName = new LastName("Моголь");
-        public static readonly AvatarUrl AvatarUrl = new AvatarUrl("https/images");
+        public static readonly FirstName FirstName = FirstName.Create("Гоголь").Value;
+        public static readonly LastName LastName = LastName.Create("Моголь").Value;
+        public static readonly AvatarUrl AvatarUrl = AvatarUrl.Create("https/images").Value;
         public static readonly string ValidPhoneNumberBelarus = "+375291112233";
         public static readonly string ValidPhoneNumberUsa = "+12125550199";
 

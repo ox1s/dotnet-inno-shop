@@ -1,22 +1,35 @@
 using ErrorOr;
+using PhoneNumbers;
 
 namespace InnoShop.Users.Domain.UserAggregate;
 
-public record PhoneNumber
+public sealed record PhoneNumber
 {
-    public string Value { get; init; }
-    internal PhoneNumber(string value) => Value = value;
+    public string Value { get; }
 
-    public static ErrorOr<PhoneNumber> Create(string number, Country country)
+    private PhoneNumber(string value) => Value = value;
+
+    public static ErrorOr<PhoneNumber> Create(string rawNumber, Country country)
     {
-        if (!country.IsValidPhoneNumber(number))
+        var phoneUtil = PhoneNumberUtil.GetInstance();
+        try
         {
-            return Error.Validation(
-                "PhoneNumber.InvalidForCountry",
-                $"Phone number is not valid for {country.Name}."
-            );
-        }
+            var parsed = phoneUtil.Parse(rawNumber, country.IsoCode);
+            if (!phoneUtil.IsValidNumber(parsed))
+                return Error.Validation("PhoneNumber.Invalid", "Invalid phone number for country.");
 
-        return new PhoneNumber(number);
+            var actualRegion = phoneUtil.GetRegionCodeForNumber(parsed);
+            if (actualRegion != country.IsoCode)
+                return Error.Validation("PhoneNumber.WrongCountry", "Phone number does not match the specified country.");
+
+            var normalized = phoneUtil.Format(parsed, PhoneNumberFormat.E164);
+            return new PhoneNumber(normalized);
+        }
+        catch (NumberParseException)
+        {
+            return Error.Validation("PhoneNumber.ParseError", "Could not parse phone number.");
+        }
     }
+
+    public string FormattedValue(Country country) => $"{country.PhoneCode}{Value}";
 }

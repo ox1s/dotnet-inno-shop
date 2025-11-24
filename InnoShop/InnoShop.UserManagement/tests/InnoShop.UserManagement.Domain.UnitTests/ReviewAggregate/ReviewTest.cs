@@ -17,8 +17,8 @@ public class ReviewTest
     public void CreateReview_WhenValidData_ShouldSuccess(string? commentValue)
     {
         // Arrange
-        var targetUserId = Guid.NewGuid();
-        var authorId = Guid.NewGuid();
+        var targetUser = CreateUserWithProfile();
+        var author = CreateUserWithProfile();
 
         Comment? comment = commentValue is not null
             ? Comment.Create(commentValue).Value
@@ -26,8 +26,8 @@ public class ReviewTest
 
         // Act
         var createdReviewResult = Review.Create(
-            targetUserId,
-            authorId,
+            targetUser,
+            author,
             Constants.Review.ValidRating,
             comment,
             _dateTimeProvider);
@@ -36,8 +36,8 @@ public class ReviewTest
         createdReviewResult.IsError.Should().BeFalse();
         var review = createdReviewResult.Value;
 
-        review.TargetUserId.Should().Be(targetUserId);
-        review.AuthorId.Should().Be(authorId);
+        review.TargetUserId.Should().Be(targetUser.Id);
+        review.AuthorId.Should().Be(author.Id);
         review.Rating.Should().Be(Constants.Review.ValidRating);
         review.Comment.Should().Be(comment);
     }
@@ -49,12 +49,12 @@ public class ReviewTest
     public void Create_WhenAuthorIsTarget_ShouldFail()
     {
         // Arrange
-        var userId = Guid.NewGuid();
+        var user = CreateUserWithProfile();
 
         // Act
         var createdReviewRusult = Review.Create(
-            targetUserId: userId,
-            authorId: userId,
+            targetUser: user,
+            author: user,
             Constants.Review.ValidRating,
             Constants.Review.Comment,
             _dateTimeProvider);
@@ -68,9 +68,12 @@ public class ReviewTest
     public void Update_WhenValidData_ShouldUpdateFields()
     {
         // Arrange
+        var targetUser = CreateUserWithProfile();
+        var author = CreateUserWithProfile();
+
         var review = Review.Create(
-            Guid.NewGuid(),
-            Guid.NewGuid(),
+            targetUser,
+            author,
             Constants.Review.ValidRating,
             Constants.Review.Comment,
             _dateTimeProvider).Value;
@@ -86,5 +89,25 @@ public class ReviewTest
         review.Rating.Should().Be(newRating);
         review.Comment.Should().Be(newComment);
     }
+    private static User CreateUserWithProfile()
+    {
+        var user = User.CreateUser(
+            Constants.User.Email,
+            Constants.User.PasswordHash
+        );
 
+        var profile = UserProfile.Create(
+            Constants.UserProfile.FirstName,
+            Constants.UserProfile.LastName,
+            Constants.UserProfile.AvatarUrl,
+            Constants.UserProfile.ValidPhoneNumberBelarus,
+            Constants.UserProfile.ValidLocationBelarus
+        ).Value;
+
+        user.CreateUserProfile(profile);
+
+        return user;
+    }
 }
+
+

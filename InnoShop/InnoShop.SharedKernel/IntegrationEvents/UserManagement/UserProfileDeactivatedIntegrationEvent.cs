@@ -1,3 +1,3 @@
 namespace InnoShop.SharedKernel.IntegrationEvents.UserManagement;
 
-public record UserProfileDeactivatedIntegrationEvent(Guid UserId) : IIntegrationEvent;
+// Fpublic record UserProfileDeactivatedIntegrationEvent(Guid UserId) : IIntegrationEvent;

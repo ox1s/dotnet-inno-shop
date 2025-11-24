@@ -17,6 +17,7 @@ var productsApi = builder.AddProject<Projects.InnoShop_ProductManagement_Api>("p
     .WaitFor(productsDatabase);
 
 builder.AddProject<Projects.InnoShop_UserManagement_Api>("users-api")
+    .WithHttpEndpoint(5001, name: "public")
     .WithReference(usersDatabase)
     .WithReference(productsApi)
     .WaitFor(usersDatabase)

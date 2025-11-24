@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InnoShop.UserManagement.Application\InnoShop.UserManagement.Application.csproj" />
+    <ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

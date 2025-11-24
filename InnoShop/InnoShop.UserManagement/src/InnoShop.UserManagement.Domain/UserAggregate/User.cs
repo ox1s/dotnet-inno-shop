@@ -15,9 +15,9 @@ public partial class User : AggregateRoot
     public bool IsActive { get; private set; } = true;
     public bool IsEmailConfirmed { get; private set; } = false;
 
-    private RatingAverage _ratingAverage = new(0, 0);
-    public double AverageRating => _ratingAverage.Value; 
-    public int ReviewCount => _ratingAverage.ReviewCount;
+    public RatingSummary RatingSummary { get; private set; } = RatingSummary.Empty;
+    public double AverageRating => RatingSummary.Average;
+    public int ReviewCount => RatingSummary.NumberOfReviews;
 
     private readonly string _passwordHash = null!;
 
@@ -99,11 +99,36 @@ public partial class User : AggregateRoot
         // _domainEvents.Add(new UserDeactivatedEvent(Id));
         return Result.Success;
     }
-    public ErrorOr<Success> DeleteReview(int oldRating)
-    {
-        ReviewCount.Throw().IfEquals(0);
 
-        _ratingAverage = _ratingAverage.Delete(oldRating);
+    // Может тут проверять на UserProfile is not null это же бизнес логика
+    public ErrorOr<Success> ApplyNewRating(int ratingValue)
+    {
+        RatingSummary = RatingSummary.AddRating(ratingValue);
+        return Result.Success;
+    }
+
+    public ErrorOr<Success> ApplyRatingRemoval(int ratingValue)
+    {
+        if (RatingSummary.NumberOfReviews == 0)
+        {
+            return UserErrors.RatingMismatch;
+        }
+        RatingSummary = RatingSummary.RemoveRating(ratingValue);
+
+        return Result.Success;
+    }
+
+    public ErrorOr<Success> ApplyRatingUpdate(int oldRating, int newRating)
+    {
+        if (RatingSummary.NumberOfReviews == 0)
+        {
+            return UserErrors.RatingMismatch;
+        }
+
+        RatingSummary = RatingSummary
+            .RemoveRating(oldRating)
+            .AddRating(newRating);
+
         return Result.Success;
     }
     public bool CanSell()

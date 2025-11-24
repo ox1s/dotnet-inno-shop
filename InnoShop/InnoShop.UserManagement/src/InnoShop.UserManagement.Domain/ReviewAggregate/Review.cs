@@ -36,25 +36,32 @@ public sealed class Review : AggregateRoot
         var now = dateTimeProvider.UtcNow;
         CreatedAt = now;
         UpdatedAt = now;
+
+        _domainEvents.Add(new ReviewCreatedEvent(Id, TargetUserId, Rating.Value));
     }
 
     public static ErrorOr<Review> Create(
-        Guid targetUserId,
-        Guid authorId,
+        User targetUser,
+        User author,
         Rating rating,
         Comment? comment,
         IDateTimeProvider dateTimeProvider
     )
     {
-        if (targetUserId == authorId)
+        if (!targetUser.CanSell() || !author.CanSell())
+        {
+            return UserErrors.UserMustCreateAUserProfile;
+        }
+
+        if (targetUser.Id == author.Id)
         {
             return UserErrors.UserCannotWriteAReviewForThemselves;
         }
 
-        // _domainEvents.Add(new ReviewCreatedEvent(review.Id));
+
         return new Review(
-            targetUserId,
-            authorId,
+            targetUser.Id,
+            author.Id,
             rating,
             comment,
             dateTimeProvider);
@@ -65,10 +72,12 @@ public sealed class Review : AggregateRoot
         Comment? newComment,
         IDateTimeProvider dateTimeProvider)
     {
+        var oldRating = Rating.Value;
         Rating = newRating;
         Comment = newComment;
         UpdatedAt = dateTimeProvider.UtcNow;
-        // _domainEvents.Add(new ReviewUpdatedEvent(review.Id));
+
+        _domainEvents.Add(new ReviewUpdatedEvent(Id, TargetUserId, NewRating: newRating.Value, OldRating: oldRating));
 
         return Result.Success;
     }
@@ -83,7 +92,7 @@ public sealed class Review : AggregateRoot
         DeletedAt = dateTimeProvider.UtcNow;
 
         _domainEvents.Add(new ReviewDeletedEvent(Id, TargetUserId, Rating.Value));
-        
+
         return Result.Deleted;
     }
 

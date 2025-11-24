@@ -14,16 +14,16 @@ public class ReviewDeletedEventHandler : INotificationHandler<ReviewDeletedEvent
     }
     public async Task Handle(ReviewDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetUserByIdAsync(notification.TargetUserId, cancellationToken)
+        var user = await _usersRepository.GetByIdAsync(notification.TargetUserId, cancellationToken)
             ?? throw new EventualConsistencyException(ReviewDeletedEvent.UserNotFound);
 
-        var removeReviewResult = user.DeleteReview(notification.OldRating);
+        var deleteReviewResult = user.ApplyRatingRemoval(notification.RatingValue);
 
-        if (removeReviewResult.IsError)
+        if (deleteReviewResult.IsError)
         {
             throw new EventualConsistencyException(
-                ReviewDeletedEvent.ReviewNotFound,
-                removeReviewResult.Errors);
+                ReviewDeletedEvent.ReviewDeletingFailed,
+                deleteReviewResult.Errors);
         }
 
         await _usersRepository.UpdateAsync(user, cancellationToken);

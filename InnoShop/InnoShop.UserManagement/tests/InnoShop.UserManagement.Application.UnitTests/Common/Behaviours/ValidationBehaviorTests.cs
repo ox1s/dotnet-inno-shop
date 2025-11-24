@@ -6,8 +6,8 @@ using MediatR;
 using NSubstitute;
 using InnoShop.UserManagement.TestCommon.UserAggregate;
 using InnoShop.UserManagement.Application.Common.Behaviours;
-using InnoShop.UserManagement.Application.Users.Authentication.Common;
-using InnoShop.UserManagement.Application.Users.Authentication.Commands.Register;
+using InnoShop.UserManagement.Application.Authentication.Common;
+using InnoShop.UserManagement.Application.Authentication.Commands.Register;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.TestCommon.TestConstants;
 
@@ -32,7 +32,7 @@ public class ValidationBehaviorTests
     public async Task InvokeBehavior_WhenValidatorResultIsValid_ShouldInvokeNextBehavior()
     {
         // Arrange
-        var registerUserRequest = UserCommandFactory.CreateRegisterCommand();
+        var registerUserRequest = UserProfileCommandFactory.CreateRegisterCommand();
         var user = User.CreateUser(
             Constants.User.Email,
             Constants.User.PasswordHash

@@ -12,5 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InnoShop.UserManagement.Application\InnoShop.UserManagement.Application.csproj" />
+    <ProjectReference Include="..\InnoShop.UserManagement.Contracts\InnoShop.UserManagement.Contracts.csproj" />
   </ItemGroup>
 </Project>

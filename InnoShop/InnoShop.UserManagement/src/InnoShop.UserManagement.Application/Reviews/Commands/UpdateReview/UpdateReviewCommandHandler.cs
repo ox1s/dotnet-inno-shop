@@ -9,13 +9,13 @@ using InnoShop.UserManagement.Domain.UserAggregate;
 namespace InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
 
 public class UpdateReviewCommandHandler(
-    IUsersRepository _usersRepository,
+    IReviewsRepository _reviewsRepository,
     IUnitOfWork _unitOfWork,
     IDateTimeProvider _dateTimeProvider) : IRequestHandler<UpdateReviewCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
     {
-        var review = await _usersRepository.GetReviewByIdAsync(request.Id, cancellationToken);
+        var review = await _reviewsRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (review is null)
         {
@@ -51,7 +51,7 @@ public class UpdateReviewCommandHandler(
             return reviewResult.Errors;
         }
 
-        await _usersRepository.UpdateReviewAsync(review, cancellationToken);
+        await _reviewsRepository.UpdateAsync(review, cancellationToken);
         await _unitOfWork.CommitChangesAsync(cancellationToken);
 
         return Result.Success;

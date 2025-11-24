@@ -30,7 +30,6 @@
     * **Relation to UserProfile:**  
         A `Review` can be created **only by a User who has a valid `UserProfile`**, and can be left **only for a User who also has a `UserProfile`**.  
         The `UserProfile` represents the public identity (name, avatar, etc.), which is the actual subject of user feedback.  
-        However, `Review` entities belong to the **User aggregate**, not the `UserProfile`, because `UserProfile` is a Value Object and cannot own entities.
 
 * 🇷🇺 **Обратная связь, оставленная одним `Пользователем` (Ревьюером) другому `Пользователю` (Продавцу).**
     * **Состав:** Включает рейтинг (1–5 звёзд) и текстовый комментарий.
@@ -38,7 +37,6 @@
     * **Связь с UserProfile:**  
         Отзыв может оставить только тот пользователь, у которого есть заполненный `UserProfile`, и получить отзыв тоже может только пользователь с `UserProfile`.  
         `UserProfile` отражает публичную личность пользователя (имя, аватар и т. д.), к которой фактически и относится обратная связь.  
-        Тем не менее, `Review` хранится внутри **агрегата User**, а не в `UserProfile`, так как `UserProfile` — это Value Object и не должен содержать сущности.
 
 
 ### **Admin / Админ**

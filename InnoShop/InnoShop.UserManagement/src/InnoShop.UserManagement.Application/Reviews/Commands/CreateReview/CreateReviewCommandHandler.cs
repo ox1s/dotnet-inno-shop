@@ -10,16 +10,17 @@ namespace InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
 public class CreateReviewCommandHandler(
     IUsersRepository _usersRepository,
     IUnitOfWork _unitOfWork,
+    IReviewsRepository _reviewsRepository,
     IDateTimeProvider _dateTimeProvider) : IRequestHandler<CreateReviewCommand, ErrorOr<Review>>
 {
     public async Task<ErrorOr<Review>> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
     {
-        var targetUser = await _usersRepository.GetUserByIdAsync(request.TargetUserId, cancellationToken);
-        var author = await _usersRepository.GetUserByIdAsync(request.AuthorId, cancellationToken);
+        var targetUser = await _usersRepository.GetByIdAsync(request.TargetUserId, cancellationToken);
+        var author = await _usersRepository.GetByIdAsync(request.AuthorId, cancellationToken);
 
         if (targetUser is null || author is null)
         {
-            return UserErrors.NotFound;
+            return UserErrors.UserNotFound;
         }
 
         var ratingResult = Rating.Create(request.Rating);
@@ -41,8 +42,8 @@ public class CreateReviewCommandHandler(
         }
 
         var reviewResult = Review.Create(
-            request.TargetUserId,
-            request.AuthorId,
+            targetUser,
+            author,
             rating,
             comment ?? null,
             _dateTimeProvider
@@ -54,7 +55,7 @@ public class CreateReviewCommandHandler(
         }
         var review = reviewResult.Value;
 
-        await _usersRepository.AddReviewAsync(review, cancellationToken);
+        await _reviewsRepository.AddReviewAsync(review, cancellationToken);
         await _unitOfWork.CommitChangesAsync(cancellationToken);
 
         return review;

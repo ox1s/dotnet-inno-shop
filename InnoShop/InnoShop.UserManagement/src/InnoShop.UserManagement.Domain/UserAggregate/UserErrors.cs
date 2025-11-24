@@ -4,9 +4,12 @@ namespace InnoShop.UserManagement.Domain.UserAggregate;
 
 public class UserErrors
 {
-    public static readonly Error NotFound = Error.NotFound(
+    public static readonly Error UserNotFound = Error.NotFound(
         "User.UserNotFound",
         "User not found");
+    public static readonly Error RatingMismatch = Error.Unexpected(
+        "User.RatingMismatch",
+        "Cannot remove rating because review count is already zero.");
     public static readonly Error UserCannotReviewTwice = Error.Conflict(
         "User.UserCannotReviewTwice",
         "A User cannot add review to one user profile twice");

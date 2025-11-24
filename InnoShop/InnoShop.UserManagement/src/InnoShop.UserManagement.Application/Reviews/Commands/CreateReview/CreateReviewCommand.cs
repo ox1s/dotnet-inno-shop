@@ -9,4 +9,4 @@ public record CreateReviewCommand(
     Guid AuthorId,
     int Rating,
     string? Comment
-): IRequest<ErrorOr<Review>>;
+) : IRequest<ErrorOr<Review>>;

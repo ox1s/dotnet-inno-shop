@@ -1,10 +1,10 @@
-using InnoShop.UserManagement.Application.Users.Authentication.Commands.Register;
+using InnoShop.UserManagement.Application.Authentication.Commands.Register;
 using InnoShop.UserManagement.TestCommon.TestConstants;
 
 
 namespace InnoShop.UserManagement.TestCommon.UserAggregate;
 
-public static class UserCommandFactory
+public static class UserProfileCommandFactory
 {
     public static RegisterCommand CreateRegisterCommand(
             string email = "test@test.com",

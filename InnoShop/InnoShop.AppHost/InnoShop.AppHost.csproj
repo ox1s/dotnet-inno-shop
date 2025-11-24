@@ -9,10 +9,10 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.Docker" />
     <PackageReference Include="Aspire.Hosting.PostgreSQL" />
-    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="13.0.0" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InnoShop.Users\src\InnoShop.Users.Api\InnoShop.Users.Api.csproj" />
+    <ProjectReference Include="..\InnoShop.UserManagement\src\InnoShop.UserManagement.Api\InnoShop.UserManagement.Api.csproj" />
     <ProjectReference Include="..\InnoShop.Products\src\InnoShop.Products.Api\InnoShop.Products.Api.csproj" />
   </ItemGroup>
 </Project>

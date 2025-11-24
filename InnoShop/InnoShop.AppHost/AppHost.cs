@@ -16,7 +16,7 @@ var productsApi = builder.AddProject<Projects.InnoShop_Products_Api>("products-a
     .WithReference(productsDatabase)
     .WaitFor(productsDatabase);
 
-builder.AddProject<Projects.InnoShop_Users_Api>("users-api")
+builder.AddProject<Projects.InnoShop_UserManagement_Api>("users-api")
     .WithReference(usersDatabase)
     .WithReference(productsApi)
     .WaitFor(usersDatabase)

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\InnoShop.Products.Domain\InnoShop.Products.Domain.csproj" />
+    <ProjectReference Include="..\InnoShop.ProductManagement.Domain\InnoShop.ProductManagement.Domain.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

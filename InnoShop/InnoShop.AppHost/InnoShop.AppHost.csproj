@@ -13,6 +13,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InnoShop.UserManagement\src\InnoShop.UserManagement.Api\InnoShop.UserManagement.Api.csproj" />
-    <ProjectReference Include="..\InnoShop.Products\src\InnoShop.Products.Api\InnoShop.Products.Api.csproj" />
+    <ProjectReference Include="..\InnoShop.ProductManagement\src\InnoShop.ProductManagement.Api\InnoShop.ProductManagement.Api.csproj" />
   </ItemGroup>
 </Project>

@@ -5,13 +5,13 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.Products.Api", "src\InnoShop.Products.Api\InnoShop.Products.Api.csproj", "{316FA14A-BAE0-4628-8E32-EA5DC2ED1F99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.ProductManagement.Api", "src\InnoShop.ProductManagement.Api\InnoShop.ProductManagement.Api.csproj", "{316FA14A-BAE0-4628-8E32-EA5DC2ED1F99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.Products.Application", "src\InnoShop.Products.Application\InnoShop.Products.Application.csproj", "{69D1F69B-1D89-4AB7-A10D-0ABFE8D5EE94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.ProductManagement.Application", "src\InnoShop.ProductManagement.Application\InnoShop.ProductManagement.Application.csproj", "{69D1F69B-1D89-4AB7-A10D-0ABFE8D5EE94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.Products.Domain", "src\InnoShop.Products.Domain\InnoShop.Products.Domain.csproj", "{84463B45-6A06-4AEB-A482-4ED058DF65C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.ProductManagement.Domain", "src\InnoShop.ProductManagement.Domain\InnoShop.ProductManagement.Domain.csproj", "{84463B45-6A06-4AEB-A482-4ED058DF65C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.Products.Infrastructure", "src\InnoShop.Products.Infrastructure\InnoShop.Products.Infrastructure.csproj", "{228747FA-4E75-4BA3-B8C8-37776C5850D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.ProductManagement.Infrastructure", "src\InnoShop.ProductManagement.Infrastructure\InnoShop.ProductManagement.Infrastructure.csproj", "{228747FA-4E75-4BA3-B8C8-37776C5850D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

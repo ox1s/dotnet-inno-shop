@@ -12,7 +12,7 @@ var postgres = builder.AddPostgres("postgres")
 var usersDatabase = postgres.AddDatabase("innoshop-users");
 var productsDatabase = postgres.AddDatabase("innoshop-products");
 
-var productsApi = builder.AddProject<Projects.InnoShop_Products_Api>("products-api")
+var productsApi = builder.AddProject<Projects.InnoShop_ProductManagement_Api>("products-api")
     .WithReference(productsDatabase)
     .WaitFor(productsDatabase);
 

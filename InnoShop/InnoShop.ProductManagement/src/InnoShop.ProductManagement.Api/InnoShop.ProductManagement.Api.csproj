@@ -8,6 +8,6 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InnoShop.Products.Application\InnoShop.Products.Application.csproj" />
+    <ProjectReference Include="..\InnoShop.ProductManagement.Application\InnoShop.ProductManagement.Application.csproj" />
   </ItemGroup>
 </Project>

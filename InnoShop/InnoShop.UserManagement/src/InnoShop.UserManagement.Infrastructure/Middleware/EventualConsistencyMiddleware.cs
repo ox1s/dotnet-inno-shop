@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.Common.EventualConsistency;
-using InnoShop.UserManagement.Infrastructure.Persistance;
+using InnoShop.UserManagement.Infrastructure.Persistence;
 
 namespace InnoShop.UserManagement.Infrastructure.Middleware;
 

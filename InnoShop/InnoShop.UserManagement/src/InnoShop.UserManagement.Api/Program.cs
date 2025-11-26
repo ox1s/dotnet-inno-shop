@@ -16,10 +16,18 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 {
     app.UseExceptionHandler();
-    //app.AddInfrastructureMiddleware();
+    app.AddInfrastructureMiddleware();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
     app.UseHttpsRedirection();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
+
     app.Run();
 }

@@ -6,14 +6,21 @@ using Throw;
 
 namespace InnoShop.UserManagement.Domain.UserAggregate;
 
-public partial class User : AggregateRoot
+public sealed class User : AggregateRoot
 {
     public Email Email { get; private set; } = null!;
     public Role Role { get; private set; } = null!;
     public UserProfile? UserProfile { get; private set; }
 
     public bool IsActive { get; private set; } = true;
-    public bool IsEmailConfirmed { get; private set; } = false;
+
+    public bool IsEmailVerified { get; private set; }
+    public string? EmailVerificationToken { get; private set; }
+    public DateTime? EmailVerificationTokenExpiration { get; private set; }
+
+    public string? PasswordResetToken { get; private set; }
+    public DateTime? PasswordResetTokenExpiration { get; private set; }
+
 
     public RatingSummary RatingSummary { get; private set; } = RatingSummary.Empty;
     public double AverageRating => RatingSummary.Average;
@@ -32,7 +39,48 @@ public partial class User : AggregateRoot
         Email = email;
         Role = role;
         _passwordHash = passwordHash;
+        IsEmailVerified = false;
+
+        EmailVerificationToken = Guid.NewGuid().ToString();
+        EmailVerificationTokenExpiration = DateTime.UtcNow.AddDays(1);
     }
+    // public ErrorOr<Success> VerifyEmail(string token)
+    // {
+    //     if (IsEmailVerified) return Error.Conflict(description: "Email already verified");
+
+    //     if (EmailVerificationToken != token) return Error.Validation(description: "Invalid token");
+
+    //     if (DateTime.UtcNow > EmailVerificationTokenExpiration)
+    //         return Error.Validation(description: "Token expired");
+
+    //     IsEmailVerified = true;
+    //     EmailVerificationToken = null;
+    //     EmailVerificationTokenExpiration = null;
+
+    //     return Result.Success;
+    // }
+
+    // public void RequestPasswordReset()
+    // {
+    //     PasswordResetToken = Guid.NewGuid().ToString();
+    //     PasswordResetTokenExpiration = DateTime.UtcNow.AddHours(1);
+
+    //     // _domainEvents.Add(new PasswordResetRequestedEvent(this));
+    // }
+
+    // public ErrorOr<Success> ResetPassword(string token, string newPasswordHash)
+    // {
+    //     if (PasswordResetToken != token) return Error.Validation(description: "Invalid token");
+
+    //     if (DateTime.UtcNow > PasswordResetTokenExpiration)
+    //         return Error.Validation(description: "Token expired");
+
+    //     _passwordHash = newPasswordHash;
+    //     PasswordResetToken = null;
+    //     PasswordResetTokenExpiration = null;
+
+    //     return Result.Success;
+    // }
 
     public bool IsCorrectPasswordHash(string password, IPasswordHasher passwordHasher)
     {
@@ -58,7 +106,7 @@ public partial class User : AggregateRoot
 
         UserProfile = userProfile;
 
-        //_domainEvents.Add(new UserProfileUpdatedEvent(Id));
+        _domainEvents.Add(new UserProfileUpdatedEvent(Id));
 
         return Result.Success;
     }
@@ -96,7 +144,7 @@ public partial class User : AggregateRoot
         }
         IsActive = false;
 
-        // _domainEvents.Add(new UserDeactivatedEvent(Id));
+        _domainEvents.Add(new UserDeactivatedEvent(Id));
         return Result.Success;
     }
 
@@ -135,5 +183,8 @@ public partial class User : AggregateRoot
     {
         return IsActive && UserProfile is not null;
     }
+
+    // TODO: Метод для генерации токуна подтверждения
+    // TODO: ConfirmEmail(string token)
     private User() { }
 }

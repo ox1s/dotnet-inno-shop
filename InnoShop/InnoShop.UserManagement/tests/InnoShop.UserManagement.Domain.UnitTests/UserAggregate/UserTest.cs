@@ -1,9 +1,6 @@
-﻿using ErrorOr;
-using FluentAssertions;
-using InnoShop.UserManagement.Domain.Common.Interfaces;
+﻿using FluentAssertions;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.TestCommon.TestConstants;
-using InnoShop.UserManagement.TestCommon.TestUtils.Services;
 using InnoShop.UserManagement.TestCommon.UserAggregate;
 
 namespace InnoShop.UserManagement.Domain.UnitTests;
@@ -11,18 +8,14 @@ namespace InnoShop.UserManagement.Domain.UnitTests;
 public class UserTests
 {
 
-    #region UserProfile Tests
     [Fact]
     public void CreateUserProfile_WhenValidData_ShouldCreateProfile()
     {
         // Arrange
-        var user = User.CreateUser(
-            Constants.User.Email,
-            Constants.User.PasswordHash
-        );
+        var user = UserFactory.CreateUser();
 
         // Act
-        var userProfile = CreateValidUserProfile();
+        var userProfile = UserFactory.CreateUserProfile();
         var createUserResult = user.CreateUserProfile(userProfile);
 
         // Assert
@@ -36,8 +29,8 @@ public class UserTests
     public void CreateUserProfile_WhenProfileAlreadyExists_ShouldFail()
     {
         // Arrange
-        var user = CreateUserWithProfile();
-        var newProfile = CreateValidUserProfile();
+        var user = UserFactory.CreateUserWithProfile();
+        var newProfile = UserFactory.CreateUserProfile();
 
         // Act
         var addUserProfile2Result = user.CreateUserProfile(newProfile);
@@ -81,8 +74,8 @@ public class UserTests
     public void UpdateUserProfile_WhenProfileDoesNotExist_ShouldFail()
     {
         // Arrange
-        var user = User.CreateUser(Constants.User.Email, Constants.User.PasswordHash);
-        var newProfile = CreateValidUserProfile();
+        var user = UserFactory.CreateUser();
+        var newProfile = UserFactory.CreateUserProfile();
 
         // Act
         var updateUserProfileResult = user.UpdateUserProfile(newProfile);
@@ -97,7 +90,7 @@ public class UserTests
     public void UpdateUserProfile_WhenNewLocationIsNotBelarus_ShouldFail()
     {
         // Arrange
-        var user = CreateUserWithProfile();
+        var user = UserFactory.CreateUserWithProfile();
 
         // Act
         var invalidProfileResult = UserProfile.Create(
@@ -118,7 +111,7 @@ public class UserTests
     public void UpdateUserProfile_WhenNewPhoneIsNotFromBelarus_ShouldFail()
     {
         // Arrange
-        var user = CreateUserWithProfile();
+        var user = UserFactory.CreateUserWithProfile();
 
         // Act
         var invalidPhoneResult = PhoneNumber.Create("+12125550199", Country.Belarus);
@@ -130,16 +123,12 @@ public class UserTests
         user.UserProfile!.Location.Country.Should().Be(Country.Belarus);
     }
 
-    #endregion
-
-
-    #region Activation Tests
 
     [Fact]
     public void DeactivateUser_WhenUserIsActive_ShouldSuccess()
     {
         // Arrange
-        var user = User.CreateUser(Constants.User.Email, Constants.User.PasswordHash);
+        var user = UserFactory.CreateUser();
 
         // Act
         var deactivatedUserResult = user.DeactivateUser();
@@ -154,7 +143,7 @@ public class UserTests
     public void DeactivateUser_WhenAlreadyDeactivated_ShouldFail()
     {
         // Arrange
-        var user = User.CreateUser(Constants.User.Email, Constants.User.PasswordHash);
+        var user = UserFactory.CreateUser();
         user.DeactivateUser();
 
         // Act
@@ -170,7 +159,7 @@ public class UserTests
     public void ActivateUser_WhenUserIsDeactivated_ShouldSuccess()
     {
         // Arrange
-        var user = User.CreateUser(Constants.User.Email, Constants.User.PasswordHash);
+        var user = UserFactory.CreateUser();
         user.DeactivateUser();
 
         // Act
@@ -184,7 +173,7 @@ public class UserTests
     public void ActivateUser_WhenUserIsActivated_ShouldSuccess()
     {
         // Arrange
-        var user = User.CreateUser(Constants.User.Email, Constants.User.PasswordHash);
+        var user = UserFactory.CreateUser();
 
         // Act
         var activatedUserResult = user.ActivateUser();
@@ -194,31 +183,4 @@ public class UserTests
         activatedUserResult.FirstError.Should().Be(UserErrors.UserAlreadyActivated);
         user.IsActive.Should().BeTrue();
     }
-
-    #endregion
-
-    #region Helpers
-
-    private static UserProfile CreateValidUserProfile()
-    {
-        return UserProfile.Create(
-            Constants.UserProfile.FirstName,
-            Constants.UserProfile.LastName,
-            Constants.UserProfile.AvatarUrl,
-            Constants.UserProfile.ValidPhoneNumberBelarus,
-            Constants.UserProfile.ValidLocationBelarus
-        ).Value;
-    }
-
-    private static User CreateUserWithProfile()
-    {
-        var user = User.CreateUser(Constants.User.Email, Constants.User.PasswordHash);
-        var profile = CreateValidUserProfile();
-
-        user.CreateUserProfile(profile);
-
-        return user;
-    }
-
-    #endregion
 }

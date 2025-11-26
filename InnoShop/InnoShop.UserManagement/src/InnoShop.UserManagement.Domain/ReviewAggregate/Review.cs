@@ -96,7 +96,7 @@ public sealed class Review : AggregateRoot
         return Result.Deleted;
     }
 
-    public Review()
+    private Review()
     {
     }
 }

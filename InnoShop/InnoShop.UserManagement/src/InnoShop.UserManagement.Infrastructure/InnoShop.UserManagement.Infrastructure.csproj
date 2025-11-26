@@ -5,6 +5,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="Aspire.RabbitMQ.Client" />
     <PackageReference Include="BCrypt.Net-Next" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
@@ -15,6 +16,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>

@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+using MediatR;
+
+using InnoShop.SharedKernel.IntegrationEvents.UserManagement;
+
 namespace InnoShop.SharedKernel.IntegrationEvents;
 
-public interface IIntegrationEvent
-{
-    string EventType { get; }
-    int Version { get; }
-}
+[JsonDerivedType(typeof(UserProfileActivatedIntegrationEvent), typeDiscriminator: nameof(UserProfileActivatedIntegrationEvent))]
+[JsonDerivedType(typeof(UserProfileDeactivatedIntegrationEvent), typeDiscriminator: nameof(UserProfileDeactivatedIntegrationEvent))]
+public interface IIntegrationEvent : INotification { }

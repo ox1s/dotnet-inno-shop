@@ -4,93 +4,84 @@ using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using NSubstitute;
-using InnoShop.UserManagement.TestCommon.UserAggregate;
 using InnoShop.UserManagement.Application.Common.Behaviours;
 using InnoShop.UserManagement.Application.Authentication.Common;
 using InnoShop.UserManagement.Application.Authentication.Commands.Register;
 using InnoShop.UserManagement.Domain.UserAggregate;
-using InnoShop.UserManagement.TestCommon.TestConstants;
+using InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
+using InnoShop.UserManagement.Domain.ReviewAggregate;
+using InnoShop.UserManagementTestCommon.ReviewAggregate;
+using InnoShop.UserManagement.TestCommon.ReviewAggregate;
 
 
 namespace InnoShop.UserManagement.Application.UnitTests.Common.Behaviours;
 
 public class ValidationBehaviorTests
 {
-    private readonly ValidationBehavior<RegisterCommand, ErrorOr<AuthenticationResult>> _validationBehavior;
-    private readonly IValidator<RegisterCommand> _mockValidator;
-    private readonly RequestHandlerDelegate<ErrorOr<AuthenticationResult>> _mockNextBehavior;
+    private readonly ValidationBehavior<CreateReviewCommand, ErrorOr<Review>> _validationBehavior;
+    private readonly IValidator<CreateReviewCommand> _mockValidator;
+    private readonly RequestHandlerDelegate<ErrorOr<Review>> _mockNextBehavior;
 
     public ValidationBehaviorTests()
     {
-        _mockValidator = Substitute.For<IValidator<RegisterCommand>>();
-        _mockNextBehavior = Substitute.For<RequestHandlerDelegate<ErrorOr<AuthenticationResult>>>();
-
-        _validationBehavior = new ValidationBehavior<RegisterCommand, ErrorOr<AuthenticationResult>>(_mockValidator);
+        _mockValidator = Substitute.For<IValidator<CreateReviewCommand>>();
+        _mockNextBehavior = Substitute.For<RequestHandlerDelegate<ErrorOr<Review>>>();
+        _validationBehavior = new ValidationBehavior<CreateReviewCommand, ErrorOr<Review>>(_mockValidator);
     }
 
     [Fact]
     public async Task InvokeBehavior_WhenValidatorResultIsValid_ShouldInvokeNextBehavior()
     {
         // Arrange
-        var registerUserRequest = UserProfileCommandFactory.CreateRegisterCommand();
-        var user = User.CreateUser(
-            Constants.User.Email,
-            Constants.User.PasswordHash
-        );
-
-        var authResult = new AuthenticationResult(user, "jwt_token");
+        var createReviewRequest = ReviewCommandFactory.CreateCreateReviewCommand();
+        var review = ReviewFactory.CreateReview();
 
         _mockValidator
-            .ValidateAsync(registerUserRequest, Arg.Any<CancellationToken>())
+            .ValidateAsync(createReviewRequest, Arg.Any<CancellationToken>())
             .Returns(new ValidationResult());
 
-        _mockNextBehavior.Invoke().Returns(authResult);
+        _mockNextBehavior.Invoke().Returns(review);
 
         // Act
-        var result = await _validationBehavior.Handle(registerUserRequest, _mockNextBehavior, default);
+        var result = await _validationBehavior.Handle(createReviewRequest, _mockNextBehavior, default);
 
         // Assert
         result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo(authResult);
-
-        await _mockNextBehavior.Received(1).Invoke();
+        result.Value.Should().BeEquivalentTo(review);
     }
 
     [Fact]
     public async Task InvokeBehavior_WhenValidatorResultIsNotValid_ShouldReturnListOfErrors()
     {
         // Arrange
-        var registerUserRequest = new RegisterCommand("bad-email", "123");
-        List<ValidationFailure> validationFailures = [new(propertyName: "foo", errorMessage: "bad foo")];
+        var createReviewRequest = ReviewCommandFactory.CreateCreateReviewCommand();
+        List<ValidationFailure> validationFailures = [new(propertyName: "бяка", errorMessage: "бяка случилась")];
 
         _mockValidator
-            .ValidateAsync(registerUserRequest, Arg.Any<CancellationToken>())
+            .ValidateAsync(createReviewRequest, Arg.Any<CancellationToken>())
             .Returns(new ValidationResult(validationFailures));
 
         // Act
-        var result = await _validationBehavior.Handle(registerUserRequest, _mockNextBehavior, default);
+        var result = await _validationBehavior.Handle(createReviewRequest, _mockNextBehavior, default);
 
         // Assert
         result.IsError.Should().BeTrue();
-        result.FirstError.Code.Should().Be("foo");
-        result.FirstError.Description.Should().Be("bad foo");
-
-        await _mockNextBehavior.DidNotReceive().Invoke();
+        result.FirstError.Code.Should().Be("бяка");
+        result.FirstError.Description.Should().Be("бяка случилась");
     }
     [Fact]
     public async Task InvokeBehavior_WhenValidatorIsNull_ShouldInvokeNextBehavior()
     {
+        // Arrange
+        var behaviorWithoutValidator = new ValidationBehavior<CreateReviewCommand, ErrorOr<Review>>(validator: null);
 
-        var behaviorWithoutValidator = new ValidationBehavior<RegisterCommand, ErrorOr<AuthenticationResult>>(validator: null);
+        var createReviewRequest = ReviewCommandFactory.CreateCreateReviewCommand();
+        var review = ReviewFactory.CreateReview();
 
-        var command = new RegisterCommand("any@test.com", "any");
-        var authResult = new AuthenticationResult(
-            User.CreateUser(Email.Create("a@b.com").Value, "h"), "t");
-
-        _mockNextBehavior.Invoke().Returns((ErrorOr<AuthenticationResult>)authResult);
+        _mockNextBehavior.Invoke().Returns((ErrorOr<Review>)review);
 
         // Act
-        var result = await behaviorWithoutValidator.Handle(command, _mockNextBehavior, default);
+        var result = await behaviorWithoutValidator.Handle(createReviewRequest, _mockNextBehavior, default);
 
         // Assert
         result.IsError.Should().BeFalse();

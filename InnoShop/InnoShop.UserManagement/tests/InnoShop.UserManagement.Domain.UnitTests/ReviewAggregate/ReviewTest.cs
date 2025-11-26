@@ -4,6 +4,7 @@ using InnoShop.UserManagement.Domain.ReviewAggregate;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.TestCommon.TestConstants;
 using InnoShop.UserManagement.TestCommon.TestUtils.Services;
+using InnoShop.UserManagement.TestCommon.UserAggregate;
 
 namespace InnoShop.UserManagement.Domain.UnitTests.ReviewAggregate;
 
@@ -17,8 +18,8 @@ public class ReviewTest
     public void CreateReview_WhenValidData_ShouldSuccess(string? commentValue)
     {
         // Arrange
-        var targetUser = CreateUserWithProfile();
-        var author = CreateUserWithProfile();
+        var targetUser = UserFactory.CreateUserWithProfile();
+        var author = UserFactory.CreateUserWithProfile();
 
         Comment? comment = commentValue is not null
             ? Comment.Create(commentValue).Value
@@ -49,7 +50,7 @@ public class ReviewTest
     public void Create_WhenAuthorIsTarget_ShouldFail()
     {
         // Arrange
-        var user = CreateUserWithProfile();
+        var user = UserFactory.CreateUserWithProfile();
 
         // Act
         var createdReviewRusult = Review.Create(
@@ -68,8 +69,8 @@ public class ReviewTest
     public void Update_WhenValidData_ShouldUpdateFields()
     {
         // Arrange
-        var targetUser = CreateUserWithProfile();
-        var author = CreateUserWithProfile();
+        var targetUser = UserFactory.CreateUserWithProfile();
+        var author = UserFactory.CreateUserWithProfile();
 
         var review = Review.Create(
             targetUser,
@@ -88,25 +89,6 @@ public class ReviewTest
         updatedReviewResult.IsError.Should().BeFalse();
         review.Rating.Should().Be(newRating);
         review.Comment.Should().Be(newComment);
-    }
-    private static User CreateUserWithProfile()
-    {
-        var user = User.CreateUser(
-            Constants.User.Email,
-            Constants.User.PasswordHash
-        );
-
-        var profile = UserProfile.Create(
-            Constants.UserProfile.FirstName,
-            Constants.UserProfile.LastName,
-            Constants.UserProfile.AvatarUrl,
-            Constants.UserProfile.ValidPhoneNumberBelarus,
-            Constants.UserProfile.ValidLocationBelarus
-        ).Value;
-
-        user.CreateUserProfile(profile);
-
-        return user;
     }
 }
 

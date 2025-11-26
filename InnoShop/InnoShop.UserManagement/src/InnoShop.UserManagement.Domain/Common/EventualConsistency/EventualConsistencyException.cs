@@ -15,4 +15,10 @@ public class EventualConsistencyException : Exception
         EventualConsistencyError = eventualConsistencyError;
         UnderlyingErrors = underlyingErrors ?? new();
     }
+    public EventualConsistencyException(string message)
+        : base(message)
+    {
+        EventualConsistencyError = Error.Failure(description: message);
+        UnderlyingErrors = new List<Error>();
+    }
 }

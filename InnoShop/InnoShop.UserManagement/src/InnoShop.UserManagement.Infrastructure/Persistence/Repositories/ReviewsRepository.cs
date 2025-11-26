@@ -1,23 +1,35 @@
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Domain.ReviewAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace InnoShop.UserManagement.Infrastructure.Persistence.Repositories;
 
 public class ReviewsRepository : IReviewsRepository
 {
-    public Task AddReviewAsync(Review review, CancellationToken cancellationToken = default)
+    private readonly UserManagementDbContext _dbContext;
+
+    public ReviewsRepository(UserManagementDbContext dbContext)
     {
-        throw new NotImplementedException();
+        _dbContext = dbContext;
     }
 
-    public Task<Review?> GetByIdAsync(Guid reviewId, CancellationToken cancellationToken = default)
+    public async Task AddReviewAsync(Review review, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await _dbContext.Reviews.AddAsync(review, cancellationToken);
+    }
+
+    public async Task<Review?> GetByIdAsync(Guid reviewId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Reviews
+            .Include(r => r.AuthorId)
+            .Include(r => r.TargetUserId)
+            .FirstOrDefaultAsync(r => r.Id == reviewId, cancellationToken);
     }
 
     public Task UpdateAsync(Review review, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
-    }
+        _dbContext.Reviews.Update(review);
 
+        return Task.CompletedTask;
+    }
 }

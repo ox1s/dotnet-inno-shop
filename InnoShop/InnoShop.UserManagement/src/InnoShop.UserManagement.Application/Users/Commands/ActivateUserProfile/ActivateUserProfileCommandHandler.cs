@@ -6,7 +6,8 @@ using MediatR;
 namespace InnoShop.UserManagement.Application.Users.Commands.ActivateUser;
 
 public class ActivateUserProfileCommandHandler(
-    IUsersRepository _usersRepository) 
+    IUsersRepository _usersRepository,
+    IUnitOfWork _unitOfWork) 
     : IRequestHandler<ActivateUserProfileCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(ActivateUserProfileCommand request, CancellationToken cancellationToken)
@@ -26,6 +27,7 @@ public class ActivateUserProfileCommandHandler(
         }
 
         await _usersRepository.UpdateAsync(user, cancellationToken);
+        await _unitOfWork.CommitChangesAsync(cancellationToken);
 
         return Result.Success;
     }

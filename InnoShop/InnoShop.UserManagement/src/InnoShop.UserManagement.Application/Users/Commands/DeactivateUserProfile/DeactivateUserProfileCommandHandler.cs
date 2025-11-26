@@ -6,7 +6,8 @@ using MediatR;
 namespace InnoShop.UserManagement.Application.Users.Commands.DeactivateUser;
 
 public class DeactivateUserProfileCommandHandler(
-    IUsersRepository _usersRepository)
+    IUsersRepository _usersRepository,
+    IUnitOfWork _unitOfWork)
     : IRequestHandler<DeactivateUserProfileCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(DeactivateUserProfileCommand request, CancellationToken cancellationToken)
@@ -26,6 +27,7 @@ public class DeactivateUserProfileCommandHandler(
         }
 
         await _usersRepository.UpdateAsync(user, cancellationToken);
+        await _unitOfWork.CommitChangesAsync(cancellationToken);
 
         return Result.Success;
     }

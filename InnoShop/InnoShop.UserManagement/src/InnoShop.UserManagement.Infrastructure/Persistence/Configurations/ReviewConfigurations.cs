@@ -17,11 +17,13 @@ public class ReviewConfigurations : IEntityTypeConfiguration<Review>
 
         builder.HasOne<User>()
             .WithMany()
-            .HasForeignKey(r => r.TargetUserId);
+            .HasForeignKey(r => r.TargetUserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne<User>()
             .WithMany()
-            .HasForeignKey(r => r.AuthorId);
+            .HasForeignKey(r => r.AuthorId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(r => r.TargetUserId)
             .HasColumnName("target_user_id")

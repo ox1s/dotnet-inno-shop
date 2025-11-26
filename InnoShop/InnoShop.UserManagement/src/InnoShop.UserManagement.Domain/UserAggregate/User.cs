@@ -44,21 +44,23 @@ public sealed class User : AggregateRoot
         EmailVerificationToken = Guid.NewGuid().ToString();
         EmailVerificationTokenExpiration = DateTime.UtcNow.AddDays(1);
     }
-    // public ErrorOr<Success> VerifyEmail(string token)
-    // {
-    //     if (IsEmailVerified) return Error.Conflict(description: "Email already verified");
+    public ErrorOr<Success> VerifyEmail(string token)
+    {
+        if (IsEmailVerified) return Error.Conflict(description: "Email already verified");
 
-    //     if (EmailVerificationToken != token) return Error.Validation(description: "Invalid token");
+        if (EmailVerificationToken != token) return Error.Validation(description: "Invalid token");
 
-    //     if (DateTime.UtcNow > EmailVerificationTokenExpiration)
-    //         return Error.Validation(description: "Token expired");
+        if (DateTime.UtcNow > EmailVerificationTokenExpiration)
+            return Error.Validation(description: "Token expired");
 
-    //     IsEmailVerified = true;
-    //     EmailVerificationToken = null;
-    //     EmailVerificationTokenExpiration = null;
+        IsEmailVerified = true;
+        EmailVerificationToken = null;
+        EmailVerificationTokenExpiration = null;
 
-    //     return Result.Success;
-    // }
+        // _domainEvents.Add(new UserEmailVerifiedEvent(Id));
+
+        return Result.Success;
+    }
 
     // public void RequestPasswordReset()
     // {
@@ -89,7 +91,10 @@ public sealed class User : AggregateRoot
 
     public static User CreateUser(Email email, string passwordHash)
     {
-        return new(email, passwordHash, Role.User);
+        var user = new User (email, passwordHash, Role.User);
+
+        user._domainEvents.Add(new UserRegisteredEvent(user.Id));
+        return user;
     }
 
     public static User CreateAdmin(Email email, string passwordHash)
@@ -144,7 +149,7 @@ public sealed class User : AggregateRoot
         }
         IsActive = false;
 
-        _domainEvents.Add(new UserDeactivatedEvent(Id));
+        _domainEvents.Add(new UserProfileDeactivatedEvent(Id));
         return Result.Success;
     }
 

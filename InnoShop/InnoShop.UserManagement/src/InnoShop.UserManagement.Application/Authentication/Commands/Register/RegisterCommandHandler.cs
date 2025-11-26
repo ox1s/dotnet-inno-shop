@@ -11,7 +11,10 @@ public class RegisterCommandHandler(
     IJwtTokenGenerator _jwtTokenGenerator,
     IPasswordHasher _passwordHasher,
     IUsersRepository _usersRepository,
-    IUnitOfWork _unitOfWork)
+    IUnitOfWork _unitOfWork,
+    IEmailSender _emailSender,
+     IEmailVerificationLinkFactory _linkFactory
+    )
         : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
 {
     public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
@@ -38,8 +41,19 @@ public class RegisterCommandHandler(
             email,
             hashPasswordResult.Value);
 
+
         await _usersRepository.AddUserAsync(user, cancellationToken);
         await _unitOfWork.CommitChangesAsync(cancellationToken);
+
+        var verificationLink = _linkFactory.Create(user.Id, user.EmailVerificationToken!);
+
+
+        await _emailSender.SendEmailAsync(
+            to: user.Email.Value,
+            from: "noreply@innoshop.com",
+            subject: "Welcome to InnoShop! Please verify your email.",
+            body: $"Hello! Click here to verify: <a href='{verificationLink}'>Verify Email</a>"
+        );
 
         var token = _jwtTokenGenerator.GenerateToken(user);
         return new AuthenticationResult(user, token);

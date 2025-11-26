@@ -1,0 +1,49 @@
+﻿using InnoShop.UserManagement.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+
+namespace InnoShop.UserManagement.Infrastructure.Authentication;
+
+public class EmailVerificationLinkFactory(
+    IHttpContextAccessor _httpContextAccessor,
+    LinkGenerator _linkGenerator,
+    IConfiguration _configuration) : IEmailVerificationLinkFactory
+{
+    public string Create(Guid userId, string token)
+    {
+        var httpContext = _httpContextAccessor.HttpContext;
+
+        string? uri;
+
+        if (httpContext is not null)
+        {
+            uri = _linkGenerator.GetUriByName(
+                httpContext,
+                "VerifyEmailRoute",
+                new { userId, token });
+        }
+        else
+        {
+            var appUrl = _configuration["AppUrl"];
+            if (string.IsNullOrEmpty(appUrl))
+            {
+                throw new Exception("AppUrl is not configured. Cannot generate email link in background.");
+            }
+
+            if (!Uri.TryCreate(appUrl, UriKind.Absolute, out var baseUrl))
+            {
+                throw new Exception($"Invalid AppUrl configuration: {appUrl}");
+            }
+
+
+            uri = _linkGenerator.GetUriByName(
+                "VerifyEmailRoute",
+                new { userId, token },
+                scheme: baseUrl.Scheme,
+                host: HostString.FromUriComponent(baseUrl));
+        }
+
+        return uri ?? throw new Exception("Could not generate email verification link");
+    }
+}

@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj" />
     <ProjectReference Include="..\InnoShop.UserManagement.Domain\InnoShop.UserManagement.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>

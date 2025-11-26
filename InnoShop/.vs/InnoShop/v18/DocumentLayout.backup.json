@@ -3,36 +3,56 @@
   "WorkspaceRootPath": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{055B867F-47FE-4C90-A6C4-AB66BC841BC2}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\InnoShop.UserManagement.Application.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.application\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{055B867F-47FE-4C90-A6C4-AB66BC841BC2}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\InnoShop.UserManagement.Application.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.application\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\storage\\miniofilestorage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\storage\\miniofilestorage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3956380C-DB7E-4EF9-80D3-68F9B107B562}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\InnoShop.UserManagement.Api.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3956380C-DB7E-4EF9-80D3-68F9B107B562}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\InnoShop.UserManagement.Api.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\requestpipeline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\requestpipeline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\integrationevents\\backgroundservices\\consumeintegrationeventsbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\integrationevents\\backgroundservices\\consumeintegrationeventsbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{322BE5E9-991F-4D93-A99D-89D713A18E27}|InnoShop.AppHost\\InnoShop.AppHost.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.apphost\\apphost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{322BE5E9-991F-4D93-A99D-89D713A18E27}|InnoShop.AppHost\\InnoShop.AppHost.csproj|solutionrelative:innoshop.apphost\\apphost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3956380C-DB7E-4EF9-80D3-68F9B107B562}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\InnoShop.UserManagement.Api.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.api\\innoshop.usermanagement.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{3956380C-DB7E-4EF9-80D3-68F9B107B562}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\InnoShop.UserManagement.Api.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.api\\innoshop.usermanagement.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{322BE5E9-991F-4D93-A99D-89D713A18E27}|InnoShop.AppHost\\InnoShop.AppHost.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.apphost\\innoshop.apphost.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{322BE5E9-991F-4D93-A99D-89D713A18E27}|InnoShop.AppHost\\InnoShop.AppHost.csproj|solutionrelative:innoshop.apphost\\innoshop.apphost.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\integrationevents\\integrationeventspublisher\\integrationeventspublisher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\integrationevents\\integrationeventspublisher\\integrationeventspublisher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\persistence\\repositories\\reviewsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\persistence\\repositories\\reviewsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\integrationevents\\backgroundservices\\publishintegrationeventsbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\integrationevents\\backgroundservices\\publishintegrationeventsbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\persistence\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\persistence\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{055B867F-47FE-4C90-A6C4-AB66BC841BC2}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\InnoShop.UserManagement.Application.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.application\\authentication\\commands\\verifyemail\\verifyemailcommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{055B867F-47FE-4C90-A6C4-AB66BC841BC2}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\InnoShop.UserManagement.Application.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.application\\authentication\\commands\\verifyemail\\verifyemailcommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{055B867F-47FE-4C90-A6C4-AB66BC841BC2}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\InnoShop.UserManagement.Application.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.application\\authentication\\commands\\verifyemail\\verifyemailcommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{055B867F-47FE-4C90-A6C4-AB66BC841BC2}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\InnoShop.UserManagement.Application.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.application\\authentication\\commands\\verifyemail\\verifyemailcommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\emailservice\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\emailservice\\emailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\persistence\\configurations\\reviewconfigurations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\persistence\\configurations\\reviewconfigurations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\persistence\\configurations\\outboxintegrationeventconfigurations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\persistence\\configurations\\outboxintegrationeventconfigurations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|p:\\c#learning\\innowise\\dotnet-inno-shop\\innoshop\\innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\integrationevents\\outboxwriter\\outboxwritereventhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CBFB84C-85D8-4231-82B6-FFE627EF28FA}|InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\InnoShop.UserManagement.Infrastructure.csproj|solutionrelative:innoshop.usermanagement\\src\\innoshop.usermanagement.infrastructure\\integrationevents\\outboxwriter\\outboxwritereventhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +62,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 14,
           "Children": [
             {
               "$type": "Bookmark",
@@ -57,41 +77,21 @@
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DependencyInjection.cs",
-              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\DependencyInjection.cs",
-              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\DependencyInjection.cs",
-              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\DependencyInjection.cs",
-              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\DependencyInjection.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-26T10:33:05.604Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "RequestPipeline.cs",
-              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\RequestPipeline.cs",
-              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\RequestPipeline.cs",
-              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\RequestPipeline.cs",
-              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\RequestPipeline.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-26T10:32:15.463Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "DependencyInjection.cs",
               "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\DependencyInjection.cs",
               "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\DependencyInjection.cs",
               "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\DependencyInjection.cs",
               "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\DependencyInjection.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAQwCEAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAHMAAAAAAAAAAAAgwJkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-26T10:30:06.172Z"
+              "WhenOpened": "2025-11-26T20:06:50.597Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -101,57 +101,153 @@
               "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\Program.cs",
               "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\Program.cs",
               "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-26T10:28:50.971Z"
+              "WhenOpened": "2025-11-26T20:05:14.369Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "InnoShop.UserManagement.Api.csproj",
-              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\InnoShop.UserManagement.Api.csproj",
-              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\InnoShop.UserManagement.Api.csproj",
-              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\InnoShop.UserManagement.Api.csproj",
-              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Api\\InnoShop.UserManagement.Api.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-11-26T10:28:39.156Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "PublishIntegrationEventsBackgroundService.cs",
-              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\BackgroundServices\\PublishIntegrationEventsBackgroundService.cs",
-              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\BackgroundServices\\PublishIntegrationEventsBackgroundService.cs",
-              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\BackgroundServices\\PublishIntegrationEventsBackgroundService.cs",
-              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\BackgroundServices\\PublishIntegrationEventsBackgroundService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvxUAAAAyAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "AppHost.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.AppHost\\AppHost.cs",
+              "RelativeDocumentMoniker": "InnoShop.AppHost\\AppHost.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.AppHost\\AppHost.cs",
+              "RelativeToolTip": "InnoShop.AppHost\\AppHost.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-26T10:12:42.662Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "IntegrationEventsPublisher.cs",
-              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\IntegrationEventsPublisher\\IntegrationEventsPublisher.cs",
-              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\IntegrationEventsPublisher\\IntegrationEventsPublisher.cs",
-              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\IntegrationEventsPublisher\\IntegrationEventsPublisher.cs",
-              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\IntegrationEventsPublisher\\IntegrationEventsPublisher.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-26T10:11:24.945Z"
+              "WhenOpened": "2025-11-26T20:03:41.627Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ConsumeIntegrationEventsBackgroundService.cs",
-              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\BackgroundServices\\ConsumeIntegrationEventsBackgroundService.cs",
-              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\BackgroundServices\\ConsumeIntegrationEventsBackgroundService.cs",
-              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\BackgroundServices\\ConsumeIntegrationEventsBackgroundService.cs",
-              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\BackgroundServices\\ConsumeIntegrationEventsBackgroundService.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAADwvx4AAAAzAAAAAAAAAA==",
+              "Title": "InnoShop.AppHost",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.AppHost\\InnoShop.AppHost.csproj",
+              "RelativeDocumentMoniker": "InnoShop.AppHost\\InnoShop.AppHost.csproj",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.AppHost\\InnoShop.AppHost.csproj",
+              "RelativeToolTip": "InnoShop.AppHost\\InnoShop.AppHost.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-11-26T20:03:35.895Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ReviewsRepository.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Repositories\\ReviewsRepository.cs",
+              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Repositories\\ReviewsRepository.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Repositories\\ReviewsRepository.cs",
+              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Repositories\\ReviewsRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-26T10:05:23.97Z"
+              "WhenOpened": "2025-11-26T19:54:32.064Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UsersRepository.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Repositories\\UsersRepository.cs",
+              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Repositories\\UsersRepository.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Repositories\\UsersRepository.cs",
+              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Repositories\\UsersRepository.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAcwCYAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T19:48:11.86Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "VerifyEmailCommandValidator.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\Authentication\\Commands\\VerifyEmail\\VerifyEmailCommandValidator.cs",
+              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\Authentication\\Commands\\VerifyEmail\\VerifyEmailCommandValidator.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\Authentication\\Commands\\VerifyEmail\\VerifyEmailCommandValidator.cs",
+              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\Authentication\\Commands\\VerifyEmail\\VerifyEmailCommandValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T19:47:47.61Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "VerifyEmailCommandHandler.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\Authentication\\Commands\\VerifyEmail\\VerifyEmailCommandHandler.cs",
+              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\Authentication\\Commands\\VerifyEmail\\VerifyEmailCommandHandler.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\Authentication\\Commands\\VerifyEmail\\VerifyEmailCommandHandler.cs",
+              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Application\\Authentication\\Commands\\VerifyEmail\\VerifyEmailCommandHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T19:47:39.606Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "EmailSender.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\EmailService\\EmailSender.cs",
+              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\EmailService\\EmailSender.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\EmailService\\EmailSender.cs",
+              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\EmailService\\EmailSender.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T19:46:29.698Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ReviewConfigurations.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Configurations\\ReviewConfigurations.cs",
+              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Configurations\\ReviewConfigurations.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Configurations\\ReviewConfigurations.cs",
+              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Configurations\\ReviewConfigurations.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwcAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T19:46:23.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MinioFileStorage.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Storage\\MinioFileStorage.cs",
+              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Storage\\MinioFileStorage.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Storage\\MinioFileStorage.cs",
+              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Storage\\MinioFileStorage.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T20:06:02.41Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "OutboxIntegrationEventConfigurations.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Configurations\\OutboxIntegrationEventConfigurations.cs",
+              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Configurations\\OutboxIntegrationEventConfigurations.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Configurations\\OutboxIntegrationEventConfigurations.cs",
+              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\Persistence\\Configurations\\OutboxIntegrationEventConfigurations.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T19:46:20.003Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "OutboxWriterEventHandler.cs",
+              "DocumentMoniker": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\OutboxWriter\\OutboxWriterEventHandler.cs",
+              "RelativeDocumentMoniker": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\OutboxWriter\\OutboxWriterEventHandler.cs",
+              "ToolTip": "P:\\C#Learning\\Innowise\\dotnet-inno-shop\\InnoShop\\InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\OutboxWriter\\OutboxWriterEventHandler.cs",
+              "RelativeToolTip": "InnoShop.UserManagement\\src\\InnoShop.UserManagement.Infrastructure\\IntegrationEvents\\OutboxWriter\\OutboxWriterEventHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T19:45:41.857Z",
+              "EditorCaption": ""
             }
           ]
         },

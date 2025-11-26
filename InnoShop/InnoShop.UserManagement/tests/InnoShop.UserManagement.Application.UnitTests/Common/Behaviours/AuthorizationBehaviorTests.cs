@@ -27,13 +27,15 @@ public class AuthorizationBehaviorTests
         var request = new PublicCommand();
         var behavior = new AuthorizationBehavior<PublicCommand, ErrorOr<Success>>(_mockCurrentUserProvider);
 
+        _mockNextBehavior.Invoke().Returns(Result.Success);
+
         // Act
         var result = await behavior.Handle(request, _mockNextBehavior, default);
-        _mockNextBehavior.Invoke().Returns(Result.Success);
 
         // Assert
         result.IsError.Should().BeFalse();
         await _mockNextBehavior.Received(1).Invoke();
+        _mockCurrentUserProvider.DidNotReceive().GetCurrentUser();
     }
 
     [Fact]
@@ -64,17 +66,16 @@ public class AuthorizationBehaviorTests
     public async Task Handle_WhenUserMissingRequiredRole_ShouldReturnUnauthorized()
     {
         // Arrange
-        var request = new AdminCommand(); 
+        var request = new AdminCommand();
         var behavior = new AuthorizationBehavior<AdminCommand, ErrorOr<Success>>(_mockCurrentUserProvider);
 
         var currentUser = new CurrentUser(
             Id: Guid.NewGuid(),
             Permissions: [],
-            Roles: ["User"] 
+            Roles: ["User"]
         );
 
         _mockCurrentUserProvider.GetCurrentUser().Returns(currentUser);
-        _mockNextBehavior.Invoke().Returns(Result.Success);
 
         // Act
         var result = await behavior.Handle(request, _mockNextBehavior, default);
@@ -96,7 +97,7 @@ public class AuthorizationBehaviorTests
 
         var currentUser = new CurrentUser(
             Id: Guid.NewGuid(),
-            Permissions: ["ReadResource"], 
+            Permissions: ["ReadResource"],
             Roles: []
         );
 
@@ -115,17 +116,16 @@ public class AuthorizationBehaviorTests
     public async Task Handle_WhenUserMissingRequiredPermission_ShouldReturnUnauthorized()
     {
         // Arrange
-        var request = new ProtectedResourceCommand(); 
+        var request = new ProtectedResourceCommand();
         var behavior = new AuthorizationBehavior<ProtectedResourceCommand, ErrorOr<Success>>(_mockCurrentUserProvider);
 
         var currentUser = new CurrentUser(
             Id: Guid.NewGuid(),
-            Permissions: ["WriteResource"], 
+            Permissions: ["WriteResource"],
             Roles: []
         );
 
         _mockCurrentUserProvider.GetCurrentUser().Returns(currentUser);
-        _mockNextBehavior.Invoke().Returns(Result.Success);
 
         // Act
         var result = await behavior.Handle(request, _mockNextBehavior, default);
@@ -147,7 +147,7 @@ public class AuthorizationBehaviorTests
         var currentUser = new CurrentUser(
             Id: Guid.NewGuid(),
             Permissions: ["Delete"],
-            Roles: ["User"] 
+            Roles: ["User"]
         );
 
         _mockCurrentUserProvider.GetCurrentUser().Returns(currentUser);

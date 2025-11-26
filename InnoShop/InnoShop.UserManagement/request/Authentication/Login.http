@@ -1,7 +1,7 @@
-POST {{user-host}}/authentication/login
+POST https://localhost:7152/authentication/register
 Content-Type: application/json
 
 {
-    "Email": "lyalya@lya.com",
-    "Password": "Q12we!"
+  "email": "test@test.com",
+  "password": "123Qew123"
 }

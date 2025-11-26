@@ -12,14 +12,13 @@ using Throw;
 
 namespace InnoShop.UserManagement.Infrastructure.IntegrationEvents.BackgroundServices;
 
-public class PublishIntegrationEventsBackgroundService : IHostedService
+public class PublishIntegrationEventsBackgroundService : BackgroundService
 {
-    private Task? _doWorkTask = null;
-    private PeriodicTimer? _timer = null!;
     private readonly IIntegrationEventsPublisher _integrationEventPublisher;
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly ILogger<PublishIntegrationEventsBackgroundService> _logger;
-    private readonly CancellationTokenSource _cts;
+
+    private PeriodicTimer _timer = null!;
 
     public PublishIntegrationEventsBackgroundService(
         IIntegrationEventsPublisher integrationEventPublisher,
@@ -29,23 +28,15 @@ public class PublishIntegrationEventsBackgroundService : IHostedService
         _integrationEventPublisher = integrationEventPublisher;
         _serviceScopeFactory = serviceScopeFactory;
         _logger = logger;
-        _cts = new CancellationTokenSource();
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        _doWorkTask = DoWorkAsync();
-
-        return Task.CompletedTask;
-    }
-
-    private async Task DoWorkAsync()
+    protected async override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Starting integration event publisher background service.");
 
         _timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
 
-        while (await _timer.WaitForNextTickAsync(_cts.Token))
+        while (await _timer.WaitForNextTickAsync(stoppingToken))
         {
             try
             {
@@ -83,26 +74,15 @@ public class PublishIntegrationEventsBackgroundService : IHostedService
             {
                 await _integrationEventPublisher.PublishEventAsync(integrationEvent);
                 dbContext.OutboxIntegrationEvents.Remove(outboxEvent);
+
+                _logger.LogInformation("Event {EventId} published and marked for deletion", outboxEvent.EventName);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to publish event {EventName}. Will retry later.", outboxEvent.EventName);
+                break;
             }
         }
         await dbContext.CommitChangesAsync();
-    }
-
-    public async Task StopAsync(CancellationToken cancellationToken)
-    {
-        if (_doWorkTask is null)
-        {
-            return;
-        }
-
-        _cts.Cancel();
-        await _doWorkTask;
-
-        _timer?.Dispose();
-        _cts.Dispose();
     }
 }

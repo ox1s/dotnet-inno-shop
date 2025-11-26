@@ -8,6 +8,7 @@ using InnoShop.UserManagement.Application.Authentication.Commands.Register;
 using InnoShop.UserManagement.Application.Authentication.Common;
 using InnoShop.UserManagement.Application.Authentication.Queries.Login;
 using InnoShop.UserManagement.Contracts.Authentication;
+using InnoShop.UserManagement.Application.Authentication.Commands.VerifyEmail;
 
 namespace InnoShop.UserManagement.Api.Controllers;
 
@@ -42,6 +43,17 @@ public class AuthenticationController(ISender _mediator) : ApiController
 
         return authResult.Match(
             authResult => Ok(MapToAuthResponse(authResult)),
+            Problem);
+    }
+
+    [HttpGet("verify-email", Name = "VerifyEmailRoute")]
+    public async Task<IActionResult> VerifyEmail([FromQuery] Guid userId, [FromQuery] string token)
+    {
+        var command = new VerifyEmailCommand(userId, token);
+        var result = await _mediator.Send(command);
+
+        return result.Match(
+            success => Ok("Email successfully verified!"),
             Problem);
     }
 

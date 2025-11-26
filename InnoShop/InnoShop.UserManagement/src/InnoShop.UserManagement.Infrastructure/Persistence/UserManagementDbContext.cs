@@ -26,7 +26,7 @@ public class UserManagementDbContext : DbContext, IUnitOfWork
     public DbSet<OutboxIntegrationEvent> OutboxIntegrationEvents { get; set; } = null!;
 
     public UserManagementDbContext(
-        DbContextOptions options,
+        DbContextOptions<UserManagementDbContext> options,
         IHttpContextAccessor httpContextAccessor,
         IPublisher publisher,
         ILogger<UserManagementDbContext> logger)

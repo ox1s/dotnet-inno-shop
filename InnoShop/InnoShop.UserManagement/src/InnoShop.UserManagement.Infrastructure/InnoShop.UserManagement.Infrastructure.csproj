@@ -4,17 +4,21 @@
     <ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <!-- <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" /> -->
     <PackageReference Include="Aspire.RabbitMQ.Client" />
     <PackageReference Include="BCrypt.Net-Next" />
+    <PackageReference Include="FluentEmail.Core" />
+    <PackageReference Include="FluentEmail.Smtp" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" />
+    <PackageReference Include="Minio" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
     <PackageReference Include="Aspire.Hosting.RabbitMQ" />
   </ItemGroup>

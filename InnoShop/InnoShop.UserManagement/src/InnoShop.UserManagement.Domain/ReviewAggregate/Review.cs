@@ -11,7 +11,7 @@ public sealed class Review : AggregateRoot
     public Guid TargetUserId { get; private set; }
     public Guid AuthorId { get; private set; }
 
-    public Rating Rating { get; private set; }
+    public Rating Rating { get; private set; } = null!;
     public Comment? Comment { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }

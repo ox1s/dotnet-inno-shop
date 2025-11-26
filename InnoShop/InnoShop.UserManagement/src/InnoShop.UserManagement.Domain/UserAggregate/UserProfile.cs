@@ -5,11 +5,11 @@ namespace InnoShop.UserManagement.Domain.UserAggregate;
 
 public record UserProfile
 {
-    public FirstName FirstName { get; }
-    public LastName LastName { get; }
-    public AvatarUrl AvatarUrl { get; }
-    public PhoneNumber PhoneNumber { get; }
-    public Location Location { get; }
+    public FirstName FirstName { get; } = null!;
+    public LastName LastName { get; } = null!;
+    public AvatarUrl AvatarUrl { get; } = null!;
+    public PhoneNumber PhoneNumber { get; } = null!;
+    public Location Location { get; } = null!;
 
 
     internal UserProfile(

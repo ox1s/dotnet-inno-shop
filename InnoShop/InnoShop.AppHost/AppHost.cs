@@ -1,18 +1,22 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Net.Sockets;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
 var rabbit = builder.AddRabbitMQ("messaging");
 
-var postgres = builder.AddPostgres("postgres")
-    .WithHostPort(5432)
+var sql = builder.AddSqlServer("sql")
+    .WithHostPort(1433)
     .WithDataVolume()
     .WithLifetime(ContainerLifetime.Persistent);
 
-var usersDatabase = postgres.AddDatabase("innoshop-users");
-var productsDatabase = postgres.AddDatabase("innoshop-products");
+var minio = builder.AddMinioContainer("minio")
+    .WithDataVolume()
+    .WithLifetime(ContainerLifetime.Persistent);
+
+var mailpit = builder.AddMailPit("mailpit");
+
+var usersDatabase = sql.AddDatabase("innoshop-users");
+var productsDatabase = sql.AddDatabase("innoshop-products");
 
 var productsApi = builder.AddProject<Projects.InnoShop_ProductManagement_Api>("products-api")
     .WithReference(rabbit)
@@ -25,6 +29,9 @@ builder.AddProject<Projects.InnoShop_UserManagement_Api>("users-api")
     .WithReference(usersDatabase)
     .WithReference(productsApi)
     .WaitFor(usersDatabase)
-    .WaitFor(productsDatabase);
+    .WithReference(minio)
+    .WithReference(mailpit)
+    .WaitFor(productsDatabase)
+    .WithEnvironment("AppUrl", "https://localhost:7152"); ;
 
 builder.Build().Run();

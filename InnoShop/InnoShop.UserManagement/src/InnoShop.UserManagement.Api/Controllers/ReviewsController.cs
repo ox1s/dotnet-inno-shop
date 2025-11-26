@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InnoShop.UserManagement.Api.Controllers;
 
-[Route("api/v{version:apiVersion}/users/{targetUserId:guid}/reviews")]
+[Route("api/v1/users/{targetUserId:guid}/reviews")] 
 public class ReviewsController(ISender _sender) : ApiController
 {
 
@@ -38,7 +38,7 @@ public class ReviewsController(ISender _sender) : ApiController
 
     }
 
-    [HttpPut("api/v{version:apiVersion}/reviews/{reviewId:guid}")]
+    [HttpPut("reviews/{reviewId:guid}")]
     public async Task<IActionResult> UpdateReview(Guid reviewId, UpdateReviewRequest request)
     {
         var command = new UpdateReviewCommand(
@@ -53,7 +53,7 @@ public class ReviewsController(ISender _sender) : ApiController
             Problem);
     }
 
-    [HttpDelete("api/v{version:apiVersion}/reviews/{reviewId:guid}")]
+    [HttpDelete("reviews/{reviewId:guid}")]
     public async Task<IActionResult> DeleteReview(Guid reviewId)
     {
         var command = new DeleteReviewCommand(reviewId);

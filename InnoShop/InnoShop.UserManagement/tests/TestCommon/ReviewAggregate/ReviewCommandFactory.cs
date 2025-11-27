@@ -7,14 +7,12 @@ public static class ReviewCommandFactory
 {
     public static CreateReviewCommand CreateCreateReviewCommand(
         Guid? targetUserId = null,
-        Guid? authorId = null,
         int rating = Constants.Review.RatingInt,
         string? comment = Constants.Review.CommentStr
     )
     {
         return new CreateReviewCommand(
             TargetUserId: targetUserId ?? Constants.Review.TargetUserId,
-            AuthorId: authorId ?? Constants.Review.AuthorId,
             Rating: rating,
             Comment: comment
         );

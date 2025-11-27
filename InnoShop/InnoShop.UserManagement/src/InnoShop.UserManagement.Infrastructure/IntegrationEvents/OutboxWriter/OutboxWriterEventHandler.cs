@@ -43,6 +43,14 @@ public class OutboxWriterEventHandler
         await AddOutboxIntegrationEventAsync(integrationEvent, cancellationToken);
     }
 
+    public async Task Handle(UserProfileUpdatedEvent notification, CancellationToken cancellationToken)
+    {
+        var integrationEvent = new UserProfileUpdatedIntegrationEvent(
+            UserId: notification.UserId);
+
+        await AddOutboxIntegrationEventAsync(integrationEvent, cancellationToken);
+    }
+
     private async Task AddOutboxIntegrationEventAsync(IIntegrationEvent integrationEvent, CancellationToken cancellationToken)
     {
         await _dbContext.OutboxIntegrationEvents.AddAsync(new OutboxIntegrationEvent(

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ServiceDiscovery;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -57,7 +56,8 @@ public static class Extensions
             {
                 metrics.AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
-                    .AddRuntimeInstrumentation();
+                    .AddRuntimeInstrumentation()
+                    .AddMeter("Microsoft.Data.SqlClient.EventSource");
             })
             .WithTracing(tracing =>
             {
@@ -72,10 +72,7 @@ public static class Extensions
                     //.AddGrpcClientInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddSource("RabbitMQ.Client")
-                    .AddSqlClientInstrumentation(options =>
-                    {
-                        options.RecordException = true;
-                    }); ;
+                    .AddSqlClientInstrumentation();
             });
 
         builder.AddOpenTelemetryExporters();

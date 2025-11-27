@@ -25,6 +25,9 @@ public class UserErrors
     public static readonly Error UserAlreadyDeactivated = Error.Conflict(
         "User.UserAlreadyDseactivated",
         "The user is already deactivated");
+    public static readonly Error ProfileUpdateForbidden = Error.Forbidden(
+        "User.ProfileUpdateForbidden",
+        "You cannot update another user's profile.");
     public static readonly Error UserProfileMustBeInAllowedCountry = Error.Validation(
         "User.UserProfileMustBeInAllowedCountry",
         "Selling is currently restricted to users located in allowed country.");

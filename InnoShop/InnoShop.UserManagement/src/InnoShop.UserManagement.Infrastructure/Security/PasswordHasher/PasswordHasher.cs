@@ -4,7 +4,7 @@ using ErrorOr;
 
 using InnoShop.UserManagement.Domain.Common.Interfaces;
 
-namespace InnoShop.UserManagement.Infrastructure.Authentication.PasswordHasher;
+namespace InnoShop.UserManagement.Infrastructure.Security.PasswordHasher;
 
 public partial class PasswordHasher : IPasswordHasher
 {

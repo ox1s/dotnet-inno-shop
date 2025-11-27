@@ -11,5 +11,5 @@ public record CreateUserProfileCommand(
     string PhoneNumber,
     Country Country,
     string State,
-    string? City)
-    : IRequest<ErrorOr<Success>>;
+    string City)
+    : IRequest<ErrorOr<User>>;

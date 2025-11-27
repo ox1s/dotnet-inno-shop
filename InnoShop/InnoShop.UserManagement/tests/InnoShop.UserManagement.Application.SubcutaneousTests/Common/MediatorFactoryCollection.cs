@@ -1,6 +1,7 @@
 namespace InnoShop.UserManagement.Application.SubcutaneousTests.Common;
 
-public class MediatorFactoryCollection
+[CollectionDefinition(CollectionName)]
+public class MediatorFactoryCollection : ICollectionFixture<MediatorFactory>
 {
-    
+    public const string CollectionName = "MediatorFactoryCollection";
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 
-namespace InnoShop.UserManagement.Infrastructure.Authentication;
+namespace InnoShop.UserManagement.Infrastructure.Security;
 
 public class EmailVerificationLinkFactory(
     IHttpContextAccessor _httpContextAccessor,

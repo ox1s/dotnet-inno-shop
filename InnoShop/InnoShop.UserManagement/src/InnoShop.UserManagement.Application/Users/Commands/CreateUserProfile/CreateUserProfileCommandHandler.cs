@@ -8,9 +8,9 @@ namespace InnoShop.UserManagement.Application.Users.Commands.CreateUserProfile;
 public class CreateUserProfileCommandHandler(
     IUsersRepository _usersRepository,
     IUnitOfWork _unitOfWork)
-    : IRequestHandler<CreateUserProfileCommand, ErrorOr<Success>>
+    : IRequestHandler<CreateUserProfileCommand, ErrorOr<User>>
 {
-    public async Task<ErrorOr<Success>> Handle(CreateUserProfileCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<User>> Handle(CreateUserProfileCommand command, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetByIdAsync(command.UserId, cancellationToken);
 
@@ -29,7 +29,7 @@ public class CreateUserProfileCommandHandler(
         if (avatarUrlResult.IsError) return avatarUrlResult.Errors;
 
         var phoneNumberResult = PhoneNumber.Create(command.PhoneNumber, command.Country);
-        if (avatarUrlResult.IsError) return phoneNumberResult.Errors;
+        if (phoneNumberResult.IsError) return phoneNumberResult.Errors;
 
         var locationResult = Location.Create(command.Country, command.State, command.City);
         if (locationResult.IsError) return locationResult.Errors;
@@ -49,6 +49,7 @@ public class CreateUserProfileCommandHandler(
         await _usersRepository.UpdateAsync(user, cancellationToken);
         await _unitOfWork.CommitChangesAsync(cancellationToken);
 
-        return Result.Success;
+        return user;
     }
+
 }

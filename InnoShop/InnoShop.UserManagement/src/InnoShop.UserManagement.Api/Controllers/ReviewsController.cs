@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InnoShop.UserManagement.Api.Controllers;
 
-[Route("api/v1/users/{targetUserId:guid}/reviews")] 
+[Route("api/v1/users/{targetUserId:guid}/reviews")]
 public class ReviewsController(ISender _sender) : ApiController
 {
 
@@ -19,11 +19,9 @@ public class ReviewsController(ISender _sender) : ApiController
         Guid targetUserId,
         CancellationToken cancellationToken)
     {
-        var requestUserId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
 
         var command = new CreateReviewCommand(
            TargetUserId: targetUserId,
-           AuthorId: requestUserId,
            Rating: request.Rating,
            Comment: request.Comment);
 
@@ -38,7 +36,7 @@ public class ReviewsController(ISender _sender) : ApiController
 
     }
 
-    [HttpPut("reviews/{reviewId:guid}")]
+    [HttpPut("{reviewId:guid}")]
     public async Task<IActionResult> UpdateReview(Guid reviewId, UpdateReviewRequest request)
     {
         var command = new UpdateReviewCommand(
@@ -53,7 +51,7 @@ public class ReviewsController(ISender _sender) : ApiController
             Problem);
     }
 
-    [HttpDelete("reviews/{reviewId:guid}")]
+    [HttpDelete("{reviewId:guid}")]
     public async Task<IActionResult> DeleteReview(Guid reviewId)
     {
         var command = new DeleteReviewCommand(reviewId);
@@ -65,7 +63,7 @@ public class ReviewsController(ISender _sender) : ApiController
             Problem);
     }
 
-    [HttpGet("reviews/{reviewId:guid}")]
+    [HttpGet("{reviewId:guid}")]
     public async Task<IActionResult> GetReview(Guid reviewId)
     {
         var query = new GetReviewQuery(reviewId);

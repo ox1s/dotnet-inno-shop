@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 
-namespace InnoShop.UserManagement.Infrastructure.Authentication.TokenGenerator;
+namespace InnoShop.UserManagement.Infrastructure.Security.TokenGenerator;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {

@@ -11,12 +11,14 @@ public class CreateReviewCommandHandler(
     IUsersRepository _usersRepository,
     IUnitOfWork _unitOfWork,
     IReviewsRepository _reviewsRepository,
+    ICurrentUserProvider _currentUserProvider,
     IDateTimeProvider _dateTimeProvider) : IRequestHandler<CreateReviewCommand, ErrorOr<Review>>
 {
     public async Task<ErrorOr<Review>> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
     {
         var targetUser = await _usersRepository.GetByIdAsync(request.TargetUserId, cancellationToken);
-        var author = await _usersRepository.GetByIdAsync(request.AuthorId, cancellationToken);
+        var currentUser = _currentUserProvider.GetCurrentUser();
+        var author = await _usersRepository.GetByIdAsync(currentUser.Id, cancellationToken);
 
         if (targetUser is null || author is null)
         {

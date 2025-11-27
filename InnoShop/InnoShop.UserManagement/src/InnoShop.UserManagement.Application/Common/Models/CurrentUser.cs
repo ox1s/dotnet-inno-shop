@@ -1,4 +1,4 @@
-namespace InnoShop.UserManagement.Application.Common.Models;
+﻿namespace InnoShop.UserManagement.Application.Common.Interfaces;
 
 public record CurrentUser(
     Guid Id,

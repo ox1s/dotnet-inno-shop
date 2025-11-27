@@ -1,4 +1,4 @@
-namespace InnoShop.UserManagement.Infrastructure.Authentication.TokenGenerator;
+namespace InnoShop.UserManagement.Infrastructure.Security.TokenGenerator;
 
 public class JwtSettings
 {

@@ -12,7 +12,7 @@ public abstract record NameValueObject(string Value)
             return NameErrors.Empty(prefix);
         }
 
-        if (value.Length < 1 || value.Length > 50)
+        if (value.Length < 2 || value.Length > 50)
         {
             return NameErrors.InvalidLength(prefix);
         }

@@ -125,7 +125,7 @@ public sealed class User : AggregateRoot
 
         UserProfile = updatedUserProfile;
 
-        //_domainEvents.Add(new UserProfileCreatedEvent(Id));
+        _domainEvents.Add(new UserProfileUpdatedEvent(Id));
 
         return Result.Success;
     }

@@ -1,5 +1,6 @@
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
@@ -8,11 +9,16 @@ namespace InnoShop.UserManagement.Infrastructure.Storage;
 
 public class MinioFileStorage(
     IMinioClient _minioClient,
+    IOptions<BlobStorageSettings> _settings,
     ILogger<MinioFileStorage> _logger) : IFileStorage
 {
-    private const string BucketName = "user-avatars";
+    private string BucketName => _settings.Value.BucketName;
 
-    public async Task<string> UploadAsync(Stream stream, string fileName, string contentType, CancellationToken cancellationToken = default)
+    public async Task<string> UploadAsync(
+        Stream stream,
+        string fileName,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         await EnsureBucketExistsAsync(cancellationToken);
 
@@ -64,29 +70,48 @@ public class MinioFileStorage(
 
     private async Task EnsureBucketExistsAsync(CancellationToken cancellationToken)
     {
-        var bucketExistsArgs = new BucketExistsArgs()
-            .WithBucket(BucketName);
-
-        bool found = await _minioClient
-            .BucketExistsAsync(bucketExistsArgs, cancellationToken);
-
-        if (!found)
+        var bucketExistsArgs = new BucketExistsArgs().WithBucket(BucketName);
+        try
         {
-            var makeBucketArgs = new MakeBucketArgs()
-                .WithBucket(BucketName);
+            bool found = await _minioClient.BucketExistsAsync(bucketExistsArgs, cancellationToken);
+
+            if (!found)
+            {
+                var makeBucketArgs = new MakeBucketArgs().WithBucket(BucketName);
+
+                await _minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
+            }
+
+            var policy = $@"{{""Version"":""2012-10-17"",""Statement"":[{{""Action"":[""s3:GetBucketLocation""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:ListBucket""],""Condition"":{{""StringEquals"":{{""s3:prefix"":[""foo"",""prefix/""]}}}},""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:GetObject""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}/foo*"",""arn:aws:s3:::{BucketName}/prefix/*""],""Sid"":""""}}]}}";
+
             await _minioClient
-                .MakeBucketAsync(makeBucketArgs, cancellationToken);
+                .SetPolicyAsync(
+                    new SetPolicyArgs()
+                        .WithBucket(BucketName)
+                        .WithPolicy(policy), cancellationToken);
+
+            _logger.LogInformation("Created bucket {Bucket} and set public policy", BucketName);
+        }
+        catch (MinioException e)
+        {
+            _logger.LogInformation("Error occurred: " + e);
         }
 
-        var policy = $@"{{""Version"":""2012-10-17"",""Statement"":[{{""Action"":[""s3:GetBucketLocation""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:ListBucket""],""Condition"":{{""StringEquals"":{{""s3:prefix"":[""foo"",""prefix/""]}}}},""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:GetObject""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}/foo*"",""arn:aws:s3:::{BucketName}/prefix/*""],""Sid"":""""}}]}}";
+    }
 
-        await _minioClient
-            .SetPolicyAsync(
-                new SetPolicyArgs()
-                    .WithBucket(BucketName)
-                    .WithPolicy(policy), cancellationToken);
+    public async Task<string> GetPresignedUrlForUploadAsync(string fileName, string contentType, CancellationToken cancellationToken = default)
+    {
+        await EnsureBucketExistsAsync(cancellationToken);
 
-        _logger.LogInformation("Created bucket {Bucket} and set public policy", BucketName);
+        var objectName = $"{Guid.NewGuid()}-{fileName}";
 
+        var args = new PresignedPutObjectArgs()
+            .WithBucket(BucketName)
+            .WithObject(objectName)
+            .WithExpiry(60 * 10);
+
+        string presignedUrl = await _minioClient.PresignedPutObjectAsync(args);
+
+        return presignedUrl;
     }
 }

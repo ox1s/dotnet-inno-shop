@@ -1,5 +1,5 @@
 using ErrorOr;
-using InnoShop.UserManagement.Application.Common.Authorization;
+using InnoShop.UserManagement.Application.Common.Security.Request;
 using MediatR;
 
 namespace InnoShop.UserManagement.Application.Users.Commands.DeactivateUser;

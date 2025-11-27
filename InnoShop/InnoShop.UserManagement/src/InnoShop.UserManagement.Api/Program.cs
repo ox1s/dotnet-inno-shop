@@ -15,13 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddProblemDetails();
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
-    builder.Services
-        .AddApplication()
-        .AddInfrastructure(builder.Configuration);
-
     builder.AddRabbitMQClient("messaging");
     builder.AddMinioClient("minio");
 
+    builder.Services
+        .AddApplication()
+        .AddInfrastructure(builder.Configuration);
 }
 
 var app = builder.Build();

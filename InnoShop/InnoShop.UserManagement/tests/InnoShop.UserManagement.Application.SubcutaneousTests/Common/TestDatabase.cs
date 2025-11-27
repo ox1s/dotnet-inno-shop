@@ -10,18 +10,23 @@ namespace InnoShop.UserManagement.Application.SubcutaneousTests.Common;
 
 public class SqliteTestDatabase : IDisposable
 {
-    public SqliteConnection Connection { get; }
+    public SqliteConnection Connection { get; private set; } = null!;
+
+    private SqliteTestDatabase(string connectionString)
+    {
+        Connection = new SqliteConnection(connectionString);
+        Connection.Open();
+    }
 
     public static SqliteTestDatabase CreateAndInitialize()
     {
-        var testDatabase = new SqliteTestDatabase("DataSource=:memory:");
-        testDatabase.InitializeDatabase();
-        return testDatabase;
+        var db = new SqliteTestDatabase("DataSource=:memory:");
+        db.InitializeDatabase();
+        return db;
     }
 
-    public void InitializeDatabase()
+    private void InitializeDatabase()
     {
-        Connection.Open();
         var options = new DbContextOptionsBuilder<UserManagementDbContext>()
             .UseSqlite(Connection)
             .Options;
@@ -30,23 +35,27 @@ public class SqliteTestDatabase : IDisposable
         var publisher = Substitute.For<IPublisher>();
         var logger = Substitute.For<ILogger<UserManagementDbContext>>();
 
-        var context = new UserManagementDbContext(options, httpContextAccessor, publisher, logger);
+        using var context = new UserManagementDbContext(options, httpContextAccessor, publisher, logger);
         context.Database.EnsureCreated();
     }
 
     public void ResetDatabase()
     {
-        Connection.Close();
-        InitializeDatabase();
-    }
+        var options = new DbContextOptionsBuilder<UserManagementDbContext>()
+            .UseSqlite(Connection)
+            .Options;
 
-    private SqliteTestDatabase(string connectionString)
-    {
-        Connection = new SqliteConnection(connectionString);
+        var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+        var publisher = Substitute.For<IPublisher>();
+        var logger = Substitute.For<ILogger<UserManagementDbContext>>();
+
+        using var context = new UserManagementDbContext(options, httpContextAccessor, publisher, logger);
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
     }
 
     public void Dispose()
     {
-        Connection.Close();
+        Connection?.Dispose();
     }
 }

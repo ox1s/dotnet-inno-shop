@@ -4,7 +4,6 @@ using MediatR;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Domain.ReviewAggregate;
-using InnoShop.UserManagement.Domain.UserAggregate;
 
 namespace InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
 
@@ -16,27 +15,19 @@ public class UpdateReviewCommandHandler(
     public async Task<ErrorOr<Success>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
     {
         var review = await _reviewsRepository.GetByIdAsync(request.Id, cancellationToken);
+        if (review is null) return ReviewErrors.NotFound;
 
-        if (review is null)
-        {
-            return ReviewErrors.NotFound;
-        }
 
         var ratingResult = Rating.Create(request.Rating);
-        if (ratingResult.IsError)
-        {
-            return ratingResult.Errors;
-        }
+        if (ratingResult.IsError) return ratingResult.Errors;
         var rating = ratingResult.Value;
+
 
         Comment? comment = null;
         if (request.Comment is not null)
         {
             var commentResult = Comment.Create(request.Comment);
-            if (commentResult.IsError)
-            {
-                return commentResult.Errors;
-            }
+            if (commentResult.IsError) return commentResult.Errors;
             comment = commentResult.Value;
         }
 
@@ -45,11 +36,8 @@ public class UpdateReviewCommandHandler(
             comment ?? null,
             _dateTimeProvider
         );
-
-        if (reviewResult.IsError)
-        {
-            return reviewResult.Errors;
-        }
+        if (reviewResult.IsError) return reviewResult.Errors;
+        
 
         await _reviewsRepository.UpdateAsync(review, cancellationToken);
         await _unitOfWork.CommitChangesAsync(cancellationToken);

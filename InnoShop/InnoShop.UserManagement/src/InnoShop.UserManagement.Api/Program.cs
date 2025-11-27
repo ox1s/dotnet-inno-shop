@@ -29,8 +29,19 @@ var app = builder.Build();
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
-        dbContext.Database.Migrate();
+        var provider = dbContext.Database.ProviderName;
+
+        if (provider?.Contains("SqlServer", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            dbContext.Database.Migrate();
+        }
+        else if (provider?.Contains("Sqlite", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            dbContext.Database.EnsureCreated();
+        }
     }
+
+
 
     app.UseExceptionHandler();
 
@@ -50,3 +61,4 @@ var app = builder.Build();
 
     app.Run();
 }
+

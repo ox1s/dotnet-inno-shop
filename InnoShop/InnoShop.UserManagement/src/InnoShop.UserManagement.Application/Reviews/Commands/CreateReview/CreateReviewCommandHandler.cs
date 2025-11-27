@@ -20,28 +20,22 @@ public class CreateReviewCommandHandler(
         var currentUser = _currentUserProvider.GetCurrentUser();
         var author = await _usersRepository.GetByIdAsync(currentUser.Id, cancellationToken);
 
-        if (targetUser is null || author is null)
-        {
-            return UserErrors.UserNotFound;
-        }
+        if (targetUser is null || author is null) return UserErrors.UserNotFound;
+
 
         var ratingResult = Rating.Create(request.Rating);
-        if (ratingResult.IsError)
-        {
-            return ratingResult.Errors;
-        }
+        if (ratingResult.IsError) return ratingResult.Errors;
         var rating = ratingResult.Value;
+
 
         Comment? comment = null;
         if (request.Comment is not null)
         {
             var commentResult = Comment.Create(request.Comment);
-            if (commentResult.IsError)
-            {
-                return commentResult.Errors;
-            }
+            if (commentResult.IsError) return commentResult.Errors;
             comment = commentResult.Value;
         }
+
 
         var reviewResult = Review.Create(
             targetUser,
@@ -50,12 +44,9 @@ public class CreateReviewCommandHandler(
             comment ?? null,
             _dateTimeProvider
         );
-
-        if (reviewResult.IsError)
-        {
-            return reviewResult.Errors;
-        }
+        if (reviewResult.IsError) return reviewResult.Errors;
         var review = reviewResult.Value;
+
 
         await _reviewsRepository.AddReviewAsync(review, cancellationToken);
         await _unitOfWork.CommitChangesAsync(cancellationToken);

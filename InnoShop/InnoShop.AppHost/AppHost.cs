@@ -2,8 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var appConfig = builder.Configuration;
-
 var rabbit = builder.AddRabbitMQ("messaging");
 
 var sql = builder.AddSqlServer("sql")

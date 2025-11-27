@@ -7,5 +7,4 @@ namespace InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
 public record CreateReviewCommand(
     Guid TargetUserId,
     int Rating,
-    string? Comment
-) : IRequest<ErrorOr<Review>>;
+    string? Comment) : IRequest<ErrorOr<Review>>;

@@ -7,5 +7,4 @@ namespace InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
 public record UpdateReviewCommand(
     Guid Id,
     int Rating,
-    string? Comment
-) : IRequest<ErrorOr<Success>>;
+    string? Comment) : IRequest<ErrorOr<Success>>;

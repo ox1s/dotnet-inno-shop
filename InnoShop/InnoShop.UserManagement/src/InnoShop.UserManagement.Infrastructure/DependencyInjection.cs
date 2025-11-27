@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Net.Mail;
 using Throw;
 
+
 namespace InnoShop.UserManagement.Infrastructure;
 
 public static class DependencyInjection
@@ -101,10 +102,20 @@ public static class DependencyInjection
     }
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = configuration.GetConnectionString("innoshop-users");
+        string? connectionString = configuration.GetConnectionString("innoshop-users")
+            ?? throw new InvalidOperationException("Connection string 'innoshop-users' not found"); ;
 
-        services.AddDbContext<UserManagementDbContext>(options =>
-            options.UseSqlServer(connectionString));
+        if (connectionString.Contains("DataSource", StringComparison.OrdinalIgnoreCase) ||
+        connectionString.Contains(":memory:", StringComparison.OrdinalIgnoreCase))
+        {
+            services.AddDbContext<UserManagementDbContext>(options =>
+                options.UseSqlite(connectionString));
+        }
+        else
+        {
+            services.AddDbContext<UserManagementDbContext>(options =>
+                options.UseSqlServer(connectionString));
+        }
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<UserManagementDbContext>());
         services.AddScoped<IUsersRepository, UsersRepository>();

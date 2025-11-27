@@ -29,7 +29,7 @@ public class ReviewTest
         var createdReviewResult = Review.Create(
             targetUser,
             author,
-            Constants.Review.ValidRating,
+            Constants.Review.Rating,
             comment,
             _dateTimeProvider);
 
@@ -39,7 +39,7 @@ public class ReviewTest
 
         review.TargetUserId.Should().Be(targetUser.Id);
         review.AuthorId.Should().Be(author.Id);
-        review.Rating.Should().Be(Constants.Review.ValidRating);
+        review.Rating.Should().Be(Constants.Review.Rating);
         review.Comment.Should().Be(comment);
     }
 
@@ -53,16 +53,16 @@ public class ReviewTest
         var user = UserFactory.CreateUserWithProfile();
 
         // Act
-        var createdReviewRusult = Review.Create(
+        var createdReviewResult = Review.Create(
             targetUser: user,
             author: user,
-            Constants.Review.ValidRating,
+            Constants.Review.Rating,
             Constants.Review.Comment,
             _dateTimeProvider);
 
         // Assert
-        createdReviewRusult.IsError.Should().BeTrue();
-        createdReviewRusult.FirstError.Should().Be(UserErrors.UserCannotWriteAReviewForThemselves);
+        createdReviewResult.IsError.Should().BeTrue();
+        createdReviewResult.FirstError.Should().Be(UserErrors.UserCannotWriteAReviewForThemselves);
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public class ReviewTest
         var review = Review.Create(
             targetUser,
             author,
-            Constants.Review.ValidRating,
+            Constants.Review.Rating,
             Constants.Review.Comment,
             _dateTimeProvider).Value;
 

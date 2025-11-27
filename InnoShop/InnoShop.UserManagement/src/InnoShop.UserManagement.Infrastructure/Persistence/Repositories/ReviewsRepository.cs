@@ -21,8 +21,6 @@ public class ReviewsRepository : IReviewsRepository
     public async Task<Review?> GetByIdAsync(Guid reviewId, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Reviews
-            .Include(r => r.AuthorId)
-            .Include(r => r.TargetUserId)
             .FirstOrDefaultAsync(r => r.Id == reviewId, cancellationToken);
     }
 

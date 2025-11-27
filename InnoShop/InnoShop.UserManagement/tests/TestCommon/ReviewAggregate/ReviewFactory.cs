@@ -20,7 +20,7 @@ public static class ReviewFactory
         var reviewer = author ?? UserFactory.CreateUserWithProfile();
 
         var ratingValue = Rating.Create(
-            rating ?? Constants.Review.ValidRating.Value).Value;
+            rating ?? Constants.Review.Rating.Value).Value;
 
         var commentText = comment ?? Constants.Review.Comment.Value;
         var commentValue = Comment.Create(commentText).Value;

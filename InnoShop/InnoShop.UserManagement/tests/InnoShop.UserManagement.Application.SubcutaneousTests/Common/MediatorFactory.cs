@@ -74,4 +74,10 @@ public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLif
         _testDatabase?.Dispose();
         return Task.CompletedTask;
     }
+    public void SetCurrentUserId(Guid userId)
+    {
+        var scope = Services.CreateScope();
+        var currentUserProvider = scope.ServiceProvider.GetRequiredService<ICurrentUserProvider>();
+        currentUserProvider.GetCurrentUser().Returns(new CurrentUser(userId, Array.Empty<string>(), Array.Empty<string>()));
+    }
 }

@@ -9,9 +9,7 @@ public static partial class Constants
     {
         public static readonly Guid TargetUserId = Guid.NewGuid();
         public static readonly Guid AuthorId = Guid.NewGuid();
-        public const int RatingInt = 1;
-        public const string CommentStr = "Ок.";
-        public static readonly Rating ValidRating = new Rating(1);
+        public static readonly Rating Rating = new Rating(1);
         public static readonly Comment Comment = new Comment("Отлично🚽");
     }
 

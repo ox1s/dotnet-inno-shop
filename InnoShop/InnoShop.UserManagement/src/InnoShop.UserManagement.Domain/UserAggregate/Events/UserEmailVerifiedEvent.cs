@@ -1,3 +1,5 @@
-﻿namespace InnoShop.UserManagement.Domain.UserAggregate.Events;
+﻿using InnoShop.SharedKernel.Common;
 
-public record UserEmailVerifiedEvent();
+namespace InnoShop.UserManagement.Domain.UserAggregate.Events;
+
+public record UserEmailVerifiedEvent(Guid UserId) : IDomainEvent;

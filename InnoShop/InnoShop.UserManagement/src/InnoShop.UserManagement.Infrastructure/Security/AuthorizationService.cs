@@ -1,42 +1,103 @@
-﻿using InnoShop.UserManagement.Application.Common.Interfaces;
-using InnoShop.UserManagement.Application.Common.Security.Request;
+using InnoShop.UserManagement.Application.Common.Interfaces;
+using InnoShop.UserManagement.Domain.UserAggregate;
+using InnoShop.UserManagement.Infrastructure.Persistence;
 using InnoShop.UserManagement.Infrastructure.Security.PolicyEnforcer;
-
 using ErrorOr;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
+using InnoShop.UserManagement.Application.Common.Security;
 
 namespace InnoShop.UserManagement.Infrastructure.Security;
 
 public class AuthorizationService(
-    IPolicyEnforcer _policyEnforcer,
-    ICurrentUserProvider _currentUserProvider)
+    UserManagementDbContext dbContext, 
+    IDistributedCache cache,
+    IPolicyEnforcer policyEnforcer,
+    ICurrentUserProvider currentUserProvider)
         : IAuthorizationService
 {
-    public ErrorOr<Success> AuthorizeCurrentUser<T>(
+    public async Task<HashSet<string>> GetPermissionsForUserAsync(Guid userId)
+    {
+        string cacheKey = $"auth:permissions-{userId}";
+        
+        var cachedPermissions = await cache.GetStringAsync(cacheKey);
+        if (cachedPermissions is not null)
+        {
+            return JsonSerializer.Deserialize<HashSet<string>>(cachedPermissions)!;
+        }
+
+
+        var permissions = await dbContext.Users
+            .AsNoTracking()
+            .Where(u => u.Id == userId)
+            .SelectMany(u => u.Roles)       
+            .SelectMany(r => r.Permissions) 
+            .Select(p => p.Name)          
+            .ToListAsync();
+
+        var permissionsSet = permissions.ToHashSet();
+        
+        await cache.SetStringAsync(
+            cacheKey, 
+            JsonSerializer.Serialize(permissionsSet),
+            new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) });
+
+        return permissionsSet;
+    }
+
+    public async Task<HashSet<string>> GetRolesForUserAsync(Guid userId)
+    {
+        string cacheKey = $"auth:roles-{userId}";
+        
+        var cachedRoles = await cache.GetStringAsync(cacheKey);
+        if (cachedRoles is not null)
+        {
+            return JsonSerializer.Deserialize<HashSet<string>>(cachedRoles)!;
+        }
+
+        var roles = await dbContext.Users
+            .AsNoTracking()
+            .Where(u => u.Id == userId)
+            .SelectMany(u => u.Roles)
+            .Select(r => r.Name)
+            .ToListAsync();
+
+        var rolesSet = roles.ToHashSet();
+
+        await cache.SetStringAsync(
+            cacheKey, 
+            JsonSerializer.Serialize(rolesSet),
+            new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) });
+
+        return rolesSet;
+    }
+
+    public async Task<ErrorOr<Success>> AuthorizeCurrentUser<T>(
         IAuthorizeableRequest<T> request,
         List<string> requiredRoles,
         List<string> requiredPermissions,
         List<string> requiredPolicies)
     {
-        var currentUser = _currentUserProvider.GetCurrentUser();
+        var currentUser = currentUserProvider.GetCurrentUser();
 
-        if (requiredPermissions.Except(currentUser.Permissions).Any())
+        var userPermissions = await GetPermissionsForUserAsync(currentUser.Id);
+        var userRoles = await GetRolesForUserAsync(currentUser.Id);
+
+        if (requiredPermissions.Except(userPermissions).Any())
         {
-            return Error.Unauthorized(description: "User is missing required permissions for taking this action");
+            return Error.Unauthorized(description: "User is missing required permissions.");
         }
 
-        if (requiredRoles.Except(currentUser.Roles).Any())
+        if (requiredRoles.Except(userRoles).Any())
         {
-            return Error.Unauthorized(description: "User is missing required roles for taking this action");
+            return Error.Forbidden(description: "User is missing required roles.");
         }
 
         foreach (var policy in requiredPolicies)
         {
-            var authorizationAgainstPolicyResult = _policyEnforcer.Authorize(request, currentUser, policy);
-
-            if (authorizationAgainstPolicyResult.IsError)
-            {
-                return authorizationAgainstPolicyResult.Errors;
-            }
+            var result = policyEnforcer.Authorize(request, currentUser, policy);
+            if (result.IsError) return result.Errors;
         }
 
         return Result.Success;

@@ -1,6 +1,7 @@
-﻿namespace InnoShop.UserManagement.Contracts.Authentication;
+﻿using InnoShop.UserManagement.Domain.UserAggregate;
 
-public class VerificationResult
-{
-    
-}
+namespace InnoShop.UserManagement.Contracts.Authentication;
+
+public record VerificationResult(
+    User User,
+    string Token);

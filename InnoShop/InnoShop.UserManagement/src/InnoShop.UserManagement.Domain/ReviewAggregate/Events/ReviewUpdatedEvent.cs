@@ -1,5 +1,5 @@
 using ErrorOr;
-using InnoShop.UserManagement.Domain.Common;
+using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Domain.Common.EventualConsistency;
 
 namespace InnoShop.UserManagement.Domain.ReviewAggregate.Events;

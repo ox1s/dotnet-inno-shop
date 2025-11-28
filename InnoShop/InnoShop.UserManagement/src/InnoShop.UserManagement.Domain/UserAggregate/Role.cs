@@ -1,14 +1,34 @@
 using Ardalis.SmartEnum;
+using InnoShop.SharedKernel.Security.Roles;
 
 namespace InnoShop.UserManagement.Domain.UserAggregate;
 
-public class Role : SmartEnum<Role>
+public sealed class Role
 {
-    public static readonly Role User = new(nameof(User), 0);
-    public static readonly Role Admin = new(nameof(Admin), 1);
+    public static readonly Role Registered = new(1, AppRoles.Registered);
+    public static readonly Role Admin = new(2, AppRoles.Admin);
+    public static readonly Role Verified = new(3, AppRoles.Verified);
+    public static readonly Role Seller = new(4, AppRoles.Seller);
 
-    public Role(string name, int value) : base(name, value)
+    public int Id { get; init; }
+
+    public string Name { get; init; }
+
+
+    private Role(int id, string name)
     {
+        Id = id;
+        Name = name;
     }
 
+
+    public ICollection<Permission> Permissions { get; init; } = new List<Permission>();
+
+    public static IReadOnlyList<Role> List =>
+    [
+        Registered,
+        Admin,
+        Verified,
+        Seller
+    ];
 }

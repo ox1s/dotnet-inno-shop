@@ -1,4 +1,5 @@
 using FluentValidation;
+using InnoShop.UserManagement.Application.Users.Commands.ActivateUserProfile;
 
 namespace InnoShop.UserManagement.Application.Users.Commands.ActivateUser;
 

@@ -50,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.UserManagement.Api.IntegrationTests", "InnoShop.UserManagement\tests\InnoShop.UserManagement.Api.IntegrationTests\InnoShop.UserManagement.Api.IntegrationTests.csproj", "{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -252,6 +254,18 @@ Global
 		{48D84537-E2AE-4A37-BC5D-58A8BD0D5B76}.Release|x64.Build.0 = Release|Any CPU
 		{48D84537-E2AE-4A37-BC5D-58A8BD0D5B76}.Release|x86.ActiveCfg = Release|Any CPU
 		{48D84537-E2AE-4A37-BC5D-58A8BD0D5B76}.Release|x86.Build.0 = Release|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Debug|x64.Build.0 = Debug|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Debug|x86.Build.0 = Debug|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Release|x64.ActiveCfg = Release|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Release|x64.Build.0 = Release|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -273,6 +287,7 @@ Global
 		{C09CD186-E697-47A1-9EC6-028943812C3D} = {A910A633-008A-E96C-ADE8-E734DAD8F51F}
 		{006DDA1C-44AC-41E4-AF0F-AA88D18B06E5} = {A910A633-008A-E96C-ADE8-E734DAD8F51F}
 		{48D84537-E2AE-4A37-BC5D-58A8BD0D5B76} = {A910A633-008A-E96C-ADE8-E734DAD8F51F}
+		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A} = {A910A633-008A-E96C-ADE8-E734DAD8F51F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E8F19A4D-9E18-4ECF-BDD8-26A150831403}

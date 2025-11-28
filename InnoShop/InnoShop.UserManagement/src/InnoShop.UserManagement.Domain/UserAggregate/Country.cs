@@ -21,8 +21,8 @@ public class Country : SmartEnum<Country>
         phoneCode: "+375",
         regexPattern: @"^(?:\+?375|80)(?:25|29|33|44)\d{7}$");
 
-    public static readonly Country USA = new(
-        name: nameof(USA),
+    public static readonly Country Usa = new(
+        name: nameof(Usa),
         value: 1,
         displayName: "США",
         isoCode: "US",

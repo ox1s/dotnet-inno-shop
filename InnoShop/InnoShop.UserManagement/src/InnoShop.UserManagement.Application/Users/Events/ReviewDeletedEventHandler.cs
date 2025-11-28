@@ -5,16 +5,11 @@ using MediatR;
 
 namespace InnoShop.UserManagement.Application.Users.Events;
 
-public class ReviewDeletedEventHandler : INotificationHandler<ReviewDeletedEvent>
+public class ReviewDeletedEventHandler(IUsersRepository usersRepository) : INotificationHandler<ReviewDeletedEvent>
 {
-    private readonly IUsersRepository _usersRepository;
-    public ReviewDeletedEventHandler(IUsersRepository usersRepository)
-    {
-        _usersRepository = usersRepository;
-    }
     public async Task Handle(ReviewDeletedEvent notification, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetByIdAsync(notification.TargetUserId, cancellationToken)
+        var user = await usersRepository.GetByIdAsync(notification.TargetUserId, cancellationToken)
             ?? throw new EventualConsistencyException(ReviewDeletedEvent.UserNotFound);
 
         var deleteReviewResult = user.ApplyRatingRemoval(notification.RatingValue);
@@ -26,6 +21,6 @@ public class ReviewDeletedEventHandler : INotificationHandler<ReviewDeletedEvent
                 deleteReviewResult.Errors);
         }
 
-        await _usersRepository.UpdateAsync(user, cancellationToken);
+        await usersRepository.UpdateAsync(user, cancellationToken);
     }
 }

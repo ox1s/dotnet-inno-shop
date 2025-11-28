@@ -1,4 +1,4 @@
-namespace InnoShop.UserManagement.Domain.Common;
+namespace InnoShop.SharedKernel.Common;
 
 public abstract class AggregateRoot : Entity
 {

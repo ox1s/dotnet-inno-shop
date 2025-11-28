@@ -1,4 +1,5 @@
 using ErrorOr;
+using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Domain.UserAggregate.Events;
@@ -9,7 +10,8 @@ namespace InnoShop.UserManagement.Domain.UserAggregate;
 public sealed class User : AggregateRoot
 {
     public Email Email { get; private set; } = null!;
-    public Role Role { get; private set; } = null!;
+    private readonly List<Role> _roles = new();
+    public IReadOnlyCollection<Role> Roles => _roles.ToList();
     public UserProfile? UserProfile { get; private set; }
 
     public bool IsActive { get; private set; } = true;
@@ -32,12 +34,10 @@ public sealed class User : AggregateRoot
     private User(
         Email email,
         string passwordHash,
-        Role role,
         Guid? id = null)
             : base(id ?? Guid.NewGuid())
     {
         Email = email;
-        Role = role;
         _passwordHash = passwordHash;
         IsEmailVerified = false;
 
@@ -53,11 +53,12 @@ public sealed class User : AggregateRoot
         if (DateTime.UtcNow > EmailVerificationTokenExpiration)
             return Error.Validation(description: "Token expired");
 
+        _roles.Add(Role.Verified);
         IsEmailVerified = true;
         EmailVerificationToken = null;
         EmailVerificationTokenExpiration = null;
 
-        // _domainEvents.Add(new UserEmailVerifiedEvent(Id));
+        DomainEvents.Add(new UserEmailVerifiedEvent(Id));
 
         return Result.Success;
     }
@@ -91,15 +92,19 @@ public sealed class User : AggregateRoot
 
     public static User CreateUser(Email email, string passwordHash)
     {
-        var user = new User (email, passwordHash, Role.User);
+        var user = new User (email, passwordHash);
+        user._roles.Add(Role.Registered);
 
-        user._domainEvents.Add(new UserRegisteredEvent(user.Id));
+        user.DomainEvents.Add(new UserRegisteredEvent(user.Id));
         return user;
     }
 
     public static User CreateAdmin(Email email, string passwordHash)
     {
-        return new(email, passwordHash, Role.Admin);
+        var user = new User (email, passwordHash);
+        user._roles.Add(Role.Admin);
+        user.DomainEvents.Add(new UserRegisteredEvent(user.Id));
+        return user;
     }
 
     public ErrorOr<Success> CreateUserProfile(UserProfile userProfile)
@@ -110,8 +115,9 @@ public sealed class User : AggregateRoot
         }
 
         UserProfile = userProfile;
+        _roles.Add(Role.Seller);
 
-        _domainEvents.Add(new UserProfileUpdatedEvent(Id));
+        DomainEvents.Add(new UserProfileUpdatedEvent(Id));
 
         return Result.Success;
     }
@@ -125,7 +131,7 @@ public sealed class User : AggregateRoot
 
         UserProfile = updatedUserProfile;
 
-        _domainEvents.Add(new UserProfileUpdatedEvent(Id));
+        DomainEvents.Add(new UserProfileUpdatedEvent(Id));
 
         return Result.Success;
     }
@@ -149,7 +155,7 @@ public sealed class User : AggregateRoot
         }
         IsActive = false;
 
-        _domainEvents.Add(new UserProfileDeactivatedEvent(Id));
+        DomainEvents.Add(new UserProfileDeactivatedEvent(Id));
         return Result.Success;
     }
 

@@ -5,16 +5,13 @@ using MediatR;
 
 namespace InnoShop.UserManagement.Application.Users.Events;
 
-public class ReviewUpdatedEventHandler : INotificationHandler<ReviewUpdatedEvent>
+public class ReviewUpdatedEventHandler(
+    IUsersRepository usersRepository)
+    : INotificationHandler<ReviewUpdatedEvent>
 {
-    private readonly IUsersRepository _usersRepository;
-    public ReviewUpdatedEventHandler(IUsersRepository usersRepository)
-    {
-        _usersRepository = usersRepository;
-    }
     public async Task Handle(ReviewUpdatedEvent notification, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetByIdAsync(notification.TargetUserId, cancellationToken)
+        var user = await usersRepository.GetByIdAsync(notification.TargetUserId, cancellationToken)
             ?? throw new EventualConsistencyException(ReviewUpdatedEvent.UserNotFound);
 
         var updateReviewResult = user.ApplyRatingUpdate(notification.OldRating, notification.NewRating);
@@ -26,6 +23,6 @@ public class ReviewUpdatedEventHandler : INotificationHandler<ReviewUpdatedEvent
                 updateReviewResult.Errors);
         }
 
-        await _usersRepository.UpdateAsync(user, cancellationToken);
+        await usersRepository.UpdateAsync(user, cancellationToken);
     }
 }

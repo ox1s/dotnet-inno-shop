@@ -1,10 +1,14 @@
 using ErrorOr;
-using InnoShop.UserManagement.Domain.ReviewAggregate;
+using InnoShop.SharedKernel.Security.Permissions;
+using InnoShop.SharedKernel.Security.Policies;
+using InnoShop.UserManagement.Application.Common.Security;
 using MediatR;
 
 namespace InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
 
+[Authorize(Permissions = AppPermissions.Review.Update, Policies = AppPolicies.SelfOrAdmin)]
 public record UpdateReviewCommand(
     Guid Id,
+    Guid UserId,
     int Rating,
-    string? Comment) : IRequest<ErrorOr<Success>>;
+    string? Comment) : IAuthorizeableRequest<ErrorOr<Success>>;

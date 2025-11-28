@@ -3,6 +3,93 @@
   <component name="GhostTextManager">
     <option name="inputs">
       <map>
+        <entry key="@&lt;file_name&gt; и PermissionRequirement это не одно и тоже?">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764331357557" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Ambiguous reference.&#10;Candidates are:&#10;    InnoShop.UserManagement.Application.Common.Security.Permissions.Permission&#10;    InnoShop.UserManagement.Domain.UserAggregate.Permission&#10;@&lt;file_name&gt;">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764330423718" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Cannot resolve symbol 'Permissions'&#10;Cannot resolve symbol 'Permission'">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764323157779" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Dereference of a possibly null reference">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764316160127" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="For the following code:&#10;```&#10;        {&#10;            DbContext.Attach(role);&#10;        }&#10;```&#10;We have the error: Cannot access non-static method 'Attach' in static context&#10;Please fix this. If needed, you can use the get_errors tool on this file.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="3.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764345738671" />
+                  <option value="1764345644245" />
+                  <option value="1764345622582" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="InnoShop.SharedKernel.Common.EventualConsistency.EventualConsistencyException: Failed to publish domain events&#10;&#10;InnoShop.SharedKernel.Common.EventualConsistency.EventualConsistencyException&#10;Failed to publish domain events&#10;   at InnoShop.UserManagement.Infrastructure.Persistence.UserManagementDbContext.SaveChangesAsync(CancellationToken cancellationToken) in P:\C#Learning\Innowise\dotnet-inno-shop\InnoShop\InnoShop.UserManagement\src\InnoShop.UserManagement.Infrastructure\Persistence\UserManagementDbContext.cs:line 65&#10;   at InnoShop.UserManagement.Application.SubcutaneousTests.Users.Queries.GetUserProfileTests.GetUserProfile_WhenExists_ShouldReturnProfile() in P:\C#Learning\Innowise\dotnet-inno-shop\InnoShop\InnoShop.UserManagement\tests\InnoShop.UserManagement.Application.SubcutaneousTests\Users\Queries\GetUserProfileTests.cs:line 29&#10;   at Xunit.Sdk.TestInvoker`1.&lt;&gt;c__DisplayClass47_0.&lt;&lt;InvokeTestMethodAsync&gt;b__1&gt;d.MoveNext() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 259&#10;--- End of stack trace from previous location ---&#10;   at Xunit.Sdk.ExecutionTimer.AggregateAsync(Func`1 asyncAction) in /_/src/xunit.execution/Sdk/Frameworks/ExecutionTimer.cs:line 48&#10;   at Xunit.Sdk.ExceptionAggregator.RunAsync(Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 90">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="2.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764346118444" />
+                  <option value="1764345883429" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="System.Exception: AppUrl is not configured. Cannot generate email link in background.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764315755787" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
         <entry key="System.InvalidOperationException: The expression 'r.AuthorId' is invalid inside an 'Include' operation, since it does not represent a property access: 't =&gt; t.MyProperty'. To target navigations declared on derived types, use casting ('t =&gt; ((Derived)t).MyProperty') or the 'as' operator ('t =&gt; (t as Derived).MyProperty'). Collection navigation access can be filtered by composing Where, OrderBy(Descending), ThenBy(Descending), Skip or Take operations. For more information on including related data, see https://go.microsoft.com/fwlink/?LinkID=746393.">
           <value>
             <GhostTextMetaData>
@@ -15,6 +102,30 @@
             </GhostTextMetaData>
           </value>
         </entry>
+        <entry key="System.NullReferenceException: Object reference not set to an instance of an object.&#10;&#10;System.NullReferenceExcept">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764324832656" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="builder.HasData(Role.List); // это правильный код?">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764350271519" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
         <entry key="public async Task&lt;Review?&gt; GetByIdAsync(Guid reviewId, CancellationToken cancellationToken = default)&#10;    {&#10;        return await _dbContext.Reviews&#10;            .Include(r =&gt; r.AuthorId)&#10;            .Include(r =&gt; r.TargetUserId)&#10;            .FirstOrDefaultAsync(r =&gt; r.Id == reviewId, cancellationToken);&#10;    }">
           <value>
             <GhostTextMetaData>
@@ -22,6 +133,205 @@
               <option name="timestamps">
                 <list>
                   <option value="1764282145137" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="sequenceDiagram&#10;    actor User as Клиент&#10;    participant API as API (Controller)&#10;    participant JWT as JwtTokenGenerator&#10;    participant MediatR as MediatR Pipeline&#10;    participant AuthBehavior as AuthorizationBehavior&#10;    participant Provider as ICurrentUserProvider&#10;    participant DB as Database&#10;&#10;    User-&gt;&gt;API: HTTP запрос + JWT token&#10;    API-&gt;&gt;JWT: Login/Register (создание токена)&#10;    JWT-&gt;&gt;DB: Получить пользователя и его роли&#10;    DB--&gt;&gt;JWT: User data + roles&#10;    JWT-&gt;&gt;JWT: Добавить claims в JWT:&lt;br/&gt;- &quot;permissions&quot;: [&quot;userprofile:create&quot;, &quot;userprofile:update&quot;]&lt;br/&gt;- &quot;roles&quot;: [&quot;Admin&quot;, &quot;User&quot;]&lt;br/&gt;- &quot;userId&quot;: &quot;xxx&quot;&#10;    JWT--&gt;&gt;API: JWT token (в response)&#10;    &#10;    API-&gt;&gt;MediatR: Send(command)&#10;    MediatR-&gt;&gt;AuthBehavior: Handle (pipeline behavior)&#10;    AuthBehavior-&gt;&gt;Provider: GetCurrentUser()&#10;    Provider-&gt;&gt;Provider: Прочитать claims из HttpContext.User&#10;    Provider-&gt;&gt;Provider: Собрать permissions и roles из claims&#10;    Provider--&gt;&gt;AuthBehavior: CurrentUser(id, email, permissions, roles)&#10;    &#10;    AuthBehavior-&gt;&gt;AuthBehavior: Получить @&lt;file_name&gt;&#10;    AuthBehavior-&gt;&gt;AuthBehavior: Проверить:&lt;br/&gt;required permissions ⊆ current.Permissions&lt;br/&gt;required roles ⊆ current.Roles&#10;    alt Авторизация пройдена&#10;        AuthBehavior-&gt;&gt;MediatR: await next()&#10;        MediatR--&gt;&gt;API: Success&#10;    else Авторизация не пройдена&#10;        AuthBehavior--&gt;&gt;API: Error.Unauthorized()&#10;    end&#10;&#10;&#10;Я нашла такую схему, расскажи как можно применить к моему проекту, так же скажи зачем иметь почту в CurrentUser">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764328744812" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="А где CurrentUser получает эти роли?">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764326691970" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Добавь сюда больше проверок в конце">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764349570313" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Ну что дальше? не используй комманды консоли, просто прописывай">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764327096236" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Посмотри проект, где мне permissions надо установить для Userа, чтобы он их получал">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764326927233" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Почему я не могу испльзовать этот using">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764322783152" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Почему я не могу испльзовать этот using&#10;using InnoShop.UserManagement.Domain.UserAggregate;&#10;using InnoShop.UserManagement.Application.Common.Security.Roles;&#10;using InnoShop.UserManagement.Application.Common.Security.Permissions;&#10;&#10;namespace InnoShop.UserManagement.TestCommon.TestConstants;">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764322931509" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Скорее надо создать TokensController&#10;```&#10;using CleanArchitecture.Application.Authentication.Queries.Login;&#10;using CleanArchitecture.Application.Tokens.Queries.Generate;&#10;using CleanArchitecture.Contracts.Common;&#10;using CleanArchitecture.Contracts.Tokens;&#10;&#10;using MediatR;&#10;&#10;using Microsoft.AspNetCore.Authorization;&#10;using Microsoft.AspNetCore.Mvc;&#10;&#10;using DomainSubscriptionType = CleanArchitecture.Domain.Users.SubscriptionType;&#10;&#10;namespace CleanArchitecture.Api.Controllers;&#10;&#10;[Route(&quot;tokens&quot;)]&#10;[AllowAnonymous]&#10;public class TokensController(ISender _mediator) : ApiController&#10;{&#10;    [HttpPost(&quot;generate&quot;)]&#10;    public async Task&lt;IActionResult&gt; GenerateToken(GenerateTokenRequest request)&#10;    {&#10;        if (!DomainSubscriptionType.TryFromName(request.SubscriptionType.ToString(), out var plan))&#10;        {&#10;            return Problem(&#10;                statusCode: StatusCodes.Status400BadRequest,&#10;                detail: &quot;Invalid subscription type&quot;);&#10;        }&#10;&#10;        var query = new GenerateTokenQuery(&#10;            request.Id,&#10;            request.FirstName,&#10;            request.LastName,&#10;            request.Email,&#10;            plan,&#10;            request.Permissions,&#10;            request.Roles);&#10;&#10;        var result = await _mediator.Send(query);&#10;&#10;        return result.Match(&#10;            generateTokenResult =&gt; Ok(ToDto(generateTokenResult)),&#10;            Problem);&#10;    }&#10;&#10;    private static TokenResponse ToDto(GenerateTokenResult authResult)&#10;    {&#10;        return new TokenResponse(&#10;            authResult.Id,&#10;            authResult.FirstName,&#10;            authResult.LastName,&#10;            authResult.Email,&#10;            ToDto(authResult.SubscriptionType),&#10;            authResult.Token);&#10;    }&#10;&#10;    private static SubscriptionType ToDto(DomainSubscriptionType subscriptionType) =&gt;&#10;        subscriptionType.Name switch&#10;        {&#10;            nameof(DomainSubscriptionType.Basic) =&gt; SubscriptionType.Basic,&#10;            nameof(DomainSubscriptionType.Pro) =&gt; SubscriptionType.Pro,&#10;            _ =&gt; throw new InvalidOperationException(),&#10;        };&#10;}&#10;&#10;```&#10;&#10;Что-то типа такого">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764327361628" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Согласно @&lt;file_name&gt; @&lt;file_name&gt; расставь Permissions для комманд">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764325170382" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Т.е. можно сделать что-то типа&#10;namespace Bookify.Domain.Users;&#10;&#10;public sealed class Role&#10;{&#10;    public static readonly Role Registered = new(1, &quot;Registered&quot;);&#10;&#10;    public Role(int id, string name)&#10;    {&#10;        Id = id;&#10;        Name = name;&#10;    }&#10;&#10;    public int Id { get; init; }&#10;&#10;    public string Name { get; init; }&#10;&#10;    public ICollection&lt;User&gt; Users { get; init; } = new List&lt;User&gt;();&#10;&#10;    public ICollection&lt;Permission&gt; Permissions { get; init; } = new List&lt;Permission&gt;();&#10;}&#10;namespace Bookify.Domain.Users;&#10;&#10;public sealed class RolePermission&#10;{&#10;    public int RoleId { get; set; }&#10;&#10;    public int PermissionId { get; set; }&#10;}&#10;    public static User Create(FirstName firstName, LastName lastName, Email email)&#10;    {&#10;        var user = new User(Guid.NewGuid(), firstName, lastName, email);&#10;&#10;        user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));&#10;&#10;        user._roles.Add(Role.Registered);&#10;&#10;        return user;&#10;    }&#10;AuthorizationService.cs&#10;GetPermissionsForUserAsync(identityId)&#10;├─ Проверяет кэш (ключ: &quot;auth:permissions-{identityId}&quot;)&#10;├─ Если не в кэше:&#10;│  └─ Получает все Permissions через Roles пользователя&#10;│     User → Roles → Permissions&#10;└─ Сохраняет в кэш и возвращает HashSet&lt;string&gt;&#10;GetRolesForUserAsync(identityId)&#10;├─ Проверяет кэш (ключ: &quot;auth:roles-{identityId}&quot;)&#10;├─ Если не в кэше:&#10;│  └─ Получает список Role для пользователя&#10;└─ Сохраняет в кэш и возвращает&#10;PermissionAuthorizationHandler.cs&#10;1. Проверяет, аутентифицирован ли пользователь&#10;2. Получает его identityId&#10;3. Вызывает AuthorizationService.GetPermissionsForUserAsync(identityId)&#10;4. Если требуемое право в HashSet → успех (context.Succeed)&#10;5. Иначе → отказ в доступе">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764329791306" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Т.е. мы в @&lt;file_name&gt; создаем VerificationResult в который ложим сгенерированный в VerificationCommandHandler токен. При добавлении токена добавляем пользователю возможность на добавление профиля. А при добавлении профиля даем ему возможность на добавление Review">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764329152479" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Т.е. нам не нужны namespace InnoShop.UserManagement.Application.Common.Security.Permissions;&#10;&#10;&#10;public static partial class Permission&#10;{&#10;    public static class User&#10;    {&#10;        public const string Create = &quot;create:user&quot;;&#10;        public const string Get = &quot;get:user&quot;;&#10;        public const string Update = &quot;update:user&quot;;&#10;        public const string Delete = &quot;delete:user&quot;;&#10;    }&#10;}">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764330543083" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Тут у меня не работает, так как при тестах EmailSender не активирован, как обойти?">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="8.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764315491982" />
+                  <option value="1764315412908" />
+                  <option value="1764315398609" />
+                  <option value="1764315367420" />
+                  <option value="1764315364165" />
+                  <option value="1764315359828" />
+                  <option value="1764315351625" />
+                  <option value="1764315318960" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="У меня здесь почему-то проходит валидация">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764320209788" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Я не очень понимаю ка работают роли, типо как влияет то, что теперь команды с ролями?">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764326466241" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="можно сделать что-то типа&#10;namespace Bookify.Domain.Users;&#10;&#10;public sealed class Role&#10;{&#10;    public static readonly Role Registered = new(1, &quot;Registered&quot;);&#10;&#10;    public Role(int id, string name)&#10;    {&#10;        Id = id;&#10;        Name = name;&#10;    }&#10;&#10;    public int Id { get; init; }&#10;&#10;    public string Name { get; init; }&#10;&#10;    public ICollection&lt;User&gt; Users { get; init; } = new List&lt;User&gt;();&#10;&#10;    public ICollection&lt;Permission&gt; Permissions { get; init; } = new List&lt;Permission&gt;();&#10;}&#10;namespace Bookify.Domain.Users;&#10;&#10;public sealed class RolePermission&#10;{&#10;    public int RoleId { get; set; }&#10;&#10;    public int PermissionId { get; set; }&#10;}&#10;    public static User Create(FirstName firstName, LastName lastName, Email email)&#10;    {&#10;        var user = new User(Guid.NewGuid(), firstName, lastName, email);&#10;&#10;        user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));&#10;&#10;        user._roles.Add(Role.Registered);&#10;&#10;        return user;&#10;    }&#10;AuthorizationService.cs&#10;GetPermissionsForUserAsync(identityId)&#10;├─ Проверяет кэш (ключ: &quot;auth:permissions-{identityId}&quot;)&#10;├─ Если не в кэше:&#10;│  └─ Получает все Permissions через Roles пользователя&#10;│     User → Roles → Permissions&#10;└─ Сохраняет в кэш и возвращает HashSet&lt;string&gt;&#10;GetRolesForUserAsync(identityId)&#10;├─ Проверяет кэш (ключ: &quot;auth:roles-{identityId}&quot;)&#10;├─ Если не в кэше:&#10;│  └─ Получает список Role для пользователя&#10;└─ Сохраняет в кэш и возвращает&#10;PermissionAuthorizationHandler.cs&#10;1. Проверяет, аутентифицирован ли пользователь&#10;2. Получает его identityId&#10;3. Вызывает AuthorizationService.GetPermissionsForUserAsync(identityId)&#10;4. Если требуемое право в HashSet → успех (context.Succeed)&#10;5. Иначе → отказ в доступе">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764329867475" />
                 </list>
               </option>
             </GhostTextMetaData>

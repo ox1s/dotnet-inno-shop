@@ -10,9 +10,9 @@ namespace InnoShop.UserManagement.Application.Authentication.Queries.Login;
 
 public class LoginQueryHandler
 (
-    IJwtTokenGenerator _jwtTokenGenerator,
-    IPasswordHasher _passwordHasher,
-    IUsersRepository _usersRepository
+    IJwtTokenGenerator jwtTokenGenerator,
+    IPasswordHasher passwordHasher,
+    IUsersRepository usersRepository
     ) : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
 {
     public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellationToken)
@@ -24,11 +24,11 @@ public class LoginQueryHandler
         }
         var email = emailResult.Value;
 
-        var user = await _usersRepository.GetByEmailAsync(email, cancellationToken);
+        var user = await usersRepository.GetByEmailAsync(email, cancellationToken);
 
-        return user is null || !user.IsCorrectPasswordHash(query.Password, _passwordHasher)
+        return user is null || !user.IsCorrectPasswordHash(query.Password, passwordHasher)
                     ? AuthenticationErrors.InvalidCredentials
-                    : new AuthenticationResult(user, _jwtTokenGenerator.GenerateToken(user));
+                    : new AuthenticationResult(user, jwtTokenGenerator.GenerateToken(user));
     }
 
 }

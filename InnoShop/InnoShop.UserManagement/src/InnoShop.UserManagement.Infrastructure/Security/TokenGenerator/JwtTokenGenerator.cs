@@ -10,14 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace InnoShop.UserManagement.Infrastructure.Security.TokenGenerator;
 
-public class JwtTokenGenerator : IJwtTokenGenerator
+public class JwtTokenGenerator(IOptions<JwtSettings> jwtOptions) : IJwtTokenGenerator
 {
-    private readonly JwtSettings _jwtSettings;
-
-    public JwtTokenGenerator(IOptions<JwtSettings> jwtOptions)
-    {
-        _jwtSettings = jwtOptions.Value;
-    }
+    private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
     public string GenerateToken(User user)
     {

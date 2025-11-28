@@ -1,13 +1,13 @@
 using ErrorOr;
 using InnoShop.UserManagement.Application.Common.Interfaces;
-using InnoShop.UserManagement.Application.Common.Security.Request;
 using MediatR;
 using System.Reflection;
+using InnoShop.UserManagement.Application.Common.Security;
 
 namespace InnoShop.UserManagement.Application.Common.Behaviours;
 
 public class AuthorizationBehavior<TRequest, TResponse>(
-    IAuthorizationService _authorizationService)
+    IAuthorizationService authorizationService)
         : IPipelineBehavior<TRequest, TResponse>
             where TRequest : IAuthorizeableRequest<TResponse>
             where TResponse : IErrorOr
@@ -23,7 +23,7 @@ public class AuthorizationBehavior<TRequest, TResponse>(
 
         if (authorizationAttributes.Count == 0)
         {
-            return await next();
+            return await next(cancellationToken);
         }
 
         var requiredPermissions = authorizationAttributes
@@ -38,7 +38,7 @@ public class AuthorizationBehavior<TRequest, TResponse>(
             .SelectMany(authorizationAttribute => authorizationAttribute.Policies?.Split(',') ?? [])
             .ToList();
 
-        var authorizationResult = _authorizationService.AuthorizeCurrentUser(
+        var authorizationResult = await authorizationService.AuthorizeCurrentUser(
             request,
             requiredRoles,
             requiredPermissions,
@@ -46,6 +46,6 @@ public class AuthorizationBehavior<TRequest, TResponse>(
 
         return authorizationResult.IsError
             ? (dynamic)authorizationResult.Errors
-            : await next();
+            : await next(cancellationToken);
     }
 }

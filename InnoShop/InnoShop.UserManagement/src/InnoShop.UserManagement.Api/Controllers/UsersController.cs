@@ -1,17 +1,17 @@
-
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-
-using InnoShop.UserManagement.Api.Controllers;
 using InnoShop.UserManagement.Api.Controllers.Common;
 using InnoShop.UserManagement.Application.Users.Commands.CreateUserProfile;
 using InnoShop.UserManagement.Application.Users.Commands.UpdateUserProfile;
+using InnoShop.UserManagement.Application.Users.Queries.GetUser;
+using InnoShop.UserManagement.Application.Users.Queries.GetUserProfile;
 using InnoShop.UserManagement.Contracts.Users;
 using InnoShop.UserManagement.Domain.UserAggregate;
-using InnoShop.UserManagement.Application.Users.Queries.GetUserProfile;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+
+namespace InnoShop.UserManagement.Api.Controllers;
 
 [Route("api/v1/users")]
-public class UsersController(ISender _sender) : ApiController
+public class UsersController(ISender sender) : ApiController
 {
     [HttpPost("{userId:guid}/profile")]
     public async Task<IActionResult> CreateUserProfile(
@@ -34,13 +34,13 @@ public class UsersController(ISender _sender) : ApiController
             City: request.City
         );
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
 
         return result.Match(
             userResult => CreatedAtAction(
                 actionName: nameof(GetUserProfile),
                 routeValues: new { UserId = userId },
-                value: MapToResponse(userResult)),
+                value: MapToProfileResponse(userResult)),
             Problem);
     }
 
@@ -69,7 +69,7 @@ public class UsersController(ISender _sender) : ApiController
             City: request.City
         );
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
 
         return result.Match(
             _ => NoContent(),
@@ -81,22 +81,42 @@ public class UsersController(ISender _sender) : ApiController
     {
         var query = new GetUserProfileQuery(userId);
 
-        var result = await _sender.Send(query);
+        var result = await sender.Send(query);
 
         return result.Match(
-            userResult => Ok(MapToResponse(userResult)),
+            userResult => Ok(MapToProfileResponse(userResult)),
             Problem);
     }
-    private static UserProfileResponse MapToResponse(User user)
+    
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> GetUser(Guid userId)
     {
+        var query = new GetUserQuery(userId);
+        var result = await sender.Send(query);
 
+        return result.Match(
+            user => Ok(new UserResponse(
+                user.Id,
+                user.Email.Value,
+                user.Roles.Select(r => r.Name).ToList(),
+                user.IsEmailVerified,
+                user.IsActive,
+                user.UserProfile != null ? MapToProfileResponse(user) : null
+            )),
+            Problem);
+    }
+
+    private static UserProfileResponse MapToProfileResponse(User user)
+    {
+        var profile = user.UserProfile!; 
+        
         return new UserProfileResponse(
-           UserId: user.Id,
-           FirstName: user.UserProfile.FirstName.Value,
-           LastName: user.UserProfile.LastName.Value,
-           AvatarUrl: user.UserProfile.AvatarUrl.Value,
-           PhoneNumber: user.UserProfile.PhoneNumber.Value,
-           Country: user.UserProfile.Location.Country.Name,
-           City: user.UserProfile.Location.City);
+            UserId: user.Id,
+            FirstName: profile.FirstName.Value,
+            LastName: profile.LastName.Value,
+            AvatarUrl: profile.AvatarUrl.Value,
+            PhoneNumber: profile.PhoneNumber.Value,
+            Country: profile.Location.Country.Name,
+            City: profile.Location.City);
     }
 }

@@ -5,14 +5,14 @@ using MediatR;
 namespace InnoShop.UserManagement.Application.Users.IntegrationEvents;
 
 public class UserRegisteredEventHandler(
-    IUsersRepository _usersRepository,
-    IEmailSender _emailSender,
-    IEmailVerificationLinkFactory _linkFactory)
+    IUsersRepository usersRepository,
+    IEmailSender emailSender,
+    IEmailVerificationLinkFactory linkFactory)
     : INotificationHandler<UserRegisteredIntegrationEvent>
 {
     public async Task Handle(UserRegisteredIntegrationEvent notification, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetByIdAsync(notification.UserId, cancellationToken);
+        var user = await usersRepository.GetByIdAsync(notification.UserId, cancellationToken);
 
         if (user is null)
         {
@@ -24,9 +24,9 @@ public class UserRegisteredEventHandler(
             return;
         }
 
-        var verificationLink = _linkFactory.Create(user.Id, user.EmailVerificationToken!);
+        var verificationLink = linkFactory.Create(user.Id, user.EmailVerificationToken!);
 
-        await _emailSender.SendEmailAsync(
+        await emailSender.SendEmailAsync(
             to: user.Email.Value,
             from: "noreply@innoshop.com",
             subject: "Welcome to InnoShop! Verify your email",

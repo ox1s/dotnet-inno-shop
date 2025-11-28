@@ -1,6 +1,10 @@
 ﻿namespace InnoShop.UserManagement.Contracts.Users;
 
-public class UserResponse
-{
-    
-}
+public record UserResponse(
+    Guid Id,
+    string Email,
+    List<string> Roles,
+    bool IsEmailVerified,
+    bool IsActive, 
+    UserProfileResponse? Profile 
+);

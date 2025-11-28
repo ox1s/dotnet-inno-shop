@@ -1,3 +1,4 @@
+using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
 using InnoShop.UserManagement.Application.Reviews.Commands.DeleteReview;
 using InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace InnoShop.UserManagement.Api.Controllers;
 
 [Route("api/v1/users/{targetUserId:guid}/reviews")]
-public class ReviewsController(ISender _sender) : ApiController
+public class ReviewsController(ISender sender, ICurrentUserProvider currentUserProvider) : ApiController
 {
 
     [HttpPost]
@@ -25,7 +26,7 @@ public class ReviewsController(ISender _sender) : ApiController
            Rating: request.Rating,
            Comment: request.Comment);
 
-        var createReviewResult = await _sender.Send(command, cancellationToken);
+        var createReviewResult = await sender.Send(command, cancellationToken);
 
         return createReviewResult.Match(
             review => CreatedAtAction(
@@ -39,12 +40,15 @@ public class ReviewsController(ISender _sender) : ApiController
     [HttpPut("{reviewId:guid}")]
     public async Task<IActionResult> UpdateReview(Guid reviewId, UpdateReviewRequest request)
     {
+        var currentUserId = currentUserProvider.GetCurrentUser().Id;
+        
         var command = new UpdateReviewCommand(
+            UserId: currentUserId,
             Id: reviewId,
             Rating: request.Rating,
             Comment: request.Comment);
 
-        var updateReviewResult = await _sender.Send(command);
+        var updateReviewResult = await sender.Send(command);
 
         return updateReviewResult.Match(
             _ => NoContent(),
@@ -56,7 +60,7 @@ public class ReviewsController(ISender _sender) : ApiController
     {
         var command = new DeleteReviewCommand(reviewId);
 
-        var deleteReviewResult = await _sender.Send(command);
+        var deleteReviewResult = await sender.Send(command);
 
         return deleteReviewResult.Match(
             _ => NoContent(),
@@ -68,7 +72,7 @@ public class ReviewsController(ISender _sender) : ApiController
     {
         var query = new GetReviewQuery(reviewId);
 
-        var getReviewResult = await _sender.Send(query);
+        var getReviewResult = await sender.Send(query);
 
         return getReviewResult.Match(
             review => Ok(MapToResponse(review)),

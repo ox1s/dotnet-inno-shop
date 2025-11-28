@@ -5,28 +5,28 @@ using Throw;
 
 namespace InnoShop.UserManagement.Application.Common.Interfaces;
 
-public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : ICurrentUserProvider
+public class CurrentUserProvider(IHttpContextAccessor httpContextAccessor) : ICurrentUserProvider
 {
     public CurrentUser GetCurrentUser()
     {
-        _httpContextAccessor.HttpContext.ThrowIfNull();
+        httpContextAccessor.HttpContext.ThrowIfNull();
 
         var id = Guid.Parse(GetSingleClaimValue("id"));
         var permissions = GetClaimValues("permissions");
         var roles = GetClaimValues(ClaimTypes.Role);
         var email = GetSingleClaimValue(ClaimTypes.Email);
 
-        return new CurrentUser(id, permissions, roles);
+        return new CurrentUser(id, email, permissions, roles);
     }
 
     private List<string> GetClaimValues(string claimType) =>
-        _httpContextAccessor.HttpContext!.User.Claims
+        httpContextAccessor.HttpContext!.User.Claims
             .Where(claim => claim.Type == claimType)
             .Select(claim => claim.Value)
             .ToList();
 
     private string GetSingleClaimValue(string claimType) =>
-        _httpContextAccessor.HttpContext!.User.Claims
+        httpContextAccessor.HttpContext!.User.Claims
             .Single(claim => claim.Type == claimType)
             .Value;
 }

@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using InnoShop.UserManagement.Application.Common.Interfaces;
-using InnoShop.UserManagement.Application.Common.Security.Request;
+using InnoShop.UserManagement.Application.Common.Security;
 
 namespace InnoShop.UserManagement.Infrastructure.Security.PolicyEnforcer;
 

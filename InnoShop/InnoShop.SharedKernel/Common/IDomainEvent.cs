@@ -1,7 +1,7 @@
 
 using MediatR;
 
-namespace InnoShop.UserManagement.Domain.Common;
+namespace InnoShop.SharedKernel.Common;
 
 public interface IDomainEvent : INotification
 {  

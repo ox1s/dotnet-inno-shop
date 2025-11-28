@@ -8,11 +8,11 @@ using Minio.Exceptions;
 namespace InnoShop.UserManagement.Infrastructure.Storage;
 
 public class MinioFileStorage(
-    IMinioClient _minioClient,
-    IOptions<BlobStorageSettings> _settings,
-    ILogger<MinioFileStorage> _logger) : IFileStorage
+    IMinioClient minioClient,
+    IOptions<BlobStorageSettings> settings,
+    ILogger<MinioFileStorage> logger) : IFileStorage
 {
-    private string BucketName => _settings.Value.BucketName;
+    private string BucketName => settings.Value.BucketName;
 
     public async Task<string> UploadAsync(
         Stream stream,
@@ -34,14 +34,14 @@ public class MinioFileStorage(
 
         try
         {
-            await _minioClient
+            await minioClient
                 .PutObjectAsync(putObjectArgs, cancellationToken);
 
-            _logger.LogInformation("Uploaded file {ObjectName} to bucket {Bucket}", objectName, BucketName);
+            logger.LogInformation("Uploaded file {ObjectName} to bucket {Bucket}", objectName, BucketName);
         }
         catch (MinioException ex)
         {
-            _logger.LogError(ex, $"Error uploading object '{objectName}'.");
+            logger.LogError(ex, $"Error uploading object '{objectName}'.");
             throw;
         }
         return objectName;
@@ -55,14 +55,14 @@ public class MinioFileStorage(
                 .WithBucket(BucketName)
                 .WithObject(fileName);
 
-            await _minioClient
+            await minioClient
                 .RemoveObjectAsync(args, cancellationToken);
 
-            _logger.LogInformation("Deleted file {FileName} from bucket {Bucket}", fileName, BucketName);
+            logger.LogInformation("Deleted file {FileName} from bucket {Bucket}", fileName, BucketName);
         }
         catch (MinioException ex)
         {
-            _logger.LogError(ex, $"Error deleting object '{fileName}'.");
+            logger.LogError(ex, $"Error deleting object '{fileName}'.");
             throw;
         }
 
@@ -73,28 +73,28 @@ public class MinioFileStorage(
         var bucketExistsArgs = new BucketExistsArgs().WithBucket(BucketName);
         try
         {
-            bool found = await _minioClient.BucketExistsAsync(bucketExistsArgs, cancellationToken);
+            bool found = await minioClient.BucketExistsAsync(bucketExistsArgs, cancellationToken);
 
             if (!found)
             {
                 var makeBucketArgs = new MakeBucketArgs().WithBucket(BucketName);
 
-                await _minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
+                await minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
             }
 
             var policy = $@"{{""Version"":""2012-10-17"",""Statement"":[{{""Action"":[""s3:GetBucketLocation""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:ListBucket""],""Condition"":{{""StringEquals"":{{""s3:prefix"":[""foo"",""prefix/""]}}}},""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:GetObject""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}/foo*"",""arn:aws:s3:::{BucketName}/prefix/*""],""Sid"":""""}}]}}";
 
-            await _minioClient
+            await minioClient
                 .SetPolicyAsync(
                     new SetPolicyArgs()
                         .WithBucket(BucketName)
                         .WithPolicy(policy), cancellationToken);
 
-            _logger.LogInformation("Created bucket {Bucket} and set public policy", BucketName);
+            logger.LogInformation("Created bucket {Bucket} and set public policy", BucketName);
         }
         catch (MinioException e)
         {
-            _logger.LogInformation("Error occurred: " + e);
+            logger.LogInformation("Error occurred: " + e);
         }
 
     }
@@ -110,7 +110,7 @@ public class MinioFileStorage(
             .WithObject(objectName)
             .WithExpiry(60 * 10);
 
-        string presignedUrl = await _minioClient.PresignedPutObjectAsync(args);
+        string presignedUrl = await minioClient.PresignedPutObjectAsync(args);
 
         return presignedUrl;
     }

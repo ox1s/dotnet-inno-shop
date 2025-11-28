@@ -20,7 +20,13 @@ public class CreateUserTests(MediatorFactory mediatorFactory)
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
 
-        var command = UserCommandFactory.CreateCreateUserCommand();
+        dbContext.AttachRange(Role.List);
+        // --------------------------------------------------------------------------------
+
+
+        var command = UserCommandFactory.CreateCreateUserCommand(
+            email: "newuser@test.com",
+            password: "P@ssw0rd!");
 
         var result = await mediator.Send(command);
 
@@ -39,6 +45,10 @@ public class CreateUserTests(MediatorFactory mediatorFactory)
         using var scope = mediatorFactory.Services.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
+
+        dbContext.AttachRange(Role.List);
+        // --------------------------------------------------------------------------------
+
 
         var existing = UserFactory.CreateUserWithProfile(email: Email.Create("dup@test.com").Value);
         dbContext.Users.Add(existing);

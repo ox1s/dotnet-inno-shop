@@ -2,32 +2,34 @@ using ErrorOr;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Domain.ReviewAggregate;
+using InnoShop.UserManagement.Domain.UserAggregate;
 using MediatR;
 
 namespace InnoShop.UserManagement.Application.Reviews.Commands.DeleteReview;
 
 public class DeleteReviewCommandHandler(
-    IUnitOfWork _unitOfWork,
-    IReviewsRepository _reviewsRepository,
-    IDateTimeProvider _dateTimeProvider) : IRequestHandler<DeleteReviewCommand, ErrorOr<Deleted>>
+    IUnitOfWork unitOfWork,
+    IReviewsRepository reviewsRepository,
+    IDateTimeProvider dateTimeProvider) 
+    : IRequestHandler<DeleteReviewCommand, ErrorOr<Deleted>>
 {
 
     public async Task<ErrorOr<Deleted>> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
     {
-        var review = await _reviewsRepository.GetByIdAsync(request.Id, cancellationToken);
+        var review = await reviewsRepository.GetByIdAsync(request.UserId, cancellationToken);
         if (review is null)
         {
             return ReviewErrors.NotFound;
         }
 
-        var deleteReviewResult = review.Delete(_dateTimeProvider);
+        var deleteReviewResult = review.Delete(dateTimeProvider);
         if (deleteReviewResult.IsError)
         {
             return deleteReviewResult.Errors;
         }
         
-        await _reviewsRepository.UpdateAsync(review, cancellationToken);
-        await _unitOfWork.CommitChangesAsync(cancellationToken);
+        await reviewsRepository.UpdateAsync(review, cancellationToken);
+        await unitOfWork.CommitChangesAsync(cancellationToken);
 
         return Result.Deleted;
     }

@@ -13,7 +13,7 @@ public static class LocationErrors
 
     public static readonly Error InvalidCity = Error.Validation(
         "Location.InvalidCity",
-        "City must be 1-100 characters if provided.");
+        "City must be 1-100 characters.");
 
 
 }

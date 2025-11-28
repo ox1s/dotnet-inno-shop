@@ -23,13 +23,6 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
                 value => new Email(value));
         builder.HasIndex(u => u.Email).IsUnique();
 
-        builder.Property(u => u.Role)
-            .HasConversion(
-                role => role.Name,
-                value => Role.FromName(value, false))
-            .HasMaxLength(50)
-            .IsRequired();
-
         builder.Property(u => u.IsActive);
         builder.Property(u => u.IsEmailVerified);
         builder.Property(u => u.EmailVerificationToken);
@@ -85,5 +78,10 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
 
         builder.Property("_passwordHash")
             .HasColumnName("password_hash");
+
+        builder.HasMany(u => u.Roles)
+               .WithMany()
+               .UsingEntity("user_roles");
+
     }
 }

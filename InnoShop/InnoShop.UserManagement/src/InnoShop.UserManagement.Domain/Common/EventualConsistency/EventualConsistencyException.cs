@@ -1,6 +1,6 @@
 using ErrorOr;
 
-namespace InnoShop.UserManagement.Infrastructure.EventualConsistency;
+namespace InnoShop.UserManagement.Domain.Common.EventualConsistency;
 
 public class EventualConsistencyException : Exception
 {

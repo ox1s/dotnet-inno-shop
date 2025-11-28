@@ -11,4 +11,10 @@
     <PackageReference Include="MediatR" />
     <PackageReference Include="Throw" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
 </Project>

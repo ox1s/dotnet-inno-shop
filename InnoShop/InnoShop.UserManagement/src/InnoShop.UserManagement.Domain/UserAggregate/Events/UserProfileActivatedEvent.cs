@@ -1,4 +1,4 @@
-using InnoShop.UserManagement.Domain.Common;
+using InnoShop.SharedKernel.Common;
 
 namespace InnoShop.UserManagement.Domain.UserAggregate.Events;
 

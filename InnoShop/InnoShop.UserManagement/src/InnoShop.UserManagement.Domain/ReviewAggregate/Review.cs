@@ -1,4 +1,5 @@
 using ErrorOr;
+using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Domain.ReviewAggregate.Events;
@@ -37,7 +38,7 @@ public sealed class Review : AggregateRoot
         CreatedAt = now;
         UpdatedAt = now;
 
-        _domainEvents.Add(new ReviewCreatedEvent(Id, TargetUserId, Rating.Value));
+        DomainEvents.Add(new ReviewCreatedEvent(Id, TargetUserId, Rating.Value));
     }
 
     public static ErrorOr<Review> Create(
@@ -77,7 +78,7 @@ public sealed class Review : AggregateRoot
         Comment = newComment;
         UpdatedAt = dateTimeProvider.UtcNow;
 
-        _domainEvents.Add(new ReviewUpdatedEvent(Id, TargetUserId, NewRating: newRating.Value, OldRating: oldRating));
+        DomainEvents.Add(new ReviewUpdatedEvent(Id, TargetUserId, NewRating: newRating.Value, OldRating: oldRating));
 
         return Result.Success;
     }
@@ -91,7 +92,7 @@ public sealed class Review : AggregateRoot
         IsDeleted = true;
         DeletedAt = dateTimeProvider.UtcNow;
 
-        _domainEvents.Add(new ReviewDeletedEvent(Id, TargetUserId, Rating.Value));
+        DomainEvents.Add(new ReviewDeletedEvent(Id, TargetUserId, Rating.Value));
 
         return Result.Deleted;
     }

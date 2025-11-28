@@ -6,26 +6,26 @@ using Microsoft.Extensions.Configuration;
 namespace InnoShop.UserManagement.Infrastructure.Security;
 
 public class EmailVerificationLinkFactory(
-    IHttpContextAccessor _httpContextAccessor,
-    LinkGenerator _linkGenerator,
-    IConfiguration _configuration) : IEmailVerificationLinkFactory
+    IHttpContextAccessor httpContextAccessor,
+    LinkGenerator linkGenerator,
+    IConfiguration configuration) : IEmailVerificationLinkFactory
 {
     public string Create(Guid userId, string token)
     {
-        var httpContext = _httpContextAccessor.HttpContext;
+        var httpContext = httpContextAccessor.HttpContext;
 
         string? uri;
 
         if (httpContext is not null)
         {
-            uri = _linkGenerator.GetUriByName(
+            uri = linkGenerator.GetUriByName(
                 httpContext,
                 "VerifyEmailRoute",
                 new { userId, token });
         }
         else
         {
-            var appUrl = _configuration["AppUrl"];
+            var appUrl = configuration["AppUrl"];
             if (string.IsNullOrEmpty(appUrl))
             {
                 throw new Exception("AppUrl is not configured. Cannot generate email link in background.");
@@ -37,7 +37,7 @@ public class EmailVerificationLinkFactory(
             }
 
 
-            uri = _linkGenerator.GetUriByName(
+            uri = linkGenerator.GetUriByName(
                 "VerifyEmailRoute",
                 new { userId, token },
                 scheme: baseUrl.Scheme,

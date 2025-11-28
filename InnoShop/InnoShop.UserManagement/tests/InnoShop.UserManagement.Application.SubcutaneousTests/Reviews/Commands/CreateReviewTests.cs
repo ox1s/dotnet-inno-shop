@@ -8,6 +8,7 @@ using InnoShop.UserManagementTestCommon.ReviewAggregate;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.TestCommon.ReviewAggregate;
 
 namespace InnoShop.UserManagement.Application.SubcutaneousTests.Reviews.Commands;
@@ -24,8 +25,10 @@ public class CreateReviewTests(MediatorFactory mediatorFactory)
         using var scope = mediatorFactory.Services.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
+
+        dbContext.AttachRange(Role.List);
         // --------------------------------------------------------------------------------
-        
+
         // Arrange
         var authorEmail = Email.Create("author@test.com").Value;
         var author = UserFactory.CreateUserWithProfile(email: authorEmail);
@@ -37,7 +40,9 @@ public class CreateReviewTests(MediatorFactory mediatorFactory)
         dbContext.Users.AddRange(author, targetUser);
         await dbContext.SaveChangesAsync();
 
-        var createReviewCommand = ReviewCommandFactory.CreateCreateReviewCommand();
+        var createReviewCommand = ReviewCommandFactory.CreateCreateReviewCommand(
+            targetUserId: targetUser.Id
+        );
 
         // Act
         var result = await mediator.Send(createReviewCommand);
@@ -54,11 +59,15 @@ public class CreateReviewTests(MediatorFactory mediatorFactory)
     [InlineData(6)]
     public async Task CreateReview_WhenInvalidRating_ShouldReturnValidationError(int invalidRating)
     {
+        // --------------------------------------------------------------------------------
         mediatorFactory.ResetDatabase();
 
         using var scope = mediatorFactory.Services.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
+
+        dbContext.AttachRange(Role.List);
+        // --------------------------------------------------------------------------------
 
         // Arrange
         var authorEmail = Email.Create("author@test.com").Value;

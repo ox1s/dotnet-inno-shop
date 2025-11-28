@@ -1,4 +1,4 @@
-namespace InnoShop.UserManagement.Application.Common.Security.Request;
+namespace InnoShop.UserManagement.Application.Common.Security;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class AuthorizeAttribute : Attribute

@@ -1,3 +1,5 @@
+using InnoShop.SharedKernel.Security.Permissions;
+using InnoShop.SharedKernel.Security.Roles;
 using InnoShop.UserManagement.Api;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Infrastructure.IntegrationEvents.BackgroundServices;
@@ -47,7 +49,7 @@ public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLif
             }
 
             services.RemoveAll<DbContextOptions<UserManagementDbContext>>();
-            services.AddDbContext<UserManagementDbContext>((sp, options) =>
+            services.AddDbContext<UserManagementDbContext>((options) =>
                 options.UseSqlite(_testDatabase.Connection)
                 .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
@@ -56,10 +58,31 @@ public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLif
 
             services.RemoveAll<IFileStorage>();
             services.AddScoped(_ => Substitute.For<IFileStorage>());
+            
+            services.RemoveAll<IEmailVerificationLinkFactory>();
+            var linkFactory = Substitute.For<IEmailVerificationLinkFactory>();
+            linkFactory.Create(Arg.Any<Guid>(), Arg.Any<string>())
+                .Returns(callInfo => $"http://localhost:5000/verify?userId={callInfo.ArgAt<Guid>(0)}&token={callInfo.ArgAt<string>(1)}");
+            services.AddScoped(_ => linkFactory);
 
             services.RemoveAll<ICurrentUserProvider>();
             var currentUserProvider = Substitute.For<ICurrentUserProvider>();
-            currentUserProvider.GetCurrentUser().Returns(new CurrentUser(DefaultUserId, Array.Empty<string>(), Array.Empty<string>()));
+            
+            
+            var allPermissions = new List<string>
+            {
+                AppPermissions.User.Create, AppPermissions.User.Read, AppPermissions.User.Delete,
+                AppPermissions.Review.Create, AppPermissions.Review.Read, AppPermissions.Review.Update, AppPermissions.Review.Delete,
+                AppPermissions.UserProfile.Create, AppPermissions.UserProfile.Read, AppPermissions.UserProfile.Update, AppPermissions.UserProfile.Activate, AppPermissions.UserProfile.Deactivate
+            };
+            currentUserProvider.GetCurrentUser().Returns(new CurrentUser(
+                DefaultUserId, 
+                "test@test.com", 
+                allPermissions, 
+                new List<string> { AppRoles.Admin, AppRoles.Seller, AppRoles.Registered } 
+            ));
+            
+            // currentUserProvider.GetCurrentUser().Returns(new CurrentUser(DefaultUserId, "test@test.com", Array.Empty<string>(), Array.Empty<string>()));
             services.AddScoped(_ => currentUserProvider);
         });
     }
@@ -74,10 +97,23 @@ public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLif
         _testDatabase?.Dispose();
         return Task.CompletedTask;
     }
-    public void SetCurrentUserId(Guid userId)
+    public void SetCurrentUser(Guid userId, List<string>? roles = null, List<string>? permissions = null)
     {
         var scope = Services.CreateScope();
         var currentUserProvider = scope.ServiceProvider.GetRequiredService<ICurrentUserProvider>();
-        currentUserProvider.GetCurrentUser().Returns(new CurrentUser(userId, Array.Empty<string>(), Array.Empty<string>()));
+        var effectiveRoles = roles ?? [AppRoles.Seller, AppRoles.Registered];
+        var effectivePermissions = permissions ?? [
+            AppPermissions.Review.Create, 
+            AppPermissions.Review.Update, 
+            AppPermissions.Review.Delete,
+            AppPermissions.UserProfile.Update
+        ];
+
+        currentUserProvider.GetCurrentUser().Returns(new CurrentUser(
+            userId, 
+            "test@test.com", 
+            effectivePermissions, 
+            effectiveRoles));
+        
     }
 }

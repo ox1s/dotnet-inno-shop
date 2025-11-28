@@ -1,4 +1,6 @@
+using ErrorOr;
 using FluentAssertions;
+using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Application.SubcutaneousTests.Common;
 using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.UserAggregate;
@@ -17,11 +19,16 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
     [Fact]
     public async Task UpdateReview_WhenValidCommand_ShouldUpdateReview()
     {
+        // --------------------------------------------------------------------------------
+
         mediatorFactory.ResetDatabase();
 
         using var scope = mediatorFactory.Services.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
+
+        dbContext.AttachRange(Role.List);
+        // --------------------------------------------------------------------------------
 
         // Arrange
         var authorEmail = Email.Create("author@test.com").Value;
@@ -37,7 +44,7 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
         var createCommand = ReviewCommandFactory.CreateCreateReviewCommand(
             targetUserId: targetUser.Id,
             rating: 4,
-            comment: "Good"
+            comment: "Оке"
         );
 
         var createResult = await mediator.Send(createCommand);
@@ -47,28 +54,34 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
         // Act
         var updateCommand = ReviewCommandFactory.CreateUpdateReviewCommand(
             reviewId: reviewId,
+            userId: mediatorFactory.DefaultUserId,
             rating: 5,
-            comment: "Excellent"
+            comment: "Умопропроай"
         );
 
         var updateResult = await mediator.Send(updateCommand);
+        
         var getReviewQuery = ReviewQueryFactory.CreateGetReviewQuery(reviewId: reviewId);
         var getReviewResult = await mediator.Send(getReviewQuery);
-        
+
         // Assert
         updateResult.IsError.Should().BeFalse();
         getReviewResult.Value.Rating.Value.Should().Be(5);
-        getReviewResult.Value.Comment?.Value.Should().Be("Excellent");
+        getReviewResult.Value.Comment?.Value.Should().Be("Умопропроай");
     }
 
     [Fact]
-    public async Task UpdateReview_WhenNotAuthor_ShouldReturnForbidden()
+    public async Task UpdateReview_WhenNotAuthor_ShouldReturnNotTheReviewAuthor()
     {
+        // --------------------------------------------------------------------------------
         mediatorFactory.ResetDatabase();
 
         using var scope = mediatorFactory.Services.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
+
+        dbContext.AttachRange(Role.List);
+        // --------------------------------------------------------------------------------
 
         // Arrange
         var author1 = UserFactory.CreateUserWithProfile(email: Email.Create("a@test.com").Value);
@@ -78,6 +91,7 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
         typeof(Entity).GetProperty("Id")!.SetValue(author2, mediatorFactory.DefaultUserId);
 
         var target = UserFactory.CreateUserWithProfile(email: Email.Create("t@test.com").Value);
+        typeof(Entity).GetProperty("Id")!.SetValue(author2, Guid.NewGuid());
 
         dbContext.Users.AddRange(author1, author2, target);
         await dbContext.SaveChangesAsync();
@@ -85,15 +99,15 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
         var createCommand = ReviewCommandFactory.CreateCreateReviewCommand(
             targetUserId: target.Id,
             rating: 3,
-            comment: "Ok"
+            comment: "Ok."
         );
 
-        mediatorFactory.SetCurrentUserId(author1.Id);
+        mediatorFactory.SetCurrentUser(author1.Id);
         var created = await mediator.Send(createCommand);
         created.IsError.Should().BeFalse();
         var reviewId = created.Value.Id;
 
-        mediatorFactory.SetCurrentUserId(author2.Id);
+        mediatorFactory.SetCurrentUser(author2.Id);
 
         // Act
         var updateCommand = ReviewCommandFactory.CreateUpdateReviewCommand(
@@ -105,6 +119,6 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
 
         // Assert
         updateResult.IsError.Should().BeTrue();
-        updateResult.Errors.Should().Contain(e => e.Code.Contains("Forbidden") || e.Code.Contains("NotAuthor"));
+        updateResult.FirstError.Type.Should().Be(ErrorType.Forbidden); 
     }
 }

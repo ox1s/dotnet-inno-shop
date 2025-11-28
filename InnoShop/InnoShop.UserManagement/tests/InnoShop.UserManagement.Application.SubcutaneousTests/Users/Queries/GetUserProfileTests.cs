@@ -1,4 +1,5 @@
 using FluentAssertions;
+using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Application.SubcutaneousTests.Common;
 using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.UserAggregate;
@@ -15,11 +16,15 @@ public class GetUserProfileTests(MediatorFactory mediatorFactory)
     [Fact]
     public async Task GetUserProfile_WhenExists_ShouldReturnProfile()
     {
+        // --------------------------------------------------------------------------------
         mediatorFactory.ResetDatabase();
 
         using var scope = mediatorFactory.Services.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
+
+        dbContext.AttachRange(Role.List);
+        // --------------------------------------------------------------------------------
 
         var user = UserFactory.CreateUserWithProfile(email: Email.Create("get@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(user, mediatorFactory.DefaultUserId);

@@ -1,13 +1,13 @@
+using InnoShop.SharedKernel.Common;
+using InnoShop.UserManagement.Domain.Common.EventualConsistency;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-using InnoShop.UserManagement.Domain.Common;
-using InnoShop.UserManagement.Domain.Common.EventualConsistency;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 
 namespace InnoShop.UserManagement.Infrastructure.Middleware;
 
-public class EventualConsistencyMiddleware(RequestDelegate _next)
+public class EventualConsistencyMiddleware(RequestDelegate next)
 {
     public const string DomainEventsKey = "DomainEventsKey";
 
@@ -40,6 +40,6 @@ public class EventualConsistencyMiddleware(RequestDelegate _next)
             }
         });
 
-        await _next(context);
+        await next(context);
     }
 }

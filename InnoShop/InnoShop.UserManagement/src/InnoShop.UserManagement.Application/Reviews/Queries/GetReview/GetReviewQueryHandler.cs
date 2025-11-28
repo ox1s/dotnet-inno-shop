@@ -6,12 +6,12 @@ using MediatR;
 namespace InnoShop.UserManagement.Application.Reviews.Queries.GetReview;
 
 public class GetReviewQueryHandler(
-    IReviewsRepository _reviewsRepository)
+    IReviewsRepository reviewsRepository)
     : IRequestHandler<GetReviewQuery, ErrorOr<Review>>
 {
     public async Task<ErrorOr<Review>> Handle(GetReviewQuery query, CancellationToken cancellationToken)
     {
-        var review = await _reviewsRepository.GetByIdAsync(query.ReviewId, cancellationToken);
+        var review = await reviewsRepository.GetByIdAsync(query.ReviewId, cancellationToken);
 
         if (review is null)
         {

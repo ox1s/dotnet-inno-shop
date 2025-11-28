@@ -4,47 +4,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InnoShop.UserManagement.Infrastructure.Persistence.Repositories;
 
-public class UsersRepository : IUsersRepository
+public class UsersRepository(UserManagementDbContext dbContext) : IUsersRepository
 {
-    private readonly UserManagementDbContext _dbContext;
-
-    public UsersRepository(UserManagementDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task AddUserAsync(User user, CancellationToken cancellationToken = default)
     {
-        await _dbContext.Users.AddAsync(user, cancellationToken);
+        foreach (var role in user.Roles)
+        {
+            dbContext.Attach(role);
+        }
+        await dbContext.Users.AddAsync(user, cancellationToken);
     }
 
     public async Task<bool> ExistsByEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Users
+        return await dbContext.Users
             .AnyAsync(x => x.Email == email, cancellationToken);
     }
 
     public async Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Users
+        return await dbContext.Users
             .AnyAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Users
+        return await dbContext.Users
             .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
     }
 
     public async Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Users.FindAsync(new object[] { userId }, cancellationToken);
+        return await dbContext.Users.FindAsync(new object[] { userId }, cancellationToken);
     }
 
     public Task UpdateAsync(User user, CancellationToken cancellationToken = default)
     {
-        _dbContext.Users.Update(user);
+        dbContext.Users.Update(user);
 
         return Task.CompletedTask;
     }
+    
 }

@@ -8,17 +8,18 @@ using MediatR;
 namespace InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
 
 public class CreateReviewCommandHandler(
-    IUsersRepository _usersRepository,
-    IUnitOfWork _unitOfWork,
-    IReviewsRepository _reviewsRepository,
-    ICurrentUserProvider _currentUserProvider,
-    IDateTimeProvider _dateTimeProvider) : IRequestHandler<CreateReviewCommand, ErrorOr<Review>>
+    IUsersRepository usersRepository,
+    IUnitOfWork unitOfWork,
+    IReviewsRepository reviewsRepository,
+    ICurrentUserProvider currentUserProvider,
+    IDateTimeProvider dateTimeProvider) : IRequestHandler<CreateReviewCommand, ErrorOr<Review>>
 {
     public async Task<ErrorOr<Review>> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
     {
-        var targetUser = await _usersRepository.GetByIdAsync(request.TargetUserId, cancellationToken);
-        var currentUser = _currentUserProvider.GetCurrentUser();
-        var author = await _usersRepository.GetByIdAsync(currentUser.Id, cancellationToken);
+        var targetUser = await usersRepository.GetByIdAsync(request.TargetUserId, cancellationToken);
+
+        var currentUser = currentUserProvider.GetCurrentUser();
+        var author = await usersRepository.GetByIdAsync(currentUser.Id, cancellationToken);
 
         if (targetUser is null || author is null) return UserErrors.UserNotFound;
 
@@ -42,14 +43,14 @@ public class CreateReviewCommandHandler(
             author,
             rating,
             comment ?? null,
-            _dateTimeProvider
+            dateTimeProvider
         );
         if (reviewResult.IsError) return reviewResult.Errors;
         var review = reviewResult.Value;
 
 
-        await _reviewsRepository.AddReviewAsync(review, cancellationToken);
-        await _unitOfWork.CommitChangesAsync(cancellationToken);
+        await reviewsRepository.AddReviewAsync(review, cancellationToken);
+        await unitOfWork.CommitChangesAsync(cancellationToken);
 
         return review;
     }

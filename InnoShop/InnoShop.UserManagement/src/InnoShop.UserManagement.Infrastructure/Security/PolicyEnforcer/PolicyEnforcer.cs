@@ -1,8 +1,8 @@
-﻿using InnoShop.UserManagement.Application.Common.Security.Policies;
-using InnoShop.UserManagement.Application.Common.Security.Request;
-using InnoShop.UserManagement.Application.Common.Security.Roles;
+﻿using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using ErrorOr;
+using InnoShop.SharedKernel.Security.Policies;
+using InnoShop.UserManagement.Application.Common.Security;
 
 
 namespace InnoShop.UserManagement.Infrastructure.Security.PolicyEnforcer;
@@ -16,13 +16,13 @@ public class PolicyEnforcer : IPolicyEnforcer
     {
         return policy switch
         {
-            Policy.SelfOrAdmin => SelfOrAdminPolicy(request, currentUser),
+            AppPolicies.SelfOrAdmin => SelfOrAdminPolicy(request, currentUser),
             _ => Error.Unexpected(description: "Unknown policy name"),
         };
     }
 
     private static ErrorOr<Success> SelfOrAdminPolicy<T>(IAuthorizeableRequest<T> request, CurrentUser currentUser) =>
-        request.UserId == currentUser.Id || currentUser.Roles.Contains(Role.Admin)
+        request.UserId == currentUser.Id || currentUser.Roles.Contains(Role.Admin.Name)
             ? Result.Success
-            : Error.Unauthorized(description: "Requesting user failed policy requirement");
+            : Error.Forbidden(description: "You are not allowed to access this resource.");
 }

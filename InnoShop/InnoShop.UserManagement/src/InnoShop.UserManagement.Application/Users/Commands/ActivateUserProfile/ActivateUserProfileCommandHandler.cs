@@ -3,16 +3,16 @@ using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using MediatR;
 
-namespace InnoShop.UserManagement.Application.Users.Commands.ActivateUser;
+namespace InnoShop.UserManagement.Application.Users.Commands.ActivateUserProfile;
 
 public class ActivateUserProfileCommandHandler(
-    IUsersRepository _usersRepository,
-    IUnitOfWork _unitOfWork) 
+    IUsersRepository usersRepository,
+    IUnitOfWork unitOfWork) 
     : IRequestHandler<ActivateUserProfileCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(ActivateUserProfileCommand request, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetByIdAsync(request.UserId, cancellationToken);
+        var user = await usersRepository.GetByIdAsync(request.UserId, cancellationToken);
 
         if (user is null)
         {
@@ -26,8 +26,8 @@ public class ActivateUserProfileCommandHandler(
             return activateUserResult.Errors;
         }
 
-        await _usersRepository.UpdateAsync(user, cancellationToken);
-        await _unitOfWork.CommitChangesAsync(cancellationToken);
+        await usersRepository.UpdateAsync(user, cancellationToken);
+        await unitOfWork.CommitChangesAsync(cancellationToken);
 
         return Result.Success;
     }

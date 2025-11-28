@@ -6,13 +6,13 @@ using MediatR;
 namespace InnoShop.UserManagement.Application.Authentication.Commands.VerifyEmail;
 
 public class VerifyEmailCommandHandler(
-    IUsersRepository _usersRepository,
-    IUnitOfWork _unitOfWork)
+    IUsersRepository usersRepository,
+    IUnitOfWork unitOfWork)
     : IRequestHandler<VerifyEmailCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(VerifyEmailCommand request, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetByIdAsync(request.UserId, cancellationToken);
+        var user = await usersRepository.GetByIdAsync(request.UserId, cancellationToken);
 
         if (user is null)
         {
@@ -26,8 +26,8 @@ public class VerifyEmailCommandHandler(
             return result.Errors;
         }
 
-        await _usersRepository.UpdateAsync(user, cancellationToken);
-        await _unitOfWork.CommitChangesAsync(cancellationToken);
+        await usersRepository.UpdateAsync(user, cancellationToken);
+        await unitOfWork.CommitChangesAsync(cancellationToken);
 
         return Result.Success;
     }

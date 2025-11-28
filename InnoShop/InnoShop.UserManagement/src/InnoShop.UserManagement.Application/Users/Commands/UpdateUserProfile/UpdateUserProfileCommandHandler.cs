@@ -6,13 +6,13 @@ using MediatR;
 namespace InnoShop.UserManagement.Application.Users.Commands.UpdateUserProfile;
 
 public class UpdateUserProfileCommandHandler(
-    IUsersRepository _usersRepository,
-    IUnitOfWork _unitOfWork)
+    IUsersRepository usersRepository,
+    IUnitOfWork unitOfWork)
     : IRequestHandler<UpdateUserProfileCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(UpdateUserProfileCommand command, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetByIdAsync(command.UserId, cancellationToken);
+        var user = await usersRepository.GetByIdAsync(command.UserId, cancellationToken);
 
         if (user is null)
         {
@@ -58,8 +58,8 @@ public class UpdateUserProfileCommandHandler(
         var updateResult = user.UpdateUserProfile(userProfileResult.Value);
         if (updateResult.IsError) return updateResult.Errors;
 
-        await _usersRepository.UpdateAsync(user, cancellationToken);
-        await _unitOfWork.CommitChangesAsync(cancellationToken);
+        await usersRepository.UpdateAsync(user, cancellationToken);
+        await unitOfWork.CommitChangesAsync(cancellationToken);
 
         return Result.Success;
     }

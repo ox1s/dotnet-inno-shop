@@ -1,4 +1,5 @@
 using FluentAssertions;
+using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Application.SubcutaneousTests.Common;
 using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.UserAggregate;
@@ -17,11 +18,16 @@ public class GetReviewsTests(MediatorFactory mediatorFactory)
     [Fact]
     public async Task GetReviews_ForTargetUser_ShouldReturnReviews()
     {
+        // --------------------------------------------------------------------------------
         mediatorFactory.ResetDatabase();
 
         using var scope = mediatorFactory.Services.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
+
+        dbContext.AttachRange(Role.List);
+        // --------------------------------------------------------------------------------
+
 
         var author = UserFactory.CreateUserWithProfile(email: Email.Create("a@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(author, mediatorFactory.DefaultUserId);
@@ -31,7 +37,7 @@ public class GetReviewsTests(MediatorFactory mediatorFactory)
         dbContext.Users.AddRange(author, target);
         await dbContext.SaveChangesAsync();
 
-        var result1 = await mediator.Send(ReviewCommandFactory.CreateCreateReviewCommand(targetUserId: target.Id, rating: 5, comment: "1"));
+        var result1 = await mediator.Send(ReviewCommandFactory.CreateCreateReviewCommand(targetUserId: target.Id, rating: 5, comment: "123"));
 
         var query = ReviewQueryFactory.CreateGetReviewQuery(result1.Value.Id);
         var resultQuery = await mediator.Send(query);

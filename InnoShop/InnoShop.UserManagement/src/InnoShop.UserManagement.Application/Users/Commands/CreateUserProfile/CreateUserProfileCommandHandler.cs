@@ -6,13 +6,13 @@ using MediatR;
 namespace InnoShop.UserManagement.Application.Users.Commands.CreateUserProfile;
 
 public class CreateUserProfileCommandHandler(
-    IUsersRepository _usersRepository,
-    IUnitOfWork _unitOfWork)
+    IUsersRepository usersRepository,
+    IUnitOfWork unitOfWork)
     : IRequestHandler<CreateUserProfileCommand, ErrorOr<User>>
 {
     public async Task<ErrorOr<User>> Handle(CreateUserProfileCommand command, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetByIdAsync(command.UserId, cancellationToken);
+        var user = await usersRepository.GetByIdAsync(command.UserId, cancellationToken);
 
         if (user is null)
         {
@@ -46,8 +46,8 @@ public class CreateUserProfileCommandHandler(
         var result = user.CreateUserProfile(createUserProfileResult.Value);
         if (result.IsError) return result.Errors;
 
-        await _usersRepository.UpdateAsync(user, cancellationToken);
-        await _unitOfWork.CommitChangesAsync(cancellationToken);
+        await usersRepository.UpdateAsync(user, cancellationToken);
+        await unitOfWork.CommitChangesAsync(cancellationToken);
 
         return user;
     }

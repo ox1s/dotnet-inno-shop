@@ -1,11 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <Compile Remove="Common\Security\Permissions\Permission.Review.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Common\Security\Permissions\Permission.Review.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj" />
     <ProjectReference Include="..\InnoShop.UserManagement.Domain\InnoShop.UserManagement.Domain.csproj" />
   </ItemGroup>

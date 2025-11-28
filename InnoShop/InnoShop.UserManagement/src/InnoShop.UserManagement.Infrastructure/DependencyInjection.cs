@@ -15,12 +15,14 @@ using InnoShop.UserManagement.Infrastructure.Services;
 using InnoShop.UserManagement.Infrastructure.Storage;
 
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Mail;
 using Throw;
+using ICustomAuthorizationService = InnoShop.UserManagement.Application.Common.Interfaces.IAuthorizationService;
 
 
 namespace InnoShop.UserManagement.Infrastructure;
@@ -38,7 +40,9 @@ public static class DependencyInjection
             .AddAuthentication()
             .AddAuthorization()
             .AddEmailService(configuration)
-            .AddServices();
+            .AddServices()
+            .AddDistributedMemoryCache();
+            // TODO: Redis
 
         return services;
     }
@@ -125,7 +129,7 @@ public static class DependencyInjection
     }
     private static IServiceCollection AddAuthorization(this IServiceCollection services)
     {
-        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<ICustomAuthorizationService, AuthorizationService>();
         services.AddSingleton<IPolicyEnforcer, PolicyEnforcer>();
 
         return services;
@@ -154,7 +158,10 @@ public static class DependencyInjection
     public static IServiceCollection AddStorage(this IServiceCollection services)
     {
         services.AddScoped<IFileStorage, MinioFileStorage>();
-
+        // services.AddStackExchangeRedisCache(options =>
+        // {
+        //     options.Configuration = configuration.GetConnectionString("cache");
+        // });
         return services;
 
     }

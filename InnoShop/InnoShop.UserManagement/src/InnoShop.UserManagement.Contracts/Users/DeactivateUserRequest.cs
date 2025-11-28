@@ -1,6 +1,5 @@
 ﻿namespace InnoShop.UserManagement.Contracts.Users;
 
-public class DeactivateUserRequest
-{
-    
-}
+public record DeactivateUserRequest(
+    string Reason 
+);

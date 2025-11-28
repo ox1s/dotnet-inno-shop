@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="ErrorOr" />
     <PackageReference Include="MediatR" />
   </ItemGroup>
 </Project>

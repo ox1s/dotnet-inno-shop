@@ -1,12 +1,15 @@
 using ErrorOr;
-using InnoShop.UserManagement.Application.Common.Security.Policies;
-using InnoShop.UserManagement.Application.Common.Security.Request;
-using InnoShop.UserManagement.Domain.UserAggregate;
+using InnoShop.SharedKernel.Security.Permissions;
+using InnoShop.SharedKernel.Security.Policies;
+using InnoShop.UserManagement.Application.Common.Security;
 using MediatR;
+
+
+using InnoShop.UserManagement.Domain.UserAggregate;
 
 namespace InnoShop.UserManagement.Application.Users.Commands.UpdateUserProfile;
 
-[Authorize(Policies = Policy.SelfOrAdmin)]
+[Authorize(Permissions = AppPermissions.UserProfile.Update, Policies = AppPolicies.SelfOrAdmin)]
 public record UpdateUserProfileCommand(
     Guid UserId,
     string? FirstName,
@@ -16,4 +19,4 @@ public record UpdateUserProfileCommand(
     Country? Country,
     string? State,
     string? City)
-    : IRequest<ErrorOr<Success>>;
+    : IAuthorizeableRequest<ErrorOr<Success>>;

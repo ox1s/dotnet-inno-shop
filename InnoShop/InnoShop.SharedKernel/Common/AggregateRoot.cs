@@ -9,12 +9,12 @@ public abstract class AggregateRoot : Entity
 
     protected AggregateRoot() { }
 
-    protected readonly List<IDomainEvent> _domainEvents = new();
+    protected readonly List<IDomainEvent> DomainEvents = new();
 
     public List<IDomainEvent> PopDomainEvents()
     {
-        var copy = _domainEvents.ToList();
-        _domainEvents.Clear();
+        var copy = DomainEvents.ToList();
+        DomainEvents.Clear();
 
         return copy;
     }

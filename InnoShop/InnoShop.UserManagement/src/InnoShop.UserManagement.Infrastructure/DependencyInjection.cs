@@ -41,8 +41,7 @@ public static class DependencyInjection
             .AddAuthorization()
             .AddEmailService(configuration)
             .AddServices()
-            .AddDistributedMemoryCache();
-            // TODO: Redis
+            .AddStorage();
 
         return services;
     }
@@ -158,10 +157,6 @@ public static class DependencyInjection
     public static IServiceCollection AddStorage(this IServiceCollection services)
     {
         services.AddScoped<IFileStorage, MinioFileStorage>();
-        // services.AddStackExchangeRedisCache(options =>
-        // {
-        //     options.Configuration = configuration.GetConnectionString("cache");
-        // });
         return services;
 
     }

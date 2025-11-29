@@ -76,6 +76,7 @@ public class CreateReviewTests(MediatorFactory mediatorFactory)
 
         var targetEmail = Email.Create("target@test.com").Value;
         var targetUser = UserFactory.CreateUserWithProfile(email: targetEmail);
+        typeof(Entity).GetProperty("Id")!.SetValue(targetUser, Guid.NewGuid());
 
         dbContext.Users.AddRange(author, targetUser);
         await dbContext.SaveChangesAsync();

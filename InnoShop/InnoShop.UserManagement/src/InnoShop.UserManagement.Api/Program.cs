@@ -1,11 +1,19 @@
+using InnoShop.UserManagement.Api.Common.Interfaces;
 using InnoShop.UserManagement.Api.Exceptions;
 using InnoShop.UserManagement.Application;
+using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Infrastructure;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    builder.AddRedisDistributedCache("cache");
+    builder.AddRedisDistributedCache("cache", settings =>
+    {
+        settings.DisableTracing = false;
+    });
+
     builder.Services.AddControllers();
     builder.Services.AddHttpContextAccessor();
 
@@ -14,7 +22,10 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddProblemDetails();
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+    builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
+    //builder.AddSqlServerDbContext<UserManagementDbContext>("innoshop-users");
+    builder.AddSqlServerClient("innoshop-users");
     builder.AddRabbitMQClient("messaging");
     builder.AddMinioClient("minio");
 

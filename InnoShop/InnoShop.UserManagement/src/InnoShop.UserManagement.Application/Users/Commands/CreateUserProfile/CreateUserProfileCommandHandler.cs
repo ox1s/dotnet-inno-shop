@@ -7,7 +7,8 @@ namespace InnoShop.UserManagement.Application.Users.Commands.CreateUserProfile;
 
 public class CreateUserProfileCommandHandler(
     IUsersRepository usersRepository,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    IAuthorizationService authorizationService)
     : IRequestHandler<CreateUserProfileCommand, ErrorOr<User>>
 {
     public async Task<ErrorOr<User>> Handle(CreateUserProfileCommand command, CancellationToken cancellationToken)
@@ -48,6 +49,8 @@ public class CreateUserProfileCommandHandler(
 
         await usersRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);
+
+        await authorizationService.InvalidateUserCacheAsync(user.Id);
 
         return user;
     }

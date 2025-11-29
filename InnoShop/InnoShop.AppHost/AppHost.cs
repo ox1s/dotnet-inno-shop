@@ -4,6 +4,10 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var rabbit = builder.AddRabbitMQ("messaging");
 
+var cache = builder.AddRedis("cache")
+                   .WithDataVolume()
+                   .WithRedisCommander();
+
 var sql = builder.AddSqlServer("sql")
     .WithHostPort(1433)
     .WithDataVolume()
@@ -24,13 +28,19 @@ var productsApi = builder.AddProject<Projects.InnoShop_ProductManagement_Api>("p
     .WaitFor(productsDatabase);
 
 builder.AddProject<Projects.InnoShop_UserManagement_Api>("users-api")
+    .WithExternalHttpEndpoints()
+
     .WithReference(rabbit)
+    .WithReference(minio)
+    .WithReference(cache)
+    .WithReference(mailpit)
+
     .WithReference(usersDatabase)
     .WaitFor(usersDatabase)
+
     .WithReference(productsApi)
-    .WithReference(minio)
-    .WithReference(mailpit)
     .WaitFor(productsDatabase)
+
     .WithEnvironment("AppUrl", "https://localhost:7152");
 
 

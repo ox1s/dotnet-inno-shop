@@ -11,7 +11,7 @@ using InnoShop.UserManagement.Application.Common.Security;
 namespace InnoShop.UserManagement.Infrastructure.Security;
 
 public class AuthorizationService(
-    UserManagementDbContext dbContext, 
+    UserManagementDbContext dbContext,
     IDistributedCache cache,
     IPolicyEnforcer policyEnforcer,
     ICurrentUserProvider currentUserProvider)
@@ -20,7 +20,7 @@ public class AuthorizationService(
     public async Task<HashSet<string>> GetPermissionsForUserAsync(Guid userId)
     {
         string cacheKey = $"auth:permissions-{userId}";
-        
+
         var cachedPermissions = await cache.GetStringAsync(cacheKey);
         if (cachedPermissions is not null)
         {
@@ -31,15 +31,15 @@ public class AuthorizationService(
         var permissions = await dbContext.Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
-            .SelectMany(u => u.Roles)       
-            .SelectMany(r => r.Permissions) 
-            .Select(p => p.Name)          
+            .SelectMany(u => u.Roles)
+            .SelectMany(r => r.Permissions)
+            .Select(p => p.Name)
             .ToListAsync();
 
         var permissionsSet = permissions.ToHashSet();
-        
+
         await cache.SetStringAsync(
-            cacheKey, 
+            cacheKey,
             JsonSerializer.Serialize(permissionsSet),
             new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) });
 
@@ -49,7 +49,7 @@ public class AuthorizationService(
     public async Task<HashSet<string>> GetRolesForUserAsync(Guid userId)
     {
         string cacheKey = $"auth:roles-{userId}";
-        
+
         var cachedRoles = await cache.GetStringAsync(cacheKey);
         if (cachedRoles is not null)
         {
@@ -66,7 +66,7 @@ public class AuthorizationService(
         var rolesSet = roles.ToHashSet();
 
         await cache.SetStringAsync(
-            cacheKey, 
+            cacheKey,
             JsonSerializer.Serialize(rolesSet),
             new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) });
 
@@ -101,5 +101,14 @@ public class AuthorizationService(
         }
 
         return Result.Success;
+    }
+
+    public async Task InvalidateUserCacheAsync(Guid userId)
+    {
+        string permissionsCacheKey = $"auth:permissions-{userId}";
+        string rolesCacheKey = $"auth:roles-{userId}";
+
+        await cache.RemoveAsync(permissionsCacheKey);
+        await cache.RemoveAsync(rolesCacheKey);
     }
 }

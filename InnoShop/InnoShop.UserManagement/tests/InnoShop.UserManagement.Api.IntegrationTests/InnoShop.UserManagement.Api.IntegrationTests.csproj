@@ -1,21 +1,37 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Testing" />
     <PackageReference Include="coverlet.collector"/>
+    <PackageReference Include="ErrorOr" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="xunit" />
-    <PackageReference Include="xunit.runner.visualstudio"  />
+    <PackageReference Include="xunit"/>
+    <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="System.Net" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <Using Include="Aspire.Hosting.ApplicationModel" />
+    <Using Include="Aspire.Hosting.Testing" />
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\InnoShop.AppHost\InnoShop.AppHost.csproj" />
+    <ProjectReference Include="..\..\src\InnoShop.UserManagement.Contracts\InnoShop.UserManagement.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\InnoShop.UserManagement.Domain\InnoShop.UserManagement.Domain.csproj" />
+    <ProjectReference Include="..\..\src\InnoShop.UserManagement.Infrastructure\InnoShop.UserManagement.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

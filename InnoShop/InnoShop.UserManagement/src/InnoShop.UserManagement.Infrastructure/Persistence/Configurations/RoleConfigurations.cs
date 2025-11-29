@@ -15,7 +15,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.HasMany(role => role.Permissions)
             .WithMany()
             .UsingEntity<RolePermission>();
-        
+
         builder.HasData(
             Role.Seller,
             Role.Verified,

@@ -30,12 +30,17 @@ public class UsersRepository(UserManagementDbContext dbContext) : IUsersReposito
     public async Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
         return await dbContext.Users
+            .Include(x => x.Roles)
             .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
     }
 
     public async Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
-        return await dbContext.Users.FindAsync(new object[] { userId }, cancellationToken);
+        return await dbContext.Users
+            .Include(u => u.Roles)
+            .ThenInclude(r => r.Permissions)
+            .Include(u => u.UserProfile)
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
     }
 
     public Task UpdateAsync(User user, CancellationToken cancellationToken = default)
@@ -44,5 +49,5 @@ public class UsersRepository(UserManagementDbContext dbContext) : IUsersReposito
 
         return Task.CompletedTask;
     }
-    
+
 }

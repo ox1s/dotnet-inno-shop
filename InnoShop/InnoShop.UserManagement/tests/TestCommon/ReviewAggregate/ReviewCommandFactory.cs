@@ -22,8 +22,12 @@ public static class ReviewCommandFactory
     }
 
     public static DeleteReviewCommand CreateDeleteReviewCommand(
-        Guid reviewId)
-        => new DeleteReviewCommand(reviewId);
+        Guid? userId = null,
+        Guid? reviewId = null)
+        => new DeleteReviewCommand(
+            UserId: userId ?? Constants.Review.AuthorId,
+            ReviewId: reviewId ?? Guid.NewGuid()
+        );
 
     public static UpdateReviewCommand CreateUpdateReviewCommand(
         Guid? reviewId,

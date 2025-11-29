@@ -50,7 +50,16 @@ public class DeleteReviewTests(MediatorFactory mediatorFactory)
         created.IsError.Should().BeFalse();
         var reviewId = created.Value.Id;
 
-        var deleteCommand = ReviewCommandFactory.CreateDeleteReviewCommand(reviewId: reviewId);
+        mediatorFactory.SetCurrentUser(
+            author.Id,
+            roles: [AppRoles.Seller],
+            permissions: [AppPermissions.Review.Delete]
+        );
+
+        var deleteCommand = ReviewCommandFactory.CreateDeleteReviewCommand(
+            userId: author.Id,
+            reviewId: reviewId);
+            
         var deletedResult = await mediator.Send(deleteCommand);
 
         deletedResult.IsError.Should().BeFalse();
@@ -90,15 +99,15 @@ public class DeleteReviewTests(MediatorFactory mediatorFactory)
         var reviewId = created.Value.Id;
 
         mediatorFactory.SetCurrentUser(
-            authorB.Id, 
-            roles: [AppRoles.Seller], 
+            authorB.Id,
+            roles: [AppRoles.Seller],
             permissions: [AppPermissions.Review.Delete]
         );
         var result = await mediator.Send(ReviewCommandFactory.CreateDeleteReviewCommand(reviewId: reviewId));
 
         result.IsError.Should().BeTrue();
         result.FirstError.Type.Should().Be(ErrorType.Forbidden);
-        
+
         var dbReview = await dbContext.Reviews.FindAsync(reviewId);
         dbReview.Should().NotBeNull();
         dbReview!.IsDeleted.Should().BeFalse();

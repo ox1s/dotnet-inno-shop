@@ -3,7 +3,7 @@ using InnoShop.UserManagement.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Throw;
 
-namespace InnoShop.UserManagement.Application.Common.Interfaces;
+namespace InnoShop.UserManagement.Api.Common.Interfaces;
 
 public class CurrentUserProvider(IHttpContextAccessor httpContextAccessor) : ICurrentUserProvider
 {

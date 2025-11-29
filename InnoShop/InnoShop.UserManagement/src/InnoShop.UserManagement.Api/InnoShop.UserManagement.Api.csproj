@@ -6,6 +6,10 @@
     <InternalsVisibleTo>InnoShop.UserManagement.Application.SubcutaneousTests</InternalsVisibleTo>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Aspire.Microsoft.Data.SqlClient" />
+    <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="Aspire.StackExchange.Redis" />
+    <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" />
     <PackageReference Include="CommunityToolkit.Aspire.Minio.Client" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">

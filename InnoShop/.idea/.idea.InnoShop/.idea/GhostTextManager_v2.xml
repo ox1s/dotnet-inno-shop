@@ -3,6 +3,18 @@
   <component name="GhostTextManager">
     <option name="inputs">
       <map>
+        <entry key="@&lt;file_name&gt; In the official documentation https://aspire.dev/testing/write-your-first-test/?testing-framework=xunit&#10;&#10;how can i make this test? provide folder structure like in application tests.&#10;like this&#10;└── tests/&#10;    ├── GymManagement.Api.IntegrationTests/&#10;    │   ├── Common/&#10;    │   │   ├── GymManagementApiCollection.cs&#10;    │   │   ├── GymManagementApiFactory.cs&#10;    │   │   └── TestDatabase.cs&#10;    │   ├── Controllers/&#10;    │   │   └── SubscriptionController.CreateSubscriptionTests.cs&#10;    │   ├── GlobalUsings.cs&#10;    │   └── GymManagement.Api.IntegrationTests.csproj&#10;&#10;but for my application">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764418762418" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
         <entry key="@&lt;file_name&gt; и PermissionRequirement это не одно и тоже?">
           <value>
             <GhostTextMetaData>
@@ -10,6 +22,18 @@
               <option name="timestamps">
                 <list>
                   <option value="1764331357557" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Access resources in tests&#10;&#10;In this article, you learn how to access the resources from the Aspire AppHost in your tests. The AppHost represents the full application environment and contains all the resources that are available to the application. When writing functional or integration tests with Aspire, you might need to access these resources to verify the behavior of your application.&#10;Access HTTP resources&#10;&#10;To access an HTTP resource, use the HttpClient to request and receive responses. The DistributedApplication and the DistributedApplicationFactory both provide a CreateHttpClient method that’s used to create an HttpClient instance for a specific resource, based on the resource name from the AppHost. This method also takes an optional endpointName parameter, so if the resource has multiple endpoints, you can specify which one to use.&#10;Access other resources&#10;&#10;In a test, you might want to access other resources by the connection information they provide, for example, querying a database to verify the state of the data. For this, you use the GetConnectionString method to retrieve the connection string for a resource, and then provide that to a client library within the test to interact with the resource.&#10;Ensure resources are available&#10;&#10;Starting with Aspire 9, there’s support for waiting on dependent resources to be available (via the health check mechanism). This is useful in tests that ensure a resource is available before attempting to access it. The ResourceNotificationService class provides a WaitForResourceAsync method that’s used to wait for a named resource to be available. This method takes the resource name and the desired state of the resource as parameters and returns a Task that yields back when the resource is available. You can access the ResourceNotificationService via app.ResourceNotifications, as in the following example.&#10;&#10;Note&#10;&#10;It’s recommended to provide a time-out when waiting for resources, to prevent the test from hanging indefinitely in situations where a resource never becomes available.&#10;&#10;using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));&#10;await app.ResourceNotifications.WaitForResourceAsync(&#10;    &quot;webfrontend&quot;,&#10;    KnownResourceStates.Running,&#10;    cts.Token);&#10;&#10;A resource enters the KnownResourceStates.Running state as soon as it starts executing, but this doesn’t mean that it’s ready to serve requests. If you want to wait for the resource to be ready to serve requests, and your resource has health checks, you can wait for the resource to become healthy by using the WaitForResourceHealthyAsync method.&#10;&#10;using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));&#10;&#10;await app.ResourceNotifications.WaitForResourceHealthyAsync(&#10;    &quot;webfrontend&quot;,&#10;    cts.Token);&#10;&#10;This resource-notification pattern ensures that the resources are available before running the tests, avoiding potential issues with the tests failing due to the resources not being ready.&#10;Edit page&#10;Translate this page&#10;&#10;&#10;&#10;I think that this documentation can help you with this. Can you review this and suggest me right way to implement Api.Integration test">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764419309556" />
                 </list>
               </option>
             </GhostTextMetaData>
@@ -78,6 +102,18 @@
             </GhostTextMetaData>
           </value>
         </entry>
+        <entry key="PS P:\C#Learning\Innowise\dotnet-inno-shop\InnoShop&gt; dotnet test InnoShop.UserManagement/tests/InnoShop.UserManagement.Api.IntegrationTests&#10;Restore complete (1.8s)&#10;  InnoShop.ProductManagement.Domain net10.0 succeeded (0.2s) → InnoShop.ProductManagement\src\InnoShop.ProductManagement.Domain\bin\Debug\net10.0\InnoShop.ProductManagement.Domain.dll&#10;  InnoShop.ProductManagement.Application net10.0 succeeded (0.2s) → InnoShop.ProductManagement\src\InnoShop.ProductManagement.Application\bin\Debug\net10.0\InnoShop.ProductManagement.Application.dll&#10;  InnoShop.ProductManagement.Api net10.0 succeeded (0.5s) → InnoShop.ProductManagement\src\InnoShop.ProductManagement.Api\bin\Debug\net10.0\InnoShop.ProductManagement.Api.dll&#10;  InnoShop.SharedKernel net10.0 succeeded (0.5s) → InnoShop.SharedKernel\bin\Debug\net10.0\InnoShop.SharedKernel.dll&#10;  InnoShop.UserManagement.Domain net10.0 succeeded (0.8s) → InnoShop.UserManagement\src\InnoShop.UserManagement.Domain\bin\Debug\net10.0\InnoShop.UserManagement.Domain.dll&#10;  InnoShop.UserManagement.Contracts net10.0 succeeded (0.5s) → InnoShop.UserManagement\src\InnoShop.UserManagement.Contracts\bin\Debug\net10.0\InnoShop.UserManagement.Contracts.dll&#10;  InnoShop.UserManagement.Application net10.0 succeeded (1.4s) → InnoShop.UserManagement\src\InnoShop.UserManagement.Application\bin\Debug\net10.0\InnoShop.UserManagement.Application.dll&#10;  InnoShop.UserManagement.Infrastructure net10.0 succeeded (0.8s) → InnoShop.UserManagement\src\InnoShop.UserManagement.Infrastructure\bin\Debug\net10.0\InnoShop.UserManagement.Infrastructure.dll&#10;  InnoShop.UserManagement.Api net10.0 succeeded (0.8s) → InnoShop.UserManagement\src\InnoShop.UserManagement.Api\bin\Debug\net10.0\InnoShop.UserManagement.Api.dll&#10;  InnoShop.AppHost net10.0 succeeded (0.6s) → InnoShop.AppHost\bin\Debug\net10.0\InnoShop.AppHost.dll&#10;  InnoShop.UserManagement.Api.IntegrationTests net10.0 succeeded (0.3s) → InnoShop.UserManagement\tests\InnoShop.UserManagement.Api.IntegrationTests\bin\Debug\net10.0\InnoShop.UserManagement.Api.IntegrationTests.dll&#10;[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.0)&#10;[xUnit.net 00:00:00.16]   Discovering: InnoShop.UserManagement.Api.IntegrationTests&#10;[xUnit.net 00:00:00.21]   Discovered:  InnoShop.UserManagement.Api.IntegrationTests&#10;[xUnit.net 00:00:00.25]   Starting:    InnoShop.UserManagement.Api.IntegrationTests&#10;  InnoShop.UserManagement.Api.IntegrationTests net10.0                                     &#10;  InnoShop.UserManagement.Api.IntegrationTests net10.0                                                  Testing (43.6s)&#10;Так долго">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764422240563" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
         <entry key="System.Exception: AppUrl is not configured. Cannot generate email link in background.">
           <value>
             <GhostTextMetaData>
@@ -126,6 +162,19 @@
             </GhostTextMetaData>
           </value>
         </entry>
+        <entry key="dotnet test P:/C#Learning/Innowise/dotnet-inno-shop/InnoShop/InnoShop.UserManagement/tests/InnoShop.UserManagement.Api.IntegrationTests">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="2.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764419578336" />
+                  <option value="1764419534915" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
         <entry key="public async Task&lt;Review?&gt; GetByIdAsync(Guid reviewId, CancellationToken cancellationToken = default)&#10;    {&#10;        return await _dbContext.Reviews&#10;            .Include(r =&gt; r.AuthorId)&#10;            .Include(r =&gt; r.TargetUserId)&#10;            .FirstOrDefaultAsync(r =&gt; r.Id == reviewId, cancellationToken);&#10;    }">
           <value>
             <GhostTextMetaData>
@@ -145,6 +194,33 @@
               <option name="timestamps">
                 <list>
                   <option value="1764328744812" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="this is official aspire testing documentation.Please write InnoShop.UserManagement.Api.IntegrationTests in the right way">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="4.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764421042658" />
+                  <option value="1764420974719" />
+                  <option value="1764420739846" />
+                  <option value="1764420596383" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="this official documentation from aspire. Please write Api.IntegrationTests in the right way">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764420510987" />
                 </list>
               </option>
             </GhostTextMetaData>
@@ -181,6 +257,18 @@
               <option name="timestamps">
                 <list>
                   <option value="1764327096236" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="Отключи логи, пускай только результаты тестов будут показыаны">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764422083395" />
                 </list>
               </option>
             </GhostTextMetaData>

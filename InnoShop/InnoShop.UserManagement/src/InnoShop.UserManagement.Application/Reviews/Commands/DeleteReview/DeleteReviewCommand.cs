@@ -9,5 +9,6 @@ namespace InnoShop.UserManagement.Application.Reviews.Commands.DeleteReview;
 
 [Authorize(Permissions = AppPermissions.Review.Delete, Policies = AppPolicies.SelfOrAdmin)]
 public record DeleteReviewCommand(
-    Guid UserId
+    Guid UserId,
+    Guid ReviewId
 ) : IAuthorizeableRequest<ErrorOr<Deleted>>;

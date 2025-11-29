@@ -92,18 +92,23 @@ public sealed class User : AggregateRoot
 
     public static User CreateUser(Email email, string passwordHash)
     {
-        var user = new User (email, passwordHash);
-        user._roles.Add(Role.Registered);
+        var user = new User(email, passwordHash);
 
         user.DomainEvents.Add(new UserRegisteredEvent(user.Id));
+
+        user._roles.Add(Role.Registered);
+
         return user;
     }
 
     public static User CreateAdmin(Email email, string passwordHash)
     {
-        var user = new User (email, passwordHash);
-        user._roles.Add(Role.Admin);
+        var user = new User(email, passwordHash);
+
         user.DomainEvents.Add(new UserRegisteredEvent(user.Id));
+
+        user._roles.Add(Role.Admin);
+
         return user;
     }
 
@@ -115,9 +120,10 @@ public sealed class User : AggregateRoot
         }
 
         UserProfile = userProfile;
-        _roles.Add(Role.Seller);
 
         DomainEvents.Add(new UserProfileUpdatedEvent(Id));
+
+        _roles.Add(Role.Seller);
 
         return Result.Success;
     }

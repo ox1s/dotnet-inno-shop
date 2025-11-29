@@ -17,9 +17,9 @@ public class UpdateReviewCommandHandler(
     {
         var review = await reviewsRepository.GetByIdAsync(request.Id, cancellationToken);
         if (review is null) return ReviewErrors.NotFound;
-        
+
         if (review.AuthorId != request.UserId) return UserErrors.NotTheReviewAuthor;
-        
+
         var ratingResult = Rating.Create(request.Rating);
         if (ratingResult.IsError) return ratingResult.Errors;
         var rating = ratingResult.Value;
@@ -39,7 +39,7 @@ public class UpdateReviewCommandHandler(
             dateTimeProvider
         );
         if (reviewResult.IsError) return reviewResult.Errors;
-        
+
 
         await reviewsRepository.UpdateAsync(review, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);

@@ -13,4 +13,5 @@ public interface IAuthorizationService
 
     Task<HashSet<string>> GetPermissionsForUserAsync(Guid identityId);
     Task<HashSet<string>> GetRolesForUserAsync(Guid identityId);
+    Task InvalidateUserCacheAsync(Guid userId);
 }

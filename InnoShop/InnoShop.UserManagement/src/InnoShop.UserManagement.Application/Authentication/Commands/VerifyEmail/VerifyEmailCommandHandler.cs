@@ -7,7 +7,8 @@ namespace InnoShop.UserManagement.Application.Authentication.Commands.VerifyEmai
 
 public class VerifyEmailCommandHandler(
     IUsersRepository usersRepository,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    IAuthorizationService authorizationService)
     : IRequestHandler<VerifyEmailCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(VerifyEmailCommand request, CancellationToken cancellationToken)
@@ -28,6 +29,8 @@ public class VerifyEmailCommandHandler(
 
         await usersRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);
+
+        await authorizationService.InvalidateUserCacheAsync(user.Id);
 
         return Result.Success;
     }

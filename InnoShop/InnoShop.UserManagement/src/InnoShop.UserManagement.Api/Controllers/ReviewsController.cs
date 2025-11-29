@@ -41,7 +41,7 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
     public async Task<IActionResult> UpdateReview(Guid reviewId, UpdateReviewRequest request)
     {
         var currentUserId = currentUserProvider.GetCurrentUser().Id;
-        
+
         var command = new UpdateReviewCommand(
             UserId: currentUserId,
             Id: reviewId,
@@ -58,7 +58,11 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
     [HttpDelete("{reviewId:guid}")]
     public async Task<IActionResult> DeleteReview(Guid reviewId)
     {
-        var command = new DeleteReviewCommand(reviewId);
+        var currentUserId = currentUserProvider.GetCurrentUser().Id;
+
+        var command = new DeleteReviewCommand(
+            UserId: currentUserId,
+            ReviewId: reviewId);
 
         var deleteReviewResult = await sender.Send(command);
 

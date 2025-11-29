@@ -1,0 +1,12 @@
+@host = localhost:7152
+@userId = 10191f52-e1da-4163-ab00-c4d3c017c159
+@token = 3d944fe0-0eab-4cb2-8594-d706b23314f1
+
+
+GET https://{{host}}/Authentication/verify-email?userId={{userId}}&token={{token}}
+
+# Пример использования:
+# 1. Откройте mailpit и найдите письмо с verify-ссылкой.
+# 2. Извлеките userId и token из URL в письме.
+# 3. Подставьте в @userId и @token выше.
+# 4. Кликните "Send Request" над этим блоком.

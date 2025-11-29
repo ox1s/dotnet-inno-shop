@@ -28,7 +28,6 @@ public class GetReviewsTests(MediatorFactory mediatorFactory)
         dbContext.AttachRange(Role.List);
         // --------------------------------------------------------------------------------
 
-
         var author = UserFactory.CreateUserWithProfile(email: Email.Create("a@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(author, mediatorFactory.DefaultUserId);
 
@@ -38,6 +37,9 @@ public class GetReviewsTests(MediatorFactory mediatorFactory)
         await dbContext.SaveChangesAsync();
 
         var result1 = await mediator.Send(ReviewCommandFactory.CreateCreateReviewCommand(targetUserId: target.Id, rating: 5, comment: "123"));
+
+        result1.IsError.Should().BeFalse();
+        result1.Value.Should().NotBeNull();
 
         var query = ReviewQueryFactory.CreateGetReviewQuery(result1.Value.Id);
         var resultQuery = await mediator.Send(query);

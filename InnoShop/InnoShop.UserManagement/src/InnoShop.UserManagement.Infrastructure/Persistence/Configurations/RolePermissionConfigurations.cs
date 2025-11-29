@@ -13,47 +13,67 @@ public class RolePermissionConfiguration : IEntityTypeConfiguration<RolePermissi
         builder.HasKey(rolePermission => new { rolePermission.RoleId, rolePermission.PermissionId });
 
         builder.HasData(
+            // Registered - базовые права
             new RolePermission
             {
-                // Зарегистрированный может смотреть пользователей
                 RoleId = Role.Registered.Id,
                 PermissionId = Permission.UserRead.Id
             },
             new RolePermission
             {
-                // После подтверждения email пользователь может создать профиль
+                RoleId = Role.Registered.Id,
+                PermissionId = Permission.UserProfileRead.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Registered.Id,
+                PermissionId = Permission.ReviewRead.Id
+            },
+
+            // Verified - может создать профиль
+            new RolePermission
+            {
                 RoleId = Role.Verified.Id,
                 PermissionId = Permission.UserProfileCreate.Id
             },
+
+            // Seller - полные права на отзывы и профиль
             new RolePermission
             {
-                // Админ может удалять пользователей
-                RoleId = Role.Admin.Id,
-                PermissionId = Permission.UserDelete.Id
-            },
-            new RolePermission
-            {
-                // После создания профиля пользователь может создать оценку
                 RoleId = Role.Seller.Id,
                 PermissionId = Permission.ReviewCreate.Id
             },
             new RolePermission
             {
-                // После создания профиля пользователь может удалять оценки
                 RoleId = Role.Seller.Id,
                 PermissionId = Permission.ReviewDelete.Id
             },
             new RolePermission
             {
-                // После создания профиля пользователь может редактировать оценки
                 RoleId = Role.Seller.Id,
                 PermissionId = Permission.ReviewUpdate.Id
             },
             new RolePermission
             {
-                // Продавец (человек с профилем) может обновлять свой профиль
                 RoleId = Role.Seller.Id,
                 PermissionId = Permission.UserProfileUpdate.Id
+            },
+
+            // Admin - полные права
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.UserDelete.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.UserProfileActivate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.UserProfileDeactivate.Id
             }
         );
     }

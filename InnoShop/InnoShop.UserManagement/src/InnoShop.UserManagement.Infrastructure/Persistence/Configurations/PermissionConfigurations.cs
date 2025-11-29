@@ -11,14 +11,18 @@ public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
         builder.ToTable("permissions");
 
         builder.HasKey(permission => permission.Id);
-        
+
         builder.HasData(
-            Permission.ReviewCreate,
-            Permission.ReviewDelete,
-            Permission.ReviewUpdate,
+            Permission.UserRead,
             Permission.UserDelete,
             Permission.UserProfileCreate,
-            Permission.UserRead,
-            Permission.UserProfileUpdate);
+            Permission.UserProfileUpdate,
+            Permission.UserProfileRead,
+            Permission.UserProfileActivate,
+            Permission.UserProfileDeactivate,
+            Permission.ReviewCreate,
+            Permission.ReviewRead,
+            Permission.ReviewDelete,
+            Permission.ReviewUpdate);
     }
 }

@@ -1,11 +1,14 @@
 using InnoShop.UserManagement.Api.Controllers.Common;
+using InnoShop.UserManagement.Application.Users.Commands.ActivateUserProfile;
 using InnoShop.UserManagement.Application.Users.Commands.CreateUserProfile;
+using InnoShop.UserManagement.Application.Users.Commands.DeactivateUserProfile;
 using InnoShop.UserManagement.Application.Users.Commands.UpdateUserProfile;
 using InnoShop.UserManagement.Application.Users.Queries.GetUser;
 using InnoShop.UserManagement.Application.Users.Queries.GetUserProfile;
 using InnoShop.UserManagement.Contracts.Users;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InnoShop.UserManagement.Api.Controllers;
@@ -87,7 +90,7 @@ public class UsersController(ISender sender) : ApiController
             userResult => Ok(MapToProfileResponse(userResult)),
             Problem);
     }
-    
+
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetUser(Guid userId)
     {
@@ -106,10 +109,28 @@ public class UsersController(ISender sender) : ApiController
             Problem);
     }
 
+    [HttpPost("{userId:guid}/deactivate")]
+    public async Task<IActionResult> DeactivateUser(Guid userId, CancellationToken cancellationToken)
+    {
+        var command = new DeactivateUserProfileCommand(userId);
+        var result = await sender.Send(command, cancellationToken);
+
+        return result.Match(_ => NoContent(), Problem);
+    }
+
+    [HttpPost("{userId:guid}/activate")]
+    public async Task<IActionResult> ActivateUser(Guid userId, CancellationToken cancellationToken)
+    {
+        var command = new ActivateUserProfileCommand(userId);
+        var result = await sender.Send(command, cancellationToken);
+
+        return result.Match(_ => NoContent(), Problem);
+    }
+
     private static UserProfileResponse MapToProfileResponse(User user)
     {
-        var profile = user.UserProfile!; 
-        
+        var profile = user.UserProfile!;
+
         return new UserProfileResponse(
             UserId: user.Id,
             FirstName: profile.FirstName.Value,

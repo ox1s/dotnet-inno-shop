@@ -22,14 +22,21 @@ Content-Type: application/json
 
 ###
 
-### 2. Получить конкретный отзыв по ID
+### 2. Получить список отзывов пользователя (с пагинацией)
+GET {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews?page=1&pageSize=10
+Authorization: Bearer {{Token}}
+Accept: application/json
+
+###
+
+### 3. Получить конкретный отзыв по ID
 GET {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews/{{ReviewId}}
 Authorization: Bearer {{Token}}
 Accept: application/json
 
 ###
 
-### 3. Обновить отзыв
+### 4. Обновить отзыв
 # Изменять отзыв может только его автор (или админ, если настроены политики)
 PUT {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews/{{ReviewId}}
 Authorization: Bearer {{Token}}
@@ -42,7 +49,7 @@ Content-Type: application/json
 
 ###
 
-### 4. Удалить отзыв
+### 5. Удалить отзыв
 # Удалять может автор или админ
 DELETE {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews/{{ReviewId}}
 Authorization: Bearer {{Token}}

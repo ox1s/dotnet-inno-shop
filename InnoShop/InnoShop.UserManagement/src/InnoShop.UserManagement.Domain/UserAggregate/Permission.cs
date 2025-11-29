@@ -9,9 +9,13 @@ public sealed class Permission
     public static readonly Permission UserDelete = new(2, AppPermissions.User.Delete);
     public static readonly Permission UserProfileCreate = new(3, AppPermissions.UserProfile.Create);
     public static readonly Permission UserProfileUpdate = new(4, AppPermissions.UserProfile.Update);
-    public static readonly Permission ReviewCreate = new(5, AppPermissions.Review.Create);
-    public static readonly Permission ReviewDelete = new(6, AppPermissions.Review.Delete);
-    public static readonly Permission ReviewUpdate = new(7, AppPermissions.Review.Update);
+    public static readonly Permission UserProfileRead = new(5, AppPermissions.UserProfile.Read);
+    public static readonly Permission UserProfileActivate = new(6, AppPermissions.UserProfile.Activate);
+    public static readonly Permission UserProfileDeactivate = new(7, AppPermissions.UserProfile.Deactivate);
+    public static readonly Permission ReviewCreate = new(8, AppPermissions.Review.Create);
+    public static readonly Permission ReviewRead = new(9, AppPermissions.Review.Read);
+    public static readonly Permission ReviewDelete = new(10, AppPermissions.Review.Delete);
+    public static readonly Permission ReviewUpdate = new(11, AppPermissions.Review.Update);
 
 
     private Permission(int id, string name)
@@ -29,10 +33,13 @@ public sealed class Permission
     [
         UserRead,
         UserDelete,
-        UserProfileUpdate,
         UserProfileCreate,
         UserProfileUpdate,
+        UserProfileRead,
+        UserProfileActivate,
+        UserProfileDeactivate,
         ReviewCreate,
+        ReviewRead,
         ReviewDelete,
         ReviewUpdate
     ];

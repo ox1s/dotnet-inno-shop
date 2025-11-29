@@ -30,4 +30,14 @@ public class ReviewsRepository : IReviewsRepository
 
         return Task.CompletedTask;
     }
+
+    public async Task<List<Review>> GetByTargetUserIdAsync(Guid targetUserId, int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Reviews
+            .Where(r => r.TargetUserId == targetUserId)
+            .OrderByDescending(r => r.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+    }
 }

@@ -9,8 +9,9 @@ namespace InnoShop.UserManagement.Infrastructure.IntegrationEvents.OutboxWriter;
 
 public class OutboxWriterEventHandler
     : INotificationHandler<UserProfileDeactivatedEvent>,
-      INotificationHandler<UserProfileActivatedEvent>
-
+      INotificationHandler<UserProfileActivatedEvent>,
+      INotificationHandler<UserRegisteredEvent>,
+      INotificationHandler<UserProfileUpdatedEvent>
 {
     private readonly UserManagementDbContext _dbContext;
 

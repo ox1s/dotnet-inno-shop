@@ -3,6 +3,7 @@ using InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
 using InnoShop.UserManagement.Application.Reviews.Commands.DeleteReview;
 using InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
 using InnoShop.UserManagement.Application.Reviews.Queries.GetReview;
+using InnoShop.UserManagement.Application.Reviews.Queries.GetReviews;
 using InnoShop.UserManagement.Contracts.Reviews;
 using InnoShop.UserManagement.Domain.ReviewAggregate;
 using MediatR;
@@ -80,6 +81,21 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
 
         return getReviewResult.Match(
             review => Ok(MapToResponse(review)),
+            Problem);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetReviews(
+        Guid targetUserId,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var query = new GetReviewsQuery(targetUserId, page, pageSize);
+
+        var getReviewsResult = await sender.Send(query);
+
+        return getReviewsResult.Match(
+            reviews => Ok(reviews.Select(MapToResponse)),
             Problem);
     }
 

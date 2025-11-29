@@ -21,8 +21,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Mail;
+using Microsoft.Extensions.Hosting;
 using Throw;
 using ICustomAuthorizationService = InnoShop.UserManagement.Application.Common.Interfaces.IAuthorizationService;
+using MediatR;
 
 
 namespace InnoShop.UserManagement.Infrastructure;
@@ -49,7 +51,7 @@ public static class DependencyInjection
     public static IServiceCollection AddMediatR(this IServiceCollection services)
     {
         services.AddMediatR(options => options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection)));
-
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserCacheInvalidationBehavior<,>));
         return services;
     }
 
@@ -84,13 +86,10 @@ public static class DependencyInjection
         mailPitConnectionString.ThrowIfNull();
         mailPitConnectionString = mailPitConnectionString.Replace("Endpoint=", "");
 
-
         var uri = new Uri(mailPitConnectionString, UriKind.Absolute);
 
         var host = uri.Host;
         var port = uri.Port;
-
-
 
         var emailSettings = configuration.GetSection(EmailSettings.Section).Get<EmailSettings>() ?? new EmailSettings();
 
@@ -101,7 +100,6 @@ public static class DependencyInjection
         services.AddTransient<IEmailSender, EmailSender>();
 
         return services;
-
     }
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {

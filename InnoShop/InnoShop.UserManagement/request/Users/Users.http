@@ -2,7 +2,7 @@
 # ID пользователя, с которым будем работать (должен существовать в базе)
 @UserId = 10191f52-e1da-4163-ab00-c4d3c017c159
 # JWT Токен (получите его через /authentication/login или /authentication/register)
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWQiOiIxMDE5MWY1Mi1lMWRhLTQxNjMtYWIwMC1jNGQzYzAxN2MxNTkiLCJleHAiOjE3NjQ0Mzk0MjQsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.TF5x87sos6tlqCwYPy4Lb_jFpy7RSt1VDinm1HSz0m4
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWQiOiIxMDE5MWY1Mi1lMWRhLTQxNjMtYWIwMC1jNGQzYzAxN2MxNTkiLCJleHAiOjE3NjQ0NDEyMTcsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.GHqWNc_-F-YLFdIhLrFYRRDkVFfleSYVUo430MtgYsc
 
 ### 1. Получить информацию о пользователе (основная инфа + профиль, если есть)
 GET {{HostAddress}}/api/v1/users/{{UserId}}

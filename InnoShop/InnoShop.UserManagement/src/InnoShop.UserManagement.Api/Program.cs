@@ -24,7 +24,6 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
     builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
-    //builder.AddSqlServerDbContext<UserManagementDbContext>("innoshop-users");
     builder.AddSqlServerClient("innoshop-users");
     builder.AddRabbitMQClient("messaging");
     builder.AddMinioClient("minio");
@@ -36,12 +35,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
-
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
         var provider = dbContext.Database.ProviderName;
-
         if (provider?.Contains("SqlServer", StringComparison.OrdinalIgnoreCase) == true)
         {
             dbContext.Database.Migrate();
@@ -51,9 +48,6 @@ var app = builder.Build();
             dbContext.Database.EnsureCreated();
         }
     }
-
-
-
     app.UseExceptionHandler();
 
     if (app.Environment.IsDevelopment())
@@ -61,13 +55,11 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+
     app.UseHttpsRedirection();
-
     app.MapControllers();
-
     app.UseAuthentication();
     app.UseAuthorization();
-
     app.AddInfrastructureMiddleware();
 
     app.Run();

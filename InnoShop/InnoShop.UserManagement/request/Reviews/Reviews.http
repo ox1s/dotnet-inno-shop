@@ -1,0 +1,48 @@
+@HostAddress = https://localhost:7152
+# ID пользователя, КОТОРОМУ оставляем отзыв (Продавец)
+@TargetUserId = 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+# ID отзыва (заполняется после создания)
+@ReviewId = <ВСТАВЬТЕ_ID_СОЗДАННОГО_ОТЗЫВА>
+
+# Токен АВТОРА отзыва (Покупателя). 
+# Важно: Автор не может быть тем же человеком, что и TargetUserId (согласно логике домена)
+@Token = <ВСТАВЬТЕ_BEARER_TOKEN_АВТОРА>
+
+### 1. Создать отзыв
+# Рейтинг от 1 до 5. Комментарий обязателен (согласно валидатору в коде)
+POST {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+  "rating": 5,
+  "comment": "Отличный продавец, товар соответствует описанию! Рекомендую."
+}
+
+###
+
+### 2. Получить конкретный отзыв по ID
+GET {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews/{{ReviewId}}
+Authorization: Bearer {{Token}}
+Accept: application/json
+
+###
+
+### 3. Обновить отзыв
+# Изменять отзыв может только его автор (или админ, если настроены политики)
+PUT {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews/{{ReviewId}}
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+  "rating": 4,
+  "comment": "Все хорошо, но доставка немного задержалась. Изменил оценку."
+}
+
+###
+
+### 4. Удалить отзыв
+# Удалять может автор или админ
+DELETE {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews/{{ReviewId}}
+Authorization: Bearer {{Token}}

@@ -40,4 +40,9 @@ public class ReviewsRepository : IReviewsRepository
             .Take(pageSize)
             .ToListAsync(cancellationToken);
     }
+     public async Task<Review?> GetByAuthorAndTargetAsync(Guid authorId, Guid targetUserId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Reviews
+            .FirstOrDefaultAsync(r => r.AuthorId == authorId && r.TargetUserId == targetUserId, cancellationToken);
+    }
 }

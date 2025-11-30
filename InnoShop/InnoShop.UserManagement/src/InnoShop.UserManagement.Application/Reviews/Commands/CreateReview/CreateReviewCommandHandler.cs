@@ -24,7 +24,9 @@ public class CreateReviewCommandHandler(
 
         if (targetUser is null || author is null) return UserErrors.UserNotFound;
 
-
+        var existingReview = await reviewsRepository.GetByAuthorAndTargetAsync(author.Id, targetUser.Id, cancellationToken);
+        if (existingReview is not null) return UserErrors.UserCannotReviewTwice;
+        
         var ratingResult = Rating.Create(request.Rating);
         if (ratingResult.IsError) return ratingResult.Errors;
         var rating = ratingResult.Value;

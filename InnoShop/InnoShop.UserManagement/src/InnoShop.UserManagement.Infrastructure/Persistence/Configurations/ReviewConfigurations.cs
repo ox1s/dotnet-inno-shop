@@ -53,8 +53,9 @@ public class ReviewConfigurations : IEntityTypeConfiguration<Review>
         builder.Property(r => r.IsDeleted).HasColumnName("is_deleted");
         builder.Property(r => r.DeletedAt).HasColumnName("deleted_at");
 
-        builder.HasIndex(r => r.TargetUserId);
-        builder.HasIndex(r => r.AuthorId);
+        builder.HasIndex(r => new { r.AuthorId, r.TargetUserId })
+            .IsUnique()
+            .HasFilter("\"is_deleted\" = false");
         builder.HasQueryFilter(r => !r.IsDeleted);
     }
 }

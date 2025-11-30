@@ -8,4 +8,5 @@ public interface IReviewsRepository
     Task<List<Review>> GetByTargetUserIdAsync(Guid targetUserId, int page, int pageSize, CancellationToken cancellationToken = default);
     Task AddReviewAsync(Review review, CancellationToken cancellationToken = default);
     Task UpdateAsync(Review review, CancellationToken cancellationToken = default);
+    Task<Review?> GetByAuthorAndTargetAsync(Guid authorId, Guid targetUserId, CancellationToken cancellationToken = default);
 }

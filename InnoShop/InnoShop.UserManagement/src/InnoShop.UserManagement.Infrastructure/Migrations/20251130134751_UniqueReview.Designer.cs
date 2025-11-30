@@ -3,6 +3,7 @@ using System;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InnoShop.UserManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(UserManagementDbContext))]
-    partial class UserManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251130134751_UniqueReview")]
+    partial class UniqueReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,11 +65,9 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TargetUserId");
+                    b.HasIndex("AuthorId");
 
-                    b.HasIndex("AuthorId", "TargetUserId")
-                        .IsUnique()
-                        .HasFilter("\"is_deleted\" = false");
+                    b.HasIndex("TargetUserId");
 
                     b.ToTable("reviews", (string)null);
                 });

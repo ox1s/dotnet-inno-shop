@@ -27,8 +27,7 @@ public sealed class User : AggregateRoot
         EmailVerificationTokenExpiration = DateTime.UtcNow.AddDays(1);
     }
 
-    // TODO: Метод для генерации токуна подтверждения
-    // TODO: ConfirmEmail(string token)
+    
     private User()
     {
     }

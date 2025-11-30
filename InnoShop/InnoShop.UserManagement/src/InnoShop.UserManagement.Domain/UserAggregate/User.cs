@@ -166,7 +166,7 @@ public sealed class User : AggregateRoot
         return Result.Success;
     }
 
-    // Может тут проверять на UserProfile is not null это же бизнес логика
+    
     public ErrorOr<Success> ApplyNewRating(int ratingValue)
     {
         RatingSummary = RatingSummary.AddRating(ratingValue);

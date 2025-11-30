@@ -1,8 +1,8 @@
 @HostAddress = https://localhost:7152
 # ID пользователя, с которым будем работать (должен существовать в базе)
-@UserId = d6ff4c69-488c-429e-ad87-41eb2616fc68
+@UserId = b731d706-3220-4ddd-acfe-39fd4bcc7695
 # JWT Токен (получите его через /authentication/login или /authentication/register)
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWQiOiJkNmZmNGM2OS00ODhjLTQyOWUtYWQ4Ny00MWViMjYxNmZjNjgiLCJleHAiOjE3NjQ0NzI4NDgsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.LQXyIsWKvzyIb4L9VjVlKU3L9wLorbocYoMDIXoH-no
+@Token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWQiOiJiNzMxZDcwNi0zMjIwLTRkZGQtYWNmZS0zOWZkNGJjYzc2OTUiLCJleHAiOjE3NjQ1MDg5OTgsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.6_fheOySOh7ftqdvUNYp7gZz4RYOZg3dmtiIPVq7PrE
 
 ### 1. Получить информацию о пользователе (основная инфа + профиль, если есть)
 GET {{HostAddress}}/api/v1/users/{{UserId}}
@@ -23,8 +23,8 @@ Content-Type: application/json
   "avatarUrl": "https://i.pinimg.com/736x/c8/cc/24/c8cc24bba37a25c009647b8875aae0e3.jpg",
   "phoneNumber": "+375291234567",
   "country": "Belarus",
-  "state": "Minsk Region",
-  "city": "Minsk"
+  "state": "Минская область",
+  "city": "Минск"
 }
 
 ###
@@ -43,9 +43,9 @@ Authorization: Bearer {{Token}}
 Content-Type: application/json
 
 {
-  "firstName": "Полина",
-  "lastName": "Мельянцева",
-  "city": "Витебск",
+  "firstName": "Иванов",
+  "lastName": "Кракозябра",
+  "country": "Belarus",
   "phoneNumber": "+375299876543"
 }
 

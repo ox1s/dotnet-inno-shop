@@ -11,11 +11,11 @@
     <PackageReference Include="Aspire.Hosting.Docker" />
     <PackageReference Include="Aspire.Hosting.RabbitMQ" />
     <PackageReference Include="Aspire.Hosting.Redis" />
-    <PackageReference Include="Aspire.Hosting.SqlServer" />
-    <PackageReference Include="Aspire.Microsoft.Data.SqlClient" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" />
     <PackageReference Include="Aspire.RabbitMQ.Client" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.Minio" />
+    <PackageReference Include="Npgsql.OpenTelemetry" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />

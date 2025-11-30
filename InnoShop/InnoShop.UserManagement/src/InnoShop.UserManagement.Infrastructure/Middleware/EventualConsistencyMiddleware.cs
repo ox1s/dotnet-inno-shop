@@ -2,7 +2,7 @@ using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Domain.Common.EventualConsistency;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-
+using Microsoft.EntityFrameworkCore;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 
 namespace InnoShop.UserManagement.Infrastructure.Middleware;
@@ -16,11 +16,16 @@ public class EventualConsistencyMiddleware(RequestDelegate next)
         IPublisher publisher,
         UserManagementDbContext dbContext)
     {
-        var transaction = await dbContext.Database.BeginTransactionAsync();
-        context.Response.OnCompleted(async () =>
+        var strategy = dbContext.Database.CreateExecutionStrategy();
+        
+        await strategy.ExecuteAsync(async () =>
         {
+            await using var transaction = await dbContext.Database.BeginTransactionAsync();
+            
             try
             {
+                await next(context);
+                
                 if (context.Items.TryGetValue(DomainEventsKey, out var value) && value is Queue<IDomainEvent> domainEvents)
                 {
                     while (domainEvents.TryDequeue(out var nextEvent))
@@ -33,13 +38,12 @@ public class EventualConsistencyMiddleware(RequestDelegate next)
             }
             catch (EventualConsistencyException)
             {
+                throw;
             }
-            finally
+            catch (Exception)
             {
-                await transaction.DisposeAsync();
+                throw;
             }
         });
-
-        await next(context);
     }
 }

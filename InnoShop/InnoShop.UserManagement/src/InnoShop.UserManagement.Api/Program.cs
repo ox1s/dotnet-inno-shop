@@ -24,30 +24,36 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
     builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
-    builder.AddSqlServerClient("innoshop-users");
     builder.AddRabbitMQClient("messaging");
     builder.AddMinioClient("minio");
+
 
     builder.Services
         .AddApplication()
         .AddInfrastructure(builder.Configuration);
+
+    var connectionString = builder.Configuration.GetConnectionString("innoshop-users");
+    if (connectionString != null && 
+        !connectionString.Contains("DataSource", StringComparison.OrdinalIgnoreCase) &&
+        !connectionString.Contains(":memory:", StringComparison.OrdinalIgnoreCase))
+    {
+        builder.EnrichNpgsqlDbContext<UserManagementDbContext>();
+    }
 }
 
 var app = builder.Build();
 {
-    using (var scope = app.Services.CreateScope())
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
+    
+    var connectionString = app.Configuration.GetConnectionString("innoshop-users");
+    if (connectionString != null && 
+        !connectionString.Contains("DataSource", StringComparison.OrdinalIgnoreCase) &&
+        !connectionString.Contains(":memory:", StringComparison.OrdinalIgnoreCase))
     {
-        var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
-        var provider = dbContext.Database.ProviderName;
-        if (provider?.Contains("SqlServer", StringComparison.OrdinalIgnoreCase) == true)
-        {
-            dbContext.Database.Migrate();
-        }
-        else if (provider?.Contains("Sqlite", StringComparison.OrdinalIgnoreCase) == true)
-        {
-            dbContext.Database.EnsureCreated();
-        }
+        dbContext.Database.Migrate();
     }
+
     app.UseExceptionHandler();
 
     if (app.Environment.IsDevelopment())

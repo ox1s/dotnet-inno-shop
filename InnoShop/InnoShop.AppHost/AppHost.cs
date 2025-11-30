@@ -8,13 +8,13 @@ var cache = builder.AddRedis("cache")
                    .WithDataVolume()
                    .WithRedisCommander();
 
-var sql = builder.AddSqlServer("sql")
-    .WithHostPort(1433)
+var postgres = builder.AddPostgres("postgres")
+    .WithHostPort(5435)
     .WithDataVolume()
     .WithLifetime(ContainerLifetime.Persistent);
 
-var usersDatabase = sql.AddDatabase("innoshop-users");
-var productsDatabase = sql.AddDatabase("innoshop-products");
+var usersDatabase = postgres.AddDatabase("innoshop-users");
+var productsDatabase = postgres.AddDatabase("innoshop-products");
 
 var minio = builder.AddMinioContainer("minio")
     .WithDataVolume()

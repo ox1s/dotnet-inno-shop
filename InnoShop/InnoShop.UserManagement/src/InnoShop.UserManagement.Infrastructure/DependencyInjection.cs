@@ -113,7 +113,7 @@ public static class DependencyInjection
         else
         {
             services.AddDbContext<UserManagementDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString));
         }
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<UserManagementDbContext>());

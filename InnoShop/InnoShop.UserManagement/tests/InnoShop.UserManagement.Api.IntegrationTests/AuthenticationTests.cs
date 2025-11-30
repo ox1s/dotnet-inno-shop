@@ -1,11 +1,9 @@
-using System.Net;
-using System.Net.Http.Json;
 using FluentAssertions;
 using InnoShop.UserManagement.Api.IntegrationTests.Common;
 using InnoShop.UserManagement.Contracts.Authentication;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
+using System.Net.Http.Json;
 
 namespace InnoShop.UserManagement.Api.IntegrationTests;
 
@@ -60,6 +58,7 @@ public class AuthenticationTests
         var authResponse = await response.Content.ReadFromJsonAsync<AuthenticationResponse>();
         authResponse!.Token.Should().NotBeNullOrEmpty();
     }
+
     [Fact]
     public async Task PostForgotPassword_WhenValidEmail_ShouldReturnSuccess()
     {
@@ -93,7 +92,7 @@ public class AuthenticationTests
     [Fact]
     public async Task PostForgotPassword_WhenEmailNotFound_ShouldStillReturnSuccess()
     {
-        // Arrange 
+        // Arrange
         var forgotPasswordData = new { Email = "nonexistent@example.com" };
 
         // Act: POST /authentication/forgot-password
@@ -101,7 +100,7 @@ public class AuthenticationTests
             "/authentication/forgot-password",
             forgotPasswordData);
 
-        // Assert 
+        // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 

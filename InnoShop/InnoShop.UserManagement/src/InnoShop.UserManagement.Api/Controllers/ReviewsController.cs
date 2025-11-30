@@ -31,7 +31,7 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
         return createReviewResult.Match(
             review => CreatedAtAction(
                 nameof(GetReview),
-                new { reviewId = review.Id },
+                new { targetUserId = targetUserId, reviewId = review.Id },
                 review),
                 Problem);
 

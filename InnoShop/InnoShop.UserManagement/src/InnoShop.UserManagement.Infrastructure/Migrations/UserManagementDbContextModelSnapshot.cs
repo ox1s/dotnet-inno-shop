@@ -3,8 +3,8 @@ using System;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -18,46 +18,46 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("InnoShop.UserManagement.Domain.ReviewAggregate.Review", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("AuthorId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("author_id");
 
                     b.Property<string>("Comment")
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnType("character varying(1000)")
                         .HasColumnName("comment");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit")
+                        .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
 
                     b.Property<int>("Rating")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("rating");
 
                     b.Property<Guid>("TargetUserId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("target_user_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
@@ -73,13 +73,13 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -147,13 +147,13 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -185,10 +185,10 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
             modelBuilder.Entity("InnoShop.UserManagement.Domain.UserAggregate.RolePermission", b =>
                 {
                     b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("PermissionId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("RoleId", "PermissionId");
 
@@ -257,35 +257,35 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
             modelBuilder.Entity("InnoShop.UserManagement.Domain.UserAggregate.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)")
+                        .HasColumnType("character varying(400)")
                         .HasColumnName("email");
 
                     b.Property<string>("EmailVerificationToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("EmailVerificationTokenExpiration")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsEmailVerified")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("PasswordResetToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("PasswordResetTokenExpiration")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("_passwordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("text")
                         .HasColumnName("password_hash");
 
                     b.HasKey("Id");
@@ -300,17 +300,17 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("EventContent")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("EventName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -320,10 +320,10 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
             modelBuilder.Entity("user_roles", b =>
                 {
                     b.Property<int>("RolesId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("RolesId", "UserId");
 
@@ -367,14 +367,14 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                     b.OwnsOne("InnoShop.UserManagement.Domain.UserAggregate.RatingSummary", "RatingSummary", b1 =>
                         {
                             b1.Property<Guid>("UserId")
-                                .HasColumnType("uniqueidentifier");
+                                .HasColumnType("uuid");
 
                             b1.Property<int>("NumberOfReviews")
-                                .HasColumnType("int")
+                                .HasColumnType("integer")
                                 .HasColumnName("number_of_reviews");
 
                             b1.Property<double>("TotalScore")
-                                .HasColumnType("float")
+                                .HasColumnType("double precision")
                                 .HasColumnName("total_score");
 
                             b1.HasKey("UserId");
@@ -388,30 +388,30 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                     b.OwnsOne("InnoShop.UserManagement.Domain.UserAggregate.UserProfile", "UserProfile", b1 =>
                         {
                             b1.Property<Guid>("UserId")
-                                .HasColumnType("uniqueidentifier");
+                                .HasColumnType("uuid");
 
                             b1.Property<string>("AvatarUrl")
                                 .IsRequired()
                                 .HasMaxLength(2048)
-                                .HasColumnType("nvarchar(2048)")
+                                .HasColumnType("character varying(2048)")
                                 .HasColumnName("avatar_url");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("nvarchar(200)")
+                                .HasColumnType("character varying(200)")
                                 .HasColumnName("first_name");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("nvarchar(200)")
+                                .HasColumnType("character varying(200)")
                                 .HasColumnName("last_name");
 
                             b1.Property<string>("PhoneNumber")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
+                                .HasColumnType("character varying(50)")
                                 .HasColumnName("phone_number");
 
                             b1.HasKey("UserId");
@@ -424,24 +424,24 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                             b1.OwnsOne("InnoShop.UserManagement.Domain.UserAggregate.Location", "Location", b2 =>
                                 {
                                     b2.Property<Guid>("UserProfileUserId")
-                                        .HasColumnType("uniqueidentifier");
+                                        .HasColumnType("uuid");
 
                                     b2.Property<string>("City")
                                         .IsRequired()
                                         .HasMaxLength(100)
-                                        .HasColumnType("nvarchar(100)")
+                                        .HasColumnType("character varying(100)")
                                         .HasColumnName("city");
 
                                     b2.Property<string>("Country")
                                         .IsRequired()
                                         .HasMaxLength(100)
-                                        .HasColumnType("nvarchar(100)")
+                                        .HasColumnType("character varying(100)")
                                         .HasColumnName("country");
 
                                     b2.Property<string>("State")
                                         .IsRequired()
                                         .HasMaxLength(100)
-                                        .HasColumnType("nvarchar(100)")
+                                        .HasColumnType("character varying(100)")
                                         .HasColumnName("state");
 
                                     b2.HasKey("UserProfileUserId");

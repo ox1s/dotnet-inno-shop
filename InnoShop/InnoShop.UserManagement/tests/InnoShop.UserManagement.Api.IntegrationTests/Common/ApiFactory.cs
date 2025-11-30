@@ -1,4 +1,3 @@
-using InnoShop.UserManagement.Api;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Infrastructure.IntegrationEvents.BackgroundServices;
 using InnoShop.UserManagement.Infrastructure.Persistence;
@@ -8,9 +7,8 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using NSubstitute;
 using RabbitMQ.Client;
 
@@ -32,9 +30,22 @@ public class ApiFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLifetime
     {
         // Отключаем переменные Aspire, чтобы Program.cs не пытался подключиться к реальным сервисам
         Environment.SetEnvironmentVariable("ConnectionStrings__innoshop-users", "DataSource=:memory:");
-        Environment.SetEnvironmentVariable("ConnectionStrings__messaging", "amqp://guest:guest@localhost:5672"); // Фейковая строка
+        Environment.SetEnvironmentVariable("ConnectionStrings__messaging", "amqp://guest:guest@localhost:5672");
         Environment.SetEnvironmentVariable("ConnectionStrings__mailpit", "Endpoint=http://localhost:1025");
         Environment.SetEnvironmentVariable("ConnectionStrings__minio", "Endpoint=http://localhost:9000");
+
+        // Ensure configuration is set before Program.cs reads it
+        builder.ConfigureAppConfiguration(config =>
+        {
+            var inMemoryConfig = new Dictionary<string, string?>
+            {
+                { "ConnectionStrings:innoshop-users", "DataSource=:memory:" },
+                { "ConnectionStrings:messaging", "amqp://guest:guest@localhost:5672" },
+                { "ConnectionStrings:mailpit", "Endpoint=http://localhost:1025" },
+                { "ConnectionStrings:minio", "Endpoint=http://localhost:9000" }
+            };
+            config.AddInMemoryCollection(inMemoryConfig);
+        });
 
         builder.ConfigureTestServices(services =>
         {

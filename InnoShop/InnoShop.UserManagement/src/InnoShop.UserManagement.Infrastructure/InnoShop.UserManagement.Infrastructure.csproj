@@ -4,7 +4,6 @@
 	<ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj" />
   </ItemGroup>
   <ItemGroup>
-	<!-- <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" /> -->
 	<PackageReference Include="Aspire.RabbitMQ.Client" />
 	<PackageReference Include="BCrypt.Net-Next" />
 	<PackageReference Include="FluentEmail.Core" />
@@ -14,7 +13,7 @@
 	<PackageReference Include="Microsoft.Data.Sqlite.Core" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+	<PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  <PrivateAssets>all</PrivateAssets>

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
@@ -36,6 +37,18 @@ public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLif
         Environment.SetEnvironmentVariable("ConnectionStrings__mailpit", "Endpoint=http://localhost:1025");
         Environment.SetEnvironmentVariable("ConnectionStrings__minio", "Endpoint=http://localhost:9000");
 
+        // Ensure configuration is set before Program.cs reads it
+        builder.ConfigureAppConfiguration(config =>
+        {
+            var inMemoryConfig = new Dictionary<string, string?>
+            {
+                { "ConnectionStrings:innoshop-users", "DataSource=:memory:" },
+                { "ConnectionStrings:messaging", "" },
+                { "ConnectionStrings:mailpit", "Endpoint=http://localhost:1025" },
+                { "ConnectionStrings:minio", "Endpoint=http://localhost:9000" }
+            };
+            config.AddInMemoryCollection(inMemoryConfig);
+        });
 
         builder.ConfigureTestServices(services =>
         {

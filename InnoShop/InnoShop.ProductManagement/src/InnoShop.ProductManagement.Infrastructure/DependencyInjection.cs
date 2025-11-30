@@ -6,8 +6,6 @@ using InnoShop.ProductManagement.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using MediatR;
 
 namespace InnoShop.ProductManagement.Infrastructure;
 
@@ -62,7 +60,7 @@ public static class DependencyInjection
         else
         {
             services.AddDbContext<ProductManagementDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString));
         }
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ProductManagementDbContext>());

@@ -41,22 +41,40 @@ public class UserManagementDbContext(
                 .SelectMany(entry => entry.Entity.PopDomainEvents())
                 .ToList();
 
-            await using var transaction = await Database.BeginTransactionAsync(cancellationToken);
-
-            var result = await base.SaveChangesAsync(cancellationToken);
-
-            if (IsUserWaitingOnline())
+            if (Database.CurrentTransaction != null)
             {
-                AddDomainEventsToOfflineProcessingQueue(domainEvents);
+                var result = await base.SaveChangesAsync(cancellationToken);
+
+                if (IsUserWaitingOnline())
+                {
+                    AddDomainEventsToOfflineProcessingQueue(domainEvents);
+                }
+                else
+                {
+                    await PublishDomainEventsAsync(domainEvents);
+                }
+
+                return result;
             }
             else
             {
-                await PublishDomainEventsAsync(domainEvents);
+                await using var transaction = await Database.BeginTransactionAsync(cancellationToken);
+
+                var result = await base.SaveChangesAsync(cancellationToken);
+
+                if (IsUserWaitingOnline())
+                {
+                    AddDomainEventsToOfflineProcessingQueue(domainEvents);
+                }
+                else
+                {
+                    await PublishDomainEventsAsync(domainEvents);
+                }
+
+                await transaction.CommitAsync(cancellationToken);
+
+                return result;
             }
-
-            await transaction.CommitAsync(cancellationToken);
-
-            return result;
         }
         catch (Exception ex)
         {

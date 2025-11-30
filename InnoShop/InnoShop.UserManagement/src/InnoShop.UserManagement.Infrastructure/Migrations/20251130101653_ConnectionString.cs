@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InnoShop.UserManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class ConnectionString : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,10 +18,10 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 name: "OutboxIntegrationEvents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EventName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EventContent = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EventName = table.Column<string>(type: "text", nullable: false),
+                    EventContent = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,9 +32,9 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 name: "permissions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,9 +45,9 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 name: "roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,24 +58,24 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    email = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
-                    first_name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    last_name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    avatar_url = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: true),
-                    phone_number = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    state = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    city = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsEmailVerified = table.Column<bool>(type: "bit", nullable: false),
-                    EmailVerificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmailVerificationTokenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PasswordResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PasswordResetTokenExpiration = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    total_score = table.Column<double>(type: "float", nullable: false),
-                    number_of_reviews = table.Column<int>(type: "int", nullable: false),
-                    password_hash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    email = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false),
+                    first_name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    last_name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    avatar_url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: true),
+                    phone_number = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    state = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    IsEmailVerified = table.Column<bool>(type: "boolean", nullable: false),
+                    EmailVerificationToken = table.Column<string>(type: "text", nullable: true),
+                    EmailVerificationTokenExpiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    PasswordResetToken = table.Column<string>(type: "text", nullable: true),
+                    PasswordResetTokenExpiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    total_score = table.Column<double>(type: "double precision", nullable: false),
+                    number_of_reviews = table.Column<int>(type: "integer", nullable: false),
+                    password_hash = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,8 +86,8 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 name: "role_permissions",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    PermissionId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    PermissionId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,15 +110,15 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 name: "reviews",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    target_user_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    author_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    rating = table.Column<int>(type: "int", nullable: false),
-                    comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    target_user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    author_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    rating = table.Column<int>(type: "integer", nullable: false),
+                    comment = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -140,8 +141,8 @@ namespace InnoShop.UserManagement.Infrastructure.Migrations
                 name: "user_roles",
                 columns: table => new
                 {
-                    RolesId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    RolesId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {

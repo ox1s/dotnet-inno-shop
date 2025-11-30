@@ -21,7 +21,7 @@ public class ReviewTest
         var targetUser = UserFactory.CreateUserWithProfile();
         var author = UserFactory.CreateUserWithProfile();
 
-        Comment? comment = commentValue is not null
+        var comment = commentValue is not null
             ? Comment.Create(commentValue).Value
             : null;
 
@@ -44,8 +44,6 @@ public class ReviewTest
     }
 
 
-
-
     [Fact]
     public void Create_WhenAuthorIsTarget_ShouldFail()
     {
@@ -54,8 +52,8 @@ public class ReviewTest
 
         // Act
         var createdReviewResult = Review.Create(
-            targetUser: user,
-            author: user,
+            user,
+            user,
             Constants.Review.Rating,
             Constants.Review.Comment,
             _dateTimeProvider);
@@ -91,5 +89,3 @@ public class ReviewTest
         review.Comment.Should().Be(newComment);
     }
 }
-
-

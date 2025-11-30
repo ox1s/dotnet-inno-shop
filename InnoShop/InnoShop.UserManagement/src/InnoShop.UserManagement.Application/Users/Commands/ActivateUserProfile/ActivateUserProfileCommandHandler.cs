@@ -7,7 +7,7 @@ namespace InnoShop.UserManagement.Application.Users.Commands.ActivateUserProfile
 
 public class ActivateUserProfileCommandHandler(
     IUsersRepository usersRepository,
-    IUnitOfWork unitOfWork) 
+    IUnitOfWork unitOfWork)
     : IRequestHandler<ActivateUserProfileCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(ActivateUserProfileCommand request, CancellationToken cancellationToken)

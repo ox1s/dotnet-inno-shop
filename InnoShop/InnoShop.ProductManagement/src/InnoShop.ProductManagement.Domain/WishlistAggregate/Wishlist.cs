@@ -4,11 +4,18 @@ namespace InnoShop.ProductManagement.Domain.WishlistAggregate;
 
 public sealed class Wishlist : AggregateRoot
 {
-    public Guid UserId { get; private set; }
     private readonly List<Guid> _productIds = new();
-    public IReadOnlyList<Guid> ProductIds => _productIds.ToList();
 
-    private Wishlist(Guid id) : base(id) { }
+    private Wishlist(Guid id) : base(id)
+    {
+    }
+
+    private Wishlist()
+    {
+    }
+
+    public Guid UserId { get; private set; }
+    public IReadOnlyList<Guid> ProductIds => _productIds.ToList();
 
     public static Wishlist Create(Guid id, Guid userId)
     {
@@ -20,16 +27,11 @@ public sealed class Wishlist : AggregateRoot
 
     public void AddProduct(Guid productId)
     {
-        if (!_productIds.Contains(productId))
-        {
-            _productIds.Add(productId);
-        }
+        if (!_productIds.Contains(productId)) _productIds.Add(productId);
     }
 
     public void RemoveProduct(Guid productId)
     {
         _productIds.Remove(productId);
     }
-
-    private Wishlist() { }
 }

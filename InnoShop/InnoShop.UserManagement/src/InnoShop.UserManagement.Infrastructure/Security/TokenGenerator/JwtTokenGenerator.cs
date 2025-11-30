@@ -3,10 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Domain.UserAggregate;
-
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-
 
 namespace InnoShop.UserManagement.Infrastructure.Security.TokenGenerator;
 
@@ -22,7 +20,7 @@ public class JwtTokenGenerator(IOptions<JwtSettings> jwtOptions) : IJwtTokenGene
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Email, user.Email.Value),
-            new Claim("id", user.Id.ToString()),
+            new Claim("id", user.Id.ToString())
         };
 
         var token = new JwtSecurityToken(

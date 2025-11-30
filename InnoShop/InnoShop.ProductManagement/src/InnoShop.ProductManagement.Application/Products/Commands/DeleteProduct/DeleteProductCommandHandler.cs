@@ -1,6 +1,5 @@
 using ErrorOr;
 using InnoShop.ProductManagement.Application.Common.Interfaces;
-using InnoShop.ProductManagement.Domain.ProductAggregate;
 using InnoShop.SharedKernel.Security.Roles;
 using MediatR;
 
@@ -14,12 +13,9 @@ public class DeleteProductCommandHandler(
 {
     public async Task<ErrorOr<Success>> Handle(DeleteProductCommand command, CancellationToken cancellationToken)
     {
-        var product = await productsRepository.GetByIdAsync(command.Id, cancellationToken, ignoreQueryFilters: true);
+        var product = await productsRepository.GetByIdAsync(command.Id, cancellationToken, true);
 
-        if (product is null)
-        {
-            return Error.NotFound("Product.NotFound", "Product not found.");
-        }
+        if (product is null) return Error.NotFound("Product.NotFound", "Product not found.");
 
         var currentUser = currentUserProvider.GetCurrentUser();
 
@@ -28,9 +24,7 @@ public class DeleteProductCommandHandler(
         var isAdmin = currentUser.Roles.Contains(AppRoles.Admin);
 
         if (!isOwner && !isAdmin)
-        {
             return Error.Forbidden("Product.Forbidden", "You can only delete your own products or must be an admin.");
-        }
 
         // Soft delete
         product.Hide();

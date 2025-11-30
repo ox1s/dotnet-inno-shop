@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using InnoShop.ProductManagement.Domain.WishlistAggregate;
 using InnoShop.ProductManagement.Infrastructure.Persistence.Converters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InnoShop.ProductManagement.Infrastructure.Persistence.Configurations;
 

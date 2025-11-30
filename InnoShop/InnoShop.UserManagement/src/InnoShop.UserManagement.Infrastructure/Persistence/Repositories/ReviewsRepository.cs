@@ -31,7 +31,8 @@ public class ReviewsRepository : IReviewsRepository
         return Task.CompletedTask;
     }
 
-    public async Task<List<Review>> GetByTargetUserIdAsync(Guid targetUserId, int page, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<List<Review>> GetByTargetUserIdAsync(Guid targetUserId, int page, int pageSize,
+        CancellationToken cancellationToken = default)
     {
         return await _dbContext.Reviews
             .Where(r => r.TargetUserId == targetUserId)
@@ -40,7 +41,9 @@ public class ReviewsRepository : IReviewsRepository
             .Take(pageSize)
             .ToListAsync(cancellationToken);
     }
-     public async Task<Review?> GetByAuthorAndTargetAsync(Guid authorId, Guid targetUserId, CancellationToken cancellationToken = default)
+
+    public async Task<Review?> GetByAuthorAndTargetAsync(Guid authorId, Guid targetUserId,
+        CancellationToken cancellationToken = default)
     {
         return await _dbContext.Reviews
             .FirstOrDefaultAsync(r => r.AuthorId == authorId && r.TargetUserId == targetUserId, cancellationToken);

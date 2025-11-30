@@ -1,5 +1,7 @@
-using InnoShop.SharedKernel.IntegrationEvents;
+using System.Text;
+using System.Text.Json;
 using InnoShop.ProductManagement.Infrastructure.IntegrationEvents.Settings;
+using InnoShop.SharedKernel.IntegrationEvents;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,8 +9,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Text;
-using System.Text.Json;
 
 namespace InnoShop.ProductManagement.Infrastructure.IntegrationEvents.BackgroundServices;
 
@@ -28,32 +28,32 @@ public class ConsumeIntegrationEventsBackgroundService(
         _channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
         await _channel.ExchangeDeclareAsync(
-            exchange: _settings.ExchangeName,
-            type: ExchangeType.Fanout,
-            durable: true,
+            _settings.ExchangeName,
+            ExchangeType.Fanout,
+            true,
             cancellationToken: stoppingToken);
 
         await _channel.QueueDeclareAsync(
-            queue: _settings.QueueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
+            _settings.QueueName,
+            true,
+            false,
+            false,
             cancellationToken: stoppingToken);
 
         await _channel.QueueBindAsync(
-            queue: _settings.QueueName,
-            exchange: _settings.ExchangeName,
-            routingKey: string.Empty,
+            _settings.QueueName,
+            _settings.ExchangeName,
+            string.Empty,
             cancellationToken: stoppingToken);
 
         var consumer = new AsyncEventingBasicConsumer(_channel);
         consumer.ReceivedAsync += HandleMessageAsync;
 
         await _channel.BasicConsumeAsync(
-            queue: _settings.QueueName,
-            autoAck: false,
-            consumer: consumer,
-            cancellationToken: stoppingToken);
+            _settings.QueueName,
+            false,
+            consumer,
+            stoppingToken);
 
         try
         {
@@ -76,10 +76,7 @@ public class ConsumeIntegrationEventsBackgroundService(
             if (integrationEvent is null)
             {
                 logger.LogWarning("Received null integration event");
-                if (_channel is not null)
-                {
-                    await _channel.BasicAckAsync(eventArgs.DeliveryTag, multiple: false);
-                }
+                if (_channel is not null) await _channel.BasicAckAsync(eventArgs.DeliveryTag, false);
                 return;
             }
 
@@ -90,18 +87,12 @@ public class ConsumeIntegrationEventsBackgroundService(
 
             await publisher.Publish(integrationEvent);
 
-            if (_channel is not null)
-            {
-                await _channel.BasicAckAsync(eventArgs.DeliveryTag, multiple: false);
-            }
+            if (_channel is not null) await _channel.BasicAckAsync(eventArgs.DeliveryTag, false);
         }
         catch (Exception e)
         {
             logger.LogError(e, "Error handling integration event");
-            if (_channel is not null)
-            {
-                await _channel.BasicNackAsync(eventArgs.DeliveryTag, multiple: false, requeue: false);
-            }
+            if (_channel is not null) await _channel.BasicNackAsync(eventArgs.DeliveryTag, false, false);
         }
     }
 

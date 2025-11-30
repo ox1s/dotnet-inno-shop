@@ -1,13 +1,14 @@
 using System.Text.Json.Serialization;
-using MediatR;
-
 using InnoShop.SharedKernel.IntegrationEvents.UserManagement;
+using MediatR;
 
 namespace InnoShop.SharedKernel.IntegrationEvents;
 
-[JsonDerivedType(typeof(UserProfileActivatedIntegrationEvent), typeDiscriminator: nameof(UserProfileActivatedIntegrationEvent))]
-[JsonDerivedType(typeof(UserProfileDeactivatedIntegrationEvent), typeDiscriminator: nameof(UserProfileDeactivatedIntegrationEvent))]
-[JsonDerivedType(typeof(UserRegisteredIntegrationEvent), typeDiscriminator: nameof(UserRegisteredIntegrationEvent))]
-[JsonDerivedType(typeof(UserProfileUpdatedIntegrationEvent), typeDiscriminator: nameof(UserProfileUpdatedIntegrationEvent))]
-[JsonDerivedType(typeof(PasswordResetRequestedIntegrationEvent), typeDiscriminator: nameof(PasswordResetRequestedIntegrationEvent))]
-public interface IIntegrationEvent : INotification { }
+[JsonDerivedType(typeof(UserProfileActivatedIntegrationEvent), nameof(UserProfileActivatedIntegrationEvent))]
+[JsonDerivedType(typeof(UserProfileDeactivatedIntegrationEvent), nameof(UserProfileDeactivatedIntegrationEvent))]
+[JsonDerivedType(typeof(UserRegisteredIntegrationEvent), nameof(UserRegisteredIntegrationEvent))]
+[JsonDerivedType(typeof(UserProfileUpdatedIntegrationEvent), nameof(UserProfileUpdatedIntegrationEvent))]
+[JsonDerivedType(typeof(PasswordResetRequestedIntegrationEvent), nameof(PasswordResetRequestedIntegrationEvent))]
+public interface IIntegrationEvent : INotification
+{
+}

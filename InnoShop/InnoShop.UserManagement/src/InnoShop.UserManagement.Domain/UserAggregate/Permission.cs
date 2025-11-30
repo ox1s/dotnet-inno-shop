@@ -1,4 +1,3 @@
-using Ardalis.SmartEnum;
 using InnoShop.SharedKernel.Security.Permissions;
 
 namespace InnoShop.UserManagement.Domain.UserAggregate;

@@ -10,7 +10,7 @@ public static class UserCommandFactory
         string? password = null)
     {
         return new RegisterCommand(
-            Email: email ?? Constants.User.Email.Value,
-            Password: password ?? Constants.User.PasswordHash);
+            email ?? Constants.User.Email.Value,
+            password ?? Constants.User.PasswordHash);
     }
 }

@@ -1,3 +1,4 @@
+using System.Net.Mail;
 using InnoShop.SharedKernel.Common.Interfaces;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Domain.Common.Interfaces;
@@ -14,15 +15,13 @@ using InnoShop.UserManagement.Infrastructure.Security.TokenGenerator;
 using InnoShop.UserManagement.Infrastructure.Security.TokenValidation;
 using InnoShop.UserManagement.Infrastructure.Services;
 using InnoShop.UserManagement.Infrastructure.Storage;
-
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Mail;
 using Throw;
 using ICustomAuthorizationService = InnoShop.UserManagement.Application.Common.Interfaces.IAuthorizationService;
-using MediatR;
 
 
 namespace InnoShop.UserManagement.Infrastructure;
@@ -46,14 +45,14 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddMediatR(this IServiceCollection services)
+    private static IServiceCollection AddMediatR(this IServiceCollection services)
     {
         services.AddMediatR(options => options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection)));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserCacheInvalidationBehavior<,>));
         return services;
     }
 
-    public static IServiceCollection AddConfigurations(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddConfigurations(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOptions();
 
@@ -65,7 +64,7 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddBackgroundServices(this IServiceCollection services)
+    private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
     {
         services.AddSingleton<IIntegrationEventsPublisher, IntegrationEventsPublisher>();
         services.AddHostedService<PublishIntegrationEventsBackgroundService>();
@@ -73,9 +72,8 @@ public static class DependencyInjection
 
         return services;
     }
-    public static IServiceCollection AddEmailService(
-        this IServiceCollection services,
-        IConfiguration configuration)
+
+    private static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
 
@@ -99,22 +97,20 @@ public static class DependencyInjection
 
         return services;
     }
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+
+    private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = configuration.GetConnectionString("innoshop-users")
-            ?? throw new InvalidOperationException("Connection string 'innoshop-users' not found"); ;
+        var connectionString = configuration.GetConnectionString("innoshop-users")
+                               ?? throw new InvalidOperationException("Connection string 'innoshop-users' not found");
+        ;
 
         if (connectionString.Contains("DataSource", StringComparison.OrdinalIgnoreCase) ||
-        connectionString.Contains(":memory:", StringComparison.OrdinalIgnoreCase))
-        {
+            connectionString.Contains(":memory:", StringComparison.OrdinalIgnoreCase))
             services.AddDbContext<UserManagementDbContext>(options =>
                 options.UseSqlite(connectionString));
-        }
         else
-        {
             services.AddDbContext<UserManagementDbContext>(options =>
                 options.UseNpgsql(connectionString));
-        }
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<UserManagementDbContext>());
         services.AddScoped<IUsersRepository, UsersRepository>();
@@ -122,6 +118,7 @@ public static class DependencyInjection
 
         return services;
     }
+
     private static IServiceCollection AddAuthorization(this IServiceCollection services)
     {
         services.AddScoped<ICustomAuthorizationService, AuthorizationService>();
@@ -137,23 +134,22 @@ public static class DependencyInjection
 
         services
             .ConfigureOptions<JwtBearerTokenValidationConfiguration>()
-            .AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer();
 
         return services;
     }
-    public static IServiceCollection AddServices(this IServiceCollection services)
+
+    private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
 
         return services;
-
     }
 
-    public static IServiceCollection AddStorage(this IServiceCollection services)
+    private static IServiceCollection AddStorage(this IServiceCollection services)
     {
         services.AddScoped<IFileStorage, MinioFileStorage>();
         return services;
-
     }
 }

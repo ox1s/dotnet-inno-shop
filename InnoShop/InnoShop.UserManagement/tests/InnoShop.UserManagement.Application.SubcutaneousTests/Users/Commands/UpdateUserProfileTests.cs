@@ -1,7 +1,6 @@
 using FluentAssertions;
 using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Application.SubcutaneousTests.Common;
-using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using InnoShop.UserManagement.TestCommon.TestConstants;
@@ -27,14 +26,14 @@ public class UpdateUserProfileTests(MediatorFactory mediatorFactory)
         dbContext.AttachRange(Role.List);
         // --------------------------------------------------------------------------------
 
-        var user = UserFactory.CreateUserWithProfile(email: Email.Create("u@test.com").Value);
+        var user = UserFactory.CreateUserWithProfile(Email.Create("u@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(user, mediatorFactory.DefaultUserId);
 
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
 
         var command = UserProfileCommandFactory.CreateUpdateUserProfileCommand(
-            userId: mediatorFactory.DefaultUserId);
+            mediatorFactory.DefaultUserId);
 
         var result = await mediator.Send(command);
 

@@ -10,12 +10,17 @@ namespace InnoShop.UserManagement.Application.SubcutaneousTests.Common;
 
 public class SqliteTestDatabase : IDisposable
 {
-    public SqliteConnection Connection { get; private set; } = null!;
-
     private SqliteTestDatabase(string connectionString)
     {
         Connection = new SqliteConnection(connectionString);
         Connection.Open();
+    }
+
+    public SqliteConnection Connection { get; } = null!;
+
+    public void Dispose()
+    {
+        Connection?.Dispose();
     }
 
     public static SqliteTestDatabase CreateAndInitialize()
@@ -52,10 +57,5 @@ public class SqliteTestDatabase : IDisposable
         using var context = new UserManagementDbContext(options, httpContextAccessor, publisher, logger);
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
-    }
-
-    public void Dispose()
-    {
-        Connection?.Dispose();
     }
 }

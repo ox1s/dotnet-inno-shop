@@ -9,4 +9,3 @@ public static class RatingErrors
         "Rating can be from one to five"
     );
 }
-

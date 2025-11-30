@@ -1,7 +1,6 @@
 using ErrorOr;
 using InnoShop.SharedKernel.Common;
 using InnoShop.SharedKernel.Common.Interfaces;
-using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.ReviewAggregate.Events;
 using InnoShop.UserManagement.Domain.UserAggregate;
 
@@ -9,18 +8,6 @@ namespace InnoShop.UserManagement.Domain.ReviewAggregate;
 
 public sealed class Review : AggregateRoot
 {
-    public Guid TargetUserId { get; private set; }
-    public Guid AuthorId { get; private set; }
-
-    public Rating Rating { get; private set; } = null!;
-    public Comment? Comment { get; private set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
-    public bool IsDeleted { get; private set; }
-    public DateTime? DeletedAt { get; private set; }
-
-
-
     private Review(
         Guid targetUserId,
         Guid authorId,
@@ -28,7 +15,7 @@ public sealed class Review : AggregateRoot
         Comment? comment,
         IDateTimeProvider dateTimeProvider,
         Guid? id = null) :
-         base(id ?? Guid.NewGuid())
+        base(id ?? Guid.NewGuid())
     {
         TargetUserId = targetUserId;
         AuthorId = authorId;
@@ -41,6 +28,20 @@ public sealed class Review : AggregateRoot
         DomainEvents.Add(new ReviewCreatedEvent(Id, TargetUserId, Rating.Value));
     }
 
+    private Review()
+    {
+    }
+
+    public Guid TargetUserId { get; }
+    public Guid AuthorId { get; private set; }
+
+    public Rating Rating { get; private set; } = null!;
+    public Comment? Comment { get; private set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    public bool IsDeleted { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
+
     public static ErrorOr<Review> Create(
         User targetUser,
         User author,
@@ -49,15 +50,9 @@ public sealed class Review : AggregateRoot
         IDateTimeProvider dateTimeProvider
     )
     {
-        if (!targetUser.CanSell() || !author.CanSell())
-        {
-            return UserErrors.UserMustCreateAUserProfile;
-        }
+        if (!targetUser.CanSell() || !author.CanSell()) return UserErrors.UserMustCreateAUserProfile;
 
-        if (targetUser.Id == author.Id)
-        {
-            return UserErrors.UserCannotWriteAReviewForThemselves;
-        }
+        if (targetUser.Id == author.Id) return UserErrors.UserCannotWriteAReviewForThemselves;
 
 
         return new Review(
@@ -82,12 +77,10 @@ public sealed class Review : AggregateRoot
 
         return Result.Success;
     }
+
     public ErrorOr<Deleted> Delete(IDateTimeProvider dateTimeProvider)
     {
-        if (IsDeleted)
-        {
-            return ReviewErrors.ReviewAlreadyDeleted;
-        }
+        if (IsDeleted) return ReviewErrors.ReviewAlreadyDeleted;
 
         IsDeleted = true;
         DeletedAt = dateTimeProvider.UtcNow;
@@ -95,9 +88,5 @@ public sealed class Review : AggregateRoot
         DomainEvents.Add(new ReviewDeletedEvent(Id, TargetUserId, Rating.Value));
 
         return Result.Deleted;
-    }
-
-    private Review()
-    {
     }
 }

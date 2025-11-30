@@ -17,10 +17,7 @@ public class UserCacheInvalidationBehavior<TRequest, TResponse>(
     {
         var response = await next();
 
-        if (!response.IsError)
-        {
-            await authService.InvalidateUserCacheAsync(request.UserId);
-        }
+        if (!response.IsError) await authService.InvalidateUserCacheAsync(request.UserId);
 
         return response;
     }

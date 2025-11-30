@@ -8,25 +8,32 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
 using RabbitMQ.Client;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using Constants = InnoShop.UserManagement.TestCommon.TestConstants.Constants;
 
 namespace InnoShop.UserManagement.Application.SubcutaneousTests.Common;
 
 public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLifetime
 {
-    private SqliteTestDatabase _testDatabase = null!;
     public readonly Guid DefaultUserId = Guid.NewGuid();
     private ICurrentUserProvider _currentUserProviderMock = null!;
+    private SqliteTestDatabase _testDatabase = null!;
 
     public Task InitializeAsync()
     {
         _testDatabase = SqliteTestDatabase.CreateAndInitialize();
+        return Task.CompletedTask;
+    }
+
+    public new Task DisposeAsync()
+    {
+        _testDatabase?.Dispose();
         return Task.CompletedTask;
     }
 
@@ -59,12 +66,10 @@ public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLif
             services.AddSingleton<IConnectionFactory>(_ => Substitute.For<IConnectionFactory>());
 
             if (_testDatabase?.Connection == null)
-            {
                 throw new InvalidOperationException("_testDatabase is not initialized.");
-            }
 
             services.RemoveAll<DbContextOptions<UserManagementDbContext>>();
-            services.AddDbContext<UserManagementDbContext>((options) =>
+            services.AddDbContext<UserManagementDbContext>(options =>
                 options.UseSqlite(_testDatabase.Connection)
                     .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
@@ -123,8 +128,8 @@ public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLif
         var userIdsToClear = new[]
         {
             DefaultUserId,
-            TestCommon.TestConstants.Constants.Review.AuthorId,
-            TestCommon.TestConstants.Constants.Review.TargetUserId
+            Constants.Review.AuthorId,
+            Constants.Review.TargetUserId
         };
 
         foreach (var userId in userIdsToClear)
@@ -153,12 +158,6 @@ public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLif
             allPermissions,
             new List<string> { AppRoles.Admin, AppRoles.Seller, AppRoles.Registered }
         ));
-    }
-
-    public new Task DisposeAsync()
-    {
-        _testDatabase?.Dispose();
-        return Task.CompletedTask;
     }
 
     public void SetCurrentUser(Guid userId, List<string>? roles = null, List<string>? permissions = null)

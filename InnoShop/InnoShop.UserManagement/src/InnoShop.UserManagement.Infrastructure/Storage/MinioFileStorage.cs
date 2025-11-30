@@ -44,6 +44,7 @@ public class MinioFileStorage(
             logger.LogError(ex, $"Error uploading object '{objectName}'.");
             throw;
         }
+
         return objectName;
     }
 
@@ -65,7 +66,6 @@ public class MinioFileStorage(
             logger.LogError(ex, $"Error deleting object '{fileName}'.");
             throw;
         }
-
     }
 
     private async Task EnsureBucketExistsAsync(CancellationToken cancellationToken)
@@ -73,7 +73,7 @@ public class MinioFileStorage(
         var bucketExistsArgs = new BucketExistsArgs().WithBucket(BucketName);
         try
         {
-            bool found = await minioClient.BucketExistsAsync(bucketExistsArgs, cancellationToken);
+            var found = await minioClient.BucketExistsAsync(bucketExistsArgs, cancellationToken);
 
             if (!found)
             {
@@ -82,7 +82,8 @@ public class MinioFileStorage(
                 await minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
             }
 
-            var policy = $@"{{""Version"":""2012-10-17"",""Statement"":[{{""Action"":[""s3:GetBucketLocation""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:ListBucket""],""Condition"":{{""StringEquals"":{{""s3:prefix"":[""foo"",""prefix/""]}}}},""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:GetObject""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}/foo*"",""arn:aws:s3:::{BucketName}/prefix/*""],""Sid"":""""}}]}}";
+            var policy =
+                $@"{{""Version"":""2012-10-17"",""Statement"":[{{""Action"":[""s3:GetBucketLocation""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:ListBucket""],""Condition"":{{""StringEquals"":{{""s3:prefix"":[""foo"",""prefix/""]}}}},""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}""],""Sid"":""""}},{{""Action"":[""s3:GetObject""],""Effect"":""Allow"",""Principal"":{{""AWS"":[""*""]}},""Resource"":[""arn:aws:s3:::{BucketName}/foo*"",""arn:aws:s3:::{BucketName}/prefix/*""],""Sid"":""""}}]}}";
 
             await minioClient
                 .SetPolicyAsync(
@@ -96,10 +97,10 @@ public class MinioFileStorage(
         {
             logger.LogInformation("Error occurred: " + e);
         }
-
     }
 
-    public async Task<string> GetPresignedUrlForUploadAsync(string fileName, string contentType, CancellationToken cancellationToken = default)
+    public async Task<string> GetPresignedUrlForUploadAsync(string fileName, string contentType,
+        CancellationToken cancellationToken = default)
     {
         await EnsureBucketExistsAsync(cancellationToken);
 
@@ -110,7 +111,7 @@ public class MinioFileStorage(
             .WithObject(objectName)
             .WithExpiry(60 * 10);
 
-        string presignedUrl = await minioClient.PresignedPutObjectAsync(args);
+        var presignedUrl = await minioClient.PresignedPutObjectAsync(args);
 
         return presignedUrl;
     }

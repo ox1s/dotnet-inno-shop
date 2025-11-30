@@ -23,7 +23,7 @@ public class ResetPasswordTests(MediatorFactory mediatorFactory)
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
 
         dbContext.AttachRange(Role.List);
-        var user = UserFactory.CreateUser(email: Email.Create("reset@example.com").Value);
+        var user = UserFactory.CreateUser(Email.Create("reset@example.com").Value);
         user.RequestPasswordReset();
         var token = user.PasswordResetToken!;
         dbContext.Users.Add(user);
@@ -53,7 +53,7 @@ public class ResetPasswordTests(MediatorFactory mediatorFactory)
         var dbContext = scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
 
         dbContext.AttachRange(Role.List);
-        var user = UserFactory.CreateUser(email: Email.Create("invalid@example.com").Value);
+        var user = UserFactory.CreateUser(Email.Create("invalid@example.com").Value);
         user.RequestPasswordReset();
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
@@ -92,4 +92,3 @@ public class ResetPasswordTests(MediatorFactory mediatorFactory)
     // Note: Token expiration testing is complex without time manipulation
     // and is better suited for integration tests with actual time delays
 }
-

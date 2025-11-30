@@ -8,4 +8,3 @@ namespace InnoShop.UserManagement.Application.Users.Queries.GetUser;
 
 [Authorize(Permissions = AppPermissions.User.Read)]
 public record GetUserQuery(Guid UserId) : IRequest<ErrorOr<UserResponse>>;
-

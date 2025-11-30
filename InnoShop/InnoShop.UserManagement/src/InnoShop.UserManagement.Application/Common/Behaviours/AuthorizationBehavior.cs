@@ -1,16 +1,16 @@
+using System.Reflection;
 using ErrorOr;
 using InnoShop.UserManagement.Application.Common.Interfaces;
-using MediatR;
-using System.Reflection;
 using InnoShop.UserManagement.Application.Common.Security;
+using MediatR;
 
 namespace InnoShop.UserManagement.Application.Common.Behaviours;
 
 public class AuthorizationBehavior<TRequest, TResponse>(
     IAuthorizationService authorizationService)
-        : IPipelineBehavior<TRequest, TResponse>
-            where TRequest : IAuthorizeableRequest<TResponse>
-            where TResponse : IErrorOr
+    : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IAuthorizeableRequest<TResponse>
+    where TResponse : IErrorOr
 {
     public async Task<TResponse> Handle(
         TRequest request,
@@ -21,10 +21,7 @@ public class AuthorizationBehavior<TRequest, TResponse>(
             .GetCustomAttributes<AuthorizeAttribute>()
             .ToList();
 
-        if (authorizationAttributes.Count == 0)
-        {
-            return await next(cancellationToken);
-        }
+        if (authorizationAttributes.Count == 0) return await next(cancellationToken);
 
         var requiredPermissions = authorizationAttributes
             .SelectMany(authorizationAttribute => authorizationAttribute.Permissions?.Split(',') ?? [])

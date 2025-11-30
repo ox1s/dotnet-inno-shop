@@ -1,5 +1,4 @@
 using ErrorOr;
-using InnoShop.SharedKernel.Security.Permissions;
 using InnoShop.SharedKernel.Security.Roles;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Application.Common.Security;

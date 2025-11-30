@@ -1,5 +1,4 @@
 using ErrorOr;
-using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Domain.UserAggregate;
@@ -20,7 +19,7 @@ public class ResetPasswordCommandHandler(
 
         var user = await usersRepository.GetByEmailAsync(emailResult.Value, cancellationToken);
         if (user is null) return UserErrors.UserNotFound;
-        
+
         var result = user.ResetPassword(request.Token, request.NewPassword, passwordHasher);
         if (result.IsError) return result.Errors;
 
@@ -30,4 +29,3 @@ public class ResetPasswordCommandHandler(
         return Result.Success;
     }
 }
-

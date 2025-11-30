@@ -4,5 +4,6 @@ public record UserProfileUpdatedIntegrationEvent(
     Guid UserId,
     string FirstName,
     string LastName,
-    string? AvatarUrl,
-    double Rating) : IIntegrationEvent;
+    string AvatarUrl,
+    double Rating,
+    int ReviewCount) : IIntegrationEvent;

@@ -1,13 +1,13 @@
 @HostAddress = https://localhost:7152
 # ID пользователя, КОТОРОМУ оставляем отзыв (Продавец)
-@TargetUserId = 4028c0ec-4451-4277-9e6d-1c8178fb842f
+@TargetUserId = b731d706-3220-4ddd-acfe-39fd4bcc7695
 
 # ID отзыва (заполняется после создания)
 @ReviewId = caa8909a-ce0c-40ff-a6c4-ff503b2fe100
 
 # Токен АВТОРА отзыва (Покупателя).
 # Важно: Автор не может быть тем же человеком, что и TargetUserId (согласно логике домена)
-@Token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWQiOiJiNzMxZDcwNi0zMjIwLTRkZGQtYWNmZS0zOWZkNGJjYzc2OTUiLCJleHAiOjE3NjQ1MDg5OTgsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.6_fheOySOh7ftqdvUNYp7gZz4RYOZg3dmtiIPVq7PrE
+@Token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWQiOiI0MDI4YzBlYy00NDUxLTQyNzctOWU2ZC0xYzgxNzhmYjg0MmYiLCJleHAiOjE3NjQ1MjU2ODEsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.lSkew-jcn1pGVxax9q9L5WzrVq9UgZOU55wuGcQYcJY
 ### 1. Создать отзыв
 # Рейтинг от 1 до 5. Комментарий обязателен
 POST {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews

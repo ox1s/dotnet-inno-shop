@@ -11,9 +11,10 @@ public record ReviewUpdatedEvent(
     int NewRating) : IDomainEvent
 {
     public static readonly Error ReviewUpdatingFailed = EventualConsistencyError.From(
-        code: "ReviewDeletedEvent.ReviewUpdatingFailed",
-        description: "Review updating failed");
+        "ReviewDeletedEvent.ReviewUpdatingFailed",
+        "Review updating failed");
+
     public static readonly Error UserNotFound = EventualConsistencyError.From(
-        code: "ReviewUpdatedEvent.TargetUserNotFound",
-        description: "Target user not found");
+        "ReviewUpdatedEvent.TargetUserNotFound",
+        "Target user not found");
 }

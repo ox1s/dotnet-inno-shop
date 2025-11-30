@@ -1,16 +1,16 @@
-using ErrorOr;
-using MediatR;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
+using System;
+using System.Threading.Tasks;
+using InnoShop.UserManagement.Application.Authentication.Commands.ForgotPassword;
 using InnoShop.UserManagement.Application.Authentication.Commands.Register;
+using InnoShop.UserManagement.Application.Authentication.Commands.ResetPassword;
+using InnoShop.UserManagement.Application.Authentication.Commands.VerifyEmail;
 using InnoShop.UserManagement.Application.Authentication.Common;
 using InnoShop.UserManagement.Application.Authentication.Queries.Login;
 using InnoShop.UserManagement.Contracts.Authentication;
-using InnoShop.UserManagement.Application.Authentication.Commands.VerifyEmail;
-using InnoShop.UserManagement.Application.Authentication.Commands.ForgotPassword;
-using InnoShop.UserManagement.Application.Authentication.Commands.ResetPassword;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InnoShop.UserManagement.Api.Controllers;
 
@@ -18,12 +18,11 @@ namespace InnoShop.UserManagement.Api.Controllers;
 [AllowAnonymous]
 public class AuthenticationController(ISender mediator) : ApiController
 {
-
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request)
     {
         var command = new RegisterCommand(request.Email, request.Password);
-        ErrorOr<AuthenticationResult> authResult = await mediator.Send(command);
+        var authResult = await mediator.Send(command);
 
         return authResult.Match(
             authResult => base.Ok(MapToAuthResponse(authResult)),
@@ -34,14 +33,12 @@ public class AuthenticationController(ISender mediator) : ApiController
     public async Task<IActionResult> Login(LoginRequest request)
     {
         var query = new LoginQuery(request.Email, request.Password);
-        ErrorOr<AuthenticationResult> authResult = await mediator.Send(query);
+        var authResult = await mediator.Send(query);
 
         if (authResult.IsError && authResult.FirstError == AuthenticationErrors.InvalidCredentials)
-        {
             return Problem(
-                detail: authResult.FirstError.Description,
+                authResult.FirstError.Description,
                 statusCode: StatusCodes.Status401Unauthorized);
-        }
 
         return authResult.Match(
             authResult => Ok(MapToAuthResponse(authResult)),

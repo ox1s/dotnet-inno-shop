@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Data;
-
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -21,9 +18,9 @@ public class ListOfIdsConverter : ValueConverter<List<Guid>, string>
 public class ListOfIdsComparer : ValueComparer<List<Guid>>
 {
     public ListOfIdsComparer() : base(
-      (t1, t2) => t1!.SequenceEqual(t2!),
-      t => t.Select(x => x!.GetHashCode()).Aggregate((x, y) => x ^ y),
-      t => t)
+        (t1, t2) => t1!.SequenceEqual(t2!),
+        t => t.Select(x => x!.GetHashCode()).Aggregate((x, y) => x ^ y),
+        t => t)
     {
     }
 }

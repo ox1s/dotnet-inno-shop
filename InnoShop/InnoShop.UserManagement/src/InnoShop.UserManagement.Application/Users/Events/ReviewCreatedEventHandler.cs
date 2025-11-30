@@ -10,16 +10,14 @@ public class ReviewCreatedEventHandler(IUsersRepository usersRepository) : INoti
     public async Task Handle(ReviewCreatedEvent notification, CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetByIdAsync(notification.TargetUserId, cancellationToken)
-            ?? throw new EventualConsistencyException(ReviewCreatedEvent.UserNotFound);
+                   ?? throw new EventualConsistencyException(ReviewCreatedEvent.UserNotFound);
 
         var createReviewResult = user.ApplyNewRating(notification.RatingValue);
 
         if (createReviewResult.IsError)
-        {
             throw new EventualConsistencyException(
                 ReviewCreatedEvent.ReviewCreatingFailed,
                 createReviewResult.Errors);
-        }
 
         await usersRepository.UpdateAsync(user, cancellationToken);
     }

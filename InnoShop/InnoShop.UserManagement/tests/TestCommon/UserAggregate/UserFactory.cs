@@ -1,7 +1,6 @@
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.TestCommon.TestConstants;
 
-
 namespace InnoShop.UserManagement.TestCommon.UserAggregate;
 
 public static class UserFactory
@@ -15,6 +14,7 @@ public static class UserFactory
             passwordHash ?? Constants.User.PasswordHash
         );
     }
+
     public static UserProfile CreateUserProfile(
         FirstName? firstName = null,
         LastName? lastName = null,
@@ -30,6 +30,7 @@ public static class UserFactory
             location ?? Constants.UserProfile.ValidLocationBelarus
         ).Value;
     }
+
     public static User CreateUserWithProfile(
         Email? email = null,
         UserProfile? userProfile = null)

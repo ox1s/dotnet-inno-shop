@@ -8,14 +8,26 @@ namespace InnoShop.ProductManagement.Application.Products.Queries.ListProducts;
 public class ListProductsQueryHandler(IProductsRepository productsRepository)
     : IRequestHandler<ListProductsQuery, ErrorOr<PagedProductResponse>>
 {
-    public async Task<ErrorOr<PagedProductResponse>> Handle(ListProductsQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<PagedProductResponse>> Handle(ListProductsQuery query,
+        CancellationToken cancellationToken)
     {
-        var (products, totalCount) = await productsRepository.GetPagedAsync(query.Page, query.PageSize, cancellationToken);
+        var (products, totalCount) = await productsRepository.GetPagedAsync(
+            query.Page,
+            query.PageSize,
+            query.SearchTerm,
+            query.MinPrice,
+            query.MaxPrice,
+            query.SellerId,
+            query.CategoryId,
+            query.IsAvailable,
+            query.SortBy,
+            query.SortOrder,
+            cancellationToken);
 
         var productResponses = products.Select(p => new ProductResponse(
             p.Id,
-            p.Title,
-            p.Description,
+            p.Title.Value,
+            p.Description.Value,
             p.Price.Value,
             p.SellerId,
             new SellerInfoResponse(

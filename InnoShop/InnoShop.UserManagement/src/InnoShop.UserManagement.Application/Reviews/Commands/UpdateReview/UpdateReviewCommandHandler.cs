@@ -1,11 +1,10 @@
 using ErrorOr;
-using MediatR;
-
 using InnoShop.SharedKernel.Common.Interfaces;
 using InnoShop.UserManagement.Application.Common.Interfaces;
+using InnoShop.UserManagement.Contracts.Reviews;
 using InnoShop.UserManagement.Domain.ReviewAggregate;
 using InnoShop.UserManagement.Domain.UserAggregate;
-using InnoShop.UserManagement.Contracts.Reviews;
+using MediatR;
 
 namespace InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
 
@@ -54,5 +53,4 @@ public class UpdateReviewCommandHandler(
             review.CreatedAt,
             review.UpdatedAt);
     }
-
 }

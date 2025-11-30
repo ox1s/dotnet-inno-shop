@@ -10,9 +10,10 @@ public record ReviewCreatedEvent(
     int RatingValue) : IDomainEvent
 {
     public static readonly Error ReviewCreatingFailed = EventualConsistencyError.From(
-        code: "ReviewDeletedEvent.ReviewCreatedFailed",
-        description: "Review creating failed");
+        "ReviewDeletedEvent.ReviewCreatedFailed",
+        "Review creating failed");
+
     public static readonly Error UserNotFound = EventualConsistencyError.From(
-        code: "ReviewCreatedEvent.TargetUserNotFound",
-        description: "Target user not found");
+        "ReviewCreatedEvent.TargetUserNotFound",
+        "Target user not found");
 }

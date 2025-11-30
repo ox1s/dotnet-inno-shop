@@ -3,15 +3,13 @@ using FluentAssertions;
 using InnoShop.SharedKernel.Common;
 using InnoShop.SharedKernel.Security.Permissions;
 using InnoShop.SharedKernel.Security.Roles;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-
 using InnoShop.UserManagement.Application.SubcutaneousTests.Common;
-using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using InnoShop.UserManagement.TestCommon.ReviewAggregate;
 using InnoShop.UserManagement.TestCommon.UserAggregate;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace InnoShop.UserManagement.Application.SubcutaneousTests.Reviews.Commands;
 
@@ -32,18 +30,18 @@ public class DeleteReviewTests(MediatorFactory mediatorFactory)
         // --------------------------------------------------------------------------------
 
         // Arrange
-        var author = UserFactory.CreateUserWithProfile(email: Email.Create("author@test.com").Value);
+        var author = UserFactory.CreateUserWithProfile(Email.Create("author@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(author, mediatorFactory.DefaultUserId);
 
-        var target = UserFactory.CreateUserWithProfile(email: Email.Create("target@test.com").Value);
+        var target = UserFactory.CreateUserWithProfile(Email.Create("target@test.com").Value);
 
         dbContext.Users.AddRange(author, target);
         await dbContext.SaveChangesAsync();
 
         // Act
         var createCommand = ReviewCommandFactory.CreateCreateReviewCommand(
-            targetUserId: target.Id,
-            rating: 4
+            target.Id,
+            4
         );
 
         var created = await mediator.Send(createCommand);
@@ -52,13 +50,13 @@ public class DeleteReviewTests(MediatorFactory mediatorFactory)
 
         mediatorFactory.SetCurrentUser(
             author.Id,
-            roles: [AppRoles.Seller],
-            permissions: [AppPermissions.Review.Delete]
+            [AppRoles.Seller],
+            [AppPermissions.Review.Delete]
         );
 
         var deleteCommand = ReviewCommandFactory.CreateDeleteReviewCommand(
-            userId: author.Id,
-            reviewId: reviewId);
+            author.Id,
+            reviewId);
 
         var deletedResult = await mediator.Send(deleteCommand);
 
@@ -84,26 +82,26 @@ public class DeleteReviewTests(MediatorFactory mediatorFactory)
         dbContext.AttachRange(Role.List);
         // --------------------------------------------------------------------------------
 
-        var authorA = UserFactory.CreateUserWithProfile(email: Email.Create("a@test.com").Value);
+        var authorA = UserFactory.CreateUserWithProfile(Email.Create("a@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(authorA, Guid.NewGuid());
 
-        var authorB = UserFactory.CreateUserWithProfile(email: Email.Create("b@test.com").Value);
+        var authorB = UserFactory.CreateUserWithProfile(Email.Create("b@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(authorB, mediatorFactory.DefaultUserId);
 
-        var target = UserFactory.CreateUserWithProfile(email: Email.Create("t@test.com").Value);
+        var target = UserFactory.CreateUserWithProfile(Email.Create("t@test.com").Value);
 
         dbContext.Users.AddRange(authorA, authorB, target);
         await dbContext.SaveChangesAsync();
 
         mediatorFactory.SetCurrentUser(authorA.Id);
-        var created = await mediator.Send(ReviewCommandFactory.CreateCreateReviewCommand(targetUserId: target.Id, rating: 2));
+        var created = await mediator.Send(ReviewCommandFactory.CreateCreateReviewCommand(target.Id, 2));
         created.IsError.Should().BeFalse();
         var reviewId = created.Value.Id;
 
         mediatorFactory.SetCurrentUser(
             authorB.Id,
-            roles: [AppRoles.Seller],
-            permissions: [AppPermissions.Review.Delete]
+            [AppRoles.Seller],
+            [AppPermissions.Review.Delete]
         );
         var result = await mediator.Send(ReviewCommandFactory.CreateDeleteReviewCommand(reviewId: reviewId));
 

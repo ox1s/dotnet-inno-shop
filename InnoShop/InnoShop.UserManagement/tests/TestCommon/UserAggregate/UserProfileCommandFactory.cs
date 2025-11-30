@@ -5,52 +5,51 @@ using InnoShop.UserManagement.Application.Users.Commands.UpdateUserProfile;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.TestCommon.TestConstants;
 
-
 namespace InnoShop.UserManagement.TestCommon.UserAggregate;
 
 public static class UserProfileCommandFactory
 {
     public static RegisterCommand CreateRegisterCommand(
-            string? email = null,
-            string? password = null)
+        string? email = null,
+        string? password = null)
     {
         return new RegisterCommand(
-            Email: email ?? Constants.User.Email.Value,
-            Password: password ?? Constants.User.PasswordHash);
+            email ?? Constants.User.Email.Value,
+            password ?? Constants.User.PasswordHash);
     }
 
     public static UpdateUserProfileCommand CreateUpdateUserProfileCommand(
-        Guid? userId = null, 
+        Guid? userId = null,
         string? firstName = null,
         string? lastName = null,
         string? avatarUrl = null,
         string? phoneNumber = null,
         Country? country = null,
         string? state = null,
-        string? city = null)   
+        string? city = null)
     {
         return new UpdateUserProfileCommand(
-            UserId: userId ?? Guid.NewGuid(),
-            FirstName: firstName ?? Constants.UserProfile.FirstName.Value,
-            LastName: lastName ?? Constants.UserProfile.LastName.Value,
-            AvatarUrl: avatarUrl ?? Constants.UserProfile.AvatarUrl.Value,
-            PhoneNumber: phoneNumber ?? Constants.UserProfile.ValidPhoneNumberBelarus.Value,
-            Country: country ?? Constants.UserProfile.ValidLocationBelarus.Country,
-            State: state ?? Constants.UserProfile.ValidLocationBelarus.State,
-            City: city ?? Constants.UserProfile.ValidLocationBelarus.City);
+            userId ?? Guid.NewGuid(),
+            firstName ?? Constants.UserProfile.FirstName.Value,
+            lastName ?? Constants.UserProfile.LastName.Value,
+            avatarUrl ?? Constants.UserProfile.AvatarUrl.Value,
+            phoneNumber ?? Constants.UserProfile.ValidPhoneNumberBelarus.Value,
+            country ?? Constants.UserProfile.ValidLocationBelarus.Country,
+            state ?? Constants.UserProfile.ValidLocationBelarus.State,
+            city ?? Constants.UserProfile.ValidLocationBelarus.City);
     }
 
     public static DeactivateUserProfileCommand CreateDeactivateUserProfileCommand(
         Guid? userId = null)
     {
         return new DeactivateUserProfileCommand(
-            UserId: userId ?? Guid.NewGuid());
+            userId ?? Guid.NewGuid());
     }
 
     public static ActivateUserProfileCommand CreateActivateUserProfileCommand(
         Guid? userId = null)
     {
         return new ActivateUserProfileCommand(
-            UserId: userId ?? Guid.NewGuid());
+            userId ?? Guid.NewGuid());
     }
 }

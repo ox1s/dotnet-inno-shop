@@ -5,6 +5,6 @@ public record UserResponse(
     string Email,
     List<string> Roles,
     bool IsEmailVerified,
-    bool IsActive, 
-    UserProfileResponse? Profile 
+    bool IsActive,
+    UserProfileResponse? Profile
 );

@@ -4,21 +4,22 @@ namespace InnoShop.UserManagement.Domain.Common.EventualConsistency;
 
 public class EventualConsistencyException : Exception
 {
-    public Error EventualConsistencyError { get; }
-    public List<Error> UnderlyingErrors { get; }
-
     public EventualConsistencyException(
         Error eventualConsistencyError,
         List<Error>? underlyingErrors = null)
-            : base(message: eventualConsistencyError.Description)
+        : base(eventualConsistencyError.Description)
     {
         EventualConsistencyError = eventualConsistencyError;
-        UnderlyingErrors = underlyingErrors ?? new();
+        UnderlyingErrors = underlyingErrors ?? new List<Error>();
     }
+
     public EventualConsistencyException(string message)
         : base(message)
     {
         EventualConsistencyError = Error.Failure(description: message);
         UnderlyingErrors = new List<Error>();
     }
+
+    public Error EventualConsistencyError { get; }
+    public List<Error> UnderlyingErrors { get; }
 }

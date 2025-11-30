@@ -11,15 +11,9 @@ public sealed record PhoneNumber(string Value)
         try
         {
             var parsed = phoneUtil.Parse(rawNumber, country.IsoCode);
-            if (!phoneUtil.IsValidNumber(parsed))
-            {
-                return PhoneNumberErrors.Invalid;
-            }
+            if (!phoneUtil.IsValidNumber(parsed)) return PhoneNumberErrors.Invalid;
             var actualRegion = phoneUtil.GetRegionCodeForNumber(parsed);
-            if (actualRegion != country.IsoCode)
-            {
-                return PhoneNumberErrors.WrongCountry;
-            }
+            if (actualRegion != country.IsoCode) return PhoneNumberErrors.WrongCountry;
             var normalized = phoneUtil.Format(parsed, PhoneNumberFormat.E164);
             return new PhoneNumber(normalized);
         }
@@ -29,5 +23,8 @@ public sealed record PhoneNumber(string Value)
         }
     }
 
-    public string FormattedValue(Country country) => $"{country.PhoneCode}{Value}";
+    public string FormattedValue(Country country)
+    {
+        return $"{country.PhoneCode}{Value}";
+    }
 }

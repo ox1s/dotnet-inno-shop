@@ -12,7 +12,8 @@ public class UpdateProductCommandHandler(
     ICurrentUserProvider currentUserProvider)
     : IRequestHandler<UpdateProductCommand, ErrorOr<ProductResponse>>
 {
-    public async Task<ErrorOr<ProductResponse>> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<ProductResponse>> Handle(UpdateProductCommand command,
+        CancellationToken cancellationToken)
     {
         var product = await productsRepository.GetByIdAsync(command.Id, cancellationToken);
 
@@ -20,12 +21,18 @@ public class UpdateProductCommandHandler(
 
         var currentUser = currentUserProvider.GetCurrentUser();
 
-        if (product.SellerId != currentUser.Id)return ProductErrors.Forbidden;
+        if (product.SellerId != currentUser.Id) return ProductErrors.Forbidden;
 
         var priceResult = Price.Create(command.Price);
         if (priceResult.IsError) return priceResult.Errors;
 
-        var updateResult = product.Update(command.Title, command.Description, priceResult.Value);
+        var titleResult = Title.Create(command.Title);
+        if (titleResult.IsError) return titleResult.Errors;
+
+        var descriptionResult = Description.Create(command.Description);
+        if (descriptionResult.IsError) return descriptionResult.Errors;
+
+        var updateResult = product.Update(titleResult.Value, descriptionResult.Value, priceResult.Value);
         if (updateResult.IsError) return updateResult.Errors;
 
         await productsRepository.UpdateAsync(product, cancellationToken);
@@ -33,8 +40,8 @@ public class UpdateProductCommandHandler(
 
         return new ProductResponse(
             product.Id,
-            product.Title,
-            product.Description,
+            product.Title.Value,
+            product.Description.Value,
             product.Price.Value,
             product.SellerId,
             new SellerInfoResponse(

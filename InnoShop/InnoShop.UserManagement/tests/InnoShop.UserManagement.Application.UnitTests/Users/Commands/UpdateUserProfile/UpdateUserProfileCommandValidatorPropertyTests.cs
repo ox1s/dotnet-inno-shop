@@ -87,10 +87,10 @@ public class UpdateUserProfileCommandValidatorPropertyTests
     {
         var validChars = new[] { 'A', 'B', 'C', 'a', 'b', 'c', 'А', 'Б', 'а', 'б' };
         var validNameGen = Gen.Choose(2, 50)
-            .SelectMany(len => Gen.ArrayOf(Gen.Elements(validChars), len)
+            .SelectMany(len => Gen.Elements(validChars).ArrayOf(len)
                 .Select(chars => new string(chars)));
 
-        return Prop.ForAll(validNameGen.ToArbitrary(), (string validName) =>
+        return Prop.ForAll(validNameGen.ToArbitrary(), validName =>
         {
             var command = CreateValidCommand() with
             {
@@ -115,7 +115,7 @@ public class UpdateUserProfileCommandValidatorPropertyTests
 
         var disallowedCountryGen = Gen.Elements(disallowedCountries);
 
-        return Prop.ForAll(disallowedCountryGen.ToArbitrary(), (Country disallowedCountry) =>
+        return Prop.ForAll(disallowedCountryGen.ToArbitrary(), disallowedCountry =>
         {
             var command = CreateValidCommand() with
             {
@@ -131,7 +131,7 @@ public class UpdateUserProfileCommandValidatorPropertyTests
     {
         var allowedCountryGen = Gen.Elements(Country.AllowedCountries.ToArray());
 
-        return Prop.ForAll(allowedCountryGen.ToArbitrary(), (Country allowedCountry) =>
+        return Prop.ForAll(allowedCountryGen.ToArbitrary(), allowedCountry =>
         {
             var command = CreateValidCommand() with
             {
@@ -147,13 +147,13 @@ public class UpdateUserProfileCommandValidatorPropertyTests
     private static UpdateUserProfileCommand CreateValidCommand()
     {
         return new UpdateUserProfileCommand(
-            UserId: Guid.NewGuid(),
-            FirstName: "John",
-            LastName: "Doe",
-            AvatarUrl: "https://example.com/avatar.jpg",
-            PhoneNumber: "+375291234567",
-            Country: Country.Belarus,
-            State: "Minsk",
-            City: "Minsk");
+            Guid.NewGuid(),
+            "John",
+            "Doe",
+            "https://example.com/avatar.jpg",
+            "+375291234567",
+            Country.Belarus,
+            "Minsk",
+            "Minsk");
     }
 }

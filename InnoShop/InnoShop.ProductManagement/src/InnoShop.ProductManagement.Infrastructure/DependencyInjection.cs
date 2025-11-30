@@ -3,6 +3,7 @@ using InnoShop.ProductManagement.Infrastructure.IntegrationEvents.BackgroundServ
 using InnoShop.ProductManagement.Infrastructure.IntegrationEvents.Settings;
 using InnoShop.ProductManagement.Infrastructure.Persistence;
 using InnoShop.ProductManagement.Infrastructure.Persistence.Repositories;
+using InnoShop.ProductManagement.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,24 +49,21 @@ public static class DependencyInjection
 
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = configuration.GetConnectionString("innoshop-products")
-            ?? throw new InvalidOperationException("Connection string 'innoshop-products' not found");
+        var connectionString = configuration.GetConnectionString("innoshop-products")
+                               ?? throw new InvalidOperationException(
+                                   "Connection string 'innoshop-products' not found");
 
         if (connectionString.Contains("DataSource", StringComparison.OrdinalIgnoreCase) ||
             connectionString.Contains(":memory:", StringComparison.OrdinalIgnoreCase))
-        {
             services.AddDbContext<ProductManagementDbContext>(options =>
                 options.UseSqlite(connectionString));
-        }
         else
-        {
             services.AddDbContext<ProductManagementDbContext>(options =>
                 options.UseNpgsql(connectionString));
-        }
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ProductManagementDbContext>());
         services.AddScoped<IProductsRepository, ProductsRepository>();
-        services.AddScoped<Application.Common.Interfaces.IUserGateway, Services.UserGateway>();
+        services.AddScoped<IUserGateway, UserGateway>();
 
         return services;
     }

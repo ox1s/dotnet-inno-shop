@@ -8,7 +8,7 @@ public static class AppPermissions
         public const string Delete = "user:delete";
         public const string Read = "user:read";
     }
-    
+
     public static class Review
     {
         public const string Create = "review:create";
@@ -16,6 +16,7 @@ public static class AppPermissions
         public const string Update = "review:update";
         public const string Delete = "review:delete";
     }
+
     public static class UserProfile
     {
         public const string Create = "profile:create";

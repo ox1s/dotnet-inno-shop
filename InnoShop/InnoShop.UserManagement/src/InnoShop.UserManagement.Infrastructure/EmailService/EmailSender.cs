@@ -15,12 +15,9 @@ public class EmailSender(
         var fluentEmail = email
             .To(to)
             .Subject(subject)
-            .Body(body, isHtml: true);
+            .Body(body, true);
 
-        if (!string.IsNullOrEmpty(from))
-        {
-            fluentEmail.SetFrom(from);
-        }
+        if (!string.IsNullOrEmpty(from)) fluentEmail.SetFrom(from);
 
         var response = await fluentEmail.SendAsync();
 

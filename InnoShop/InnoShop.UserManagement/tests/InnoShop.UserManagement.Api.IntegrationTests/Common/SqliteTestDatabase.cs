@@ -11,12 +11,17 @@ namespace InnoShop.UserManagement.Api.IntegrationTests.Common;
 
 public class SqliteTestDatabase : IDisposable
 {
-    public SqliteConnection Connection { get; private set; } = null!;
-
     private SqliteTestDatabase(string connectionString)
     {
         Connection = new SqliteConnection(connectionString);
         Connection.Open();
+    }
+
+    public SqliteConnection Connection { get; } = null!;
+
+    public void Dispose()
+    {
+        Connection?.Dispose();
     }
 
     public static SqliteTestDatabase CreateAndInitialize()
@@ -67,10 +72,5 @@ public class SqliteTestDatabase : IDisposable
             context.AttachRange(Role.List);
             context.SaveChanges();
         }
-    }
-
-    public void Dispose()
-    {
-        Connection?.Dispose();
     }
 }

@@ -2,7 +2,7 @@
 # ID пользователя, с которым будем работать (должен существовать в базе)
 @UserId = b731d706-3220-4ddd-acfe-39fd4bcc7695
 # JWT Токен (получите его через /authentication/login или /authentication/register)
-@Token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWQiOiJiNzMxZDcwNi0zMjIwLTRkZGQtYWNmZS0zOWZkNGJjYzc2OTUiLCJleHAiOjE3NjQ1MDg5OTgsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.6_fheOySOh7ftqdvUNYp7gZz4RYOZg3dmtiIPVq7PrE
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWQiOiI0MDI4YzBlYy00NDUxLTQyNzctOWU2ZC0xYzgxNzhmYjg0MmYiLCJleHAiOjE3NjQ1MDUwODAsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.ZDxbxoLTtZFbOmKITlJbV8kxKThWVN5ERNYoKtjwS4c
 
 ### 1. Получить информацию о пользователе (основная инфа + профиль, если есть)
 GET {{HostAddress}}/api/v1/users/{{UserId}}
@@ -23,8 +23,8 @@ Content-Type: application/json
   "avatarUrl": "https://i.pinimg.com/736x/c8/cc/24/c8cc24bba37a25c009647b8875aae0e3.jpg",
   "phoneNumber": "+375291234567",
   "country": "Belarus",
-  "state": "Минская область",
-  "city": "Минск"
+  "state": "Minsk Region",
+  "city": "Minsk"
 }
 
 ###
@@ -43,9 +43,9 @@ Authorization: Bearer {{Token}}
 Content-Type: application/json
 
 {
-  "firstName": "Иванов",
-  "lastName": "Кракозябра",
-  "country": "Belarus",
+  "firstName": "Полина",
+  "lastName": "Мельянцева",
+  "city": "Витебск",
   "phoneNumber": "+375299876543"
 }
 

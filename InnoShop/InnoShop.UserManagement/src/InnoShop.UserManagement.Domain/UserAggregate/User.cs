@@ -1,17 +1,39 @@
 using System.Security.Cryptography;
 using ErrorOr;
 using InnoShop.SharedKernel.Common;
-using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Domain.UserAggregate.Events;
-using Throw;
 
 namespace InnoShop.UserManagement.Domain.UserAggregate;
 
 public sealed class User : AggregateRoot
 {
-    public Email Email { get; private set; } = null!;
     private readonly List<Role> _roles = new();
+
+    private string _passwordHash = null!;
+
+
+    private User(
+        Email email,
+        string passwordHash,
+        Guid? id = null)
+        : base(id ?? Guid.NewGuid())
+    {
+        Email = email;
+        _passwordHash = passwordHash;
+        IsEmailVerified = false;
+
+        EmailVerificationToken = Guid.NewGuid().ToString();
+        EmailVerificationTokenExpiration = DateTime.UtcNow.AddDays(1);
+    }
+
+    // TODO: Метод для генерации токуна подтверждения
+    // TODO: ConfirmEmail(string token)
+    private User()
+    {
+    }
+
+    public Email Email { get; } = null!;
     public IReadOnlyCollection<Role> Roles => _roles.ToList();
     public UserProfile? UserProfile { get; private set; }
 
@@ -29,22 +51,6 @@ public sealed class User : AggregateRoot
     public double AverageRating => RatingSummary.Average;
     public int ReviewCount => RatingSummary.NumberOfReviews;
 
-    private string _passwordHash = null!;
-
-
-    private User(
-        Email email,
-        string passwordHash,
-        Guid? id = null)
-            : base(id ?? Guid.NewGuid())
-    {
-        Email = email;
-        _passwordHash = passwordHash;
-        IsEmailVerified = false;
-
-        EmailVerificationToken = Guid.NewGuid().ToString();
-        EmailVerificationTokenExpiration = DateTime.UtcNow.AddDays(1);
-    }
     public ErrorOr<Success> VerifyEmail(string token)
     {
         if (IsEmailVerified) return Error.Conflict(description: "Email already verified");
@@ -66,7 +72,7 @@ public sealed class User : AggregateRoot
 
     public void RequestPasswordReset()
     {
-        byte[] tokenBytes = new byte[32];
+        var tokenBytes = new byte[32];
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(tokenBytes);
         PasswordResetToken = Convert.ToBase64String(tokenBytes)
@@ -81,13 +87,9 @@ public sealed class User : AggregateRoot
     public ErrorOr<Success> ResetPassword(string token, string newPassword, IPasswordHasher passwordHasher)
     {
         if (PasswordResetToken != token)
-        {
             return Error.Validation("User.InvalidResetToken", "Invalid or expired password reset token.");
-        }
         if (DateTime.UtcNow > PasswordResetTokenExpiration)
-        {
             return Error.Validation("User.ExpiredResetToken", "The password reset token has expired.");
-        }
         var hashResult = passwordHasher.HashPassword(newPassword);
         if (hashResult.IsError) return hashResult.Errors;
         _passwordHash = hashResult.Value;
@@ -125,10 +127,7 @@ public sealed class User : AggregateRoot
 
     public ErrorOr<Success> CreateUserProfile(UserProfile userProfile)
     {
-        if (UserProfile is not null)
-        {
-            return UserErrors.CannotCreateMoreThanOneProfile;
-        }
+        if (UserProfile is not null) return UserErrors.CannotCreateMoreThanOneProfile;
 
         UserProfile = userProfile;
 
@@ -141,10 +140,7 @@ public sealed class User : AggregateRoot
 
     public ErrorOr<Success> UpdateUserProfile(UserProfile updatedUserProfile)
     {
-        if (UserProfile is null)
-        {
-            return UserErrors.UserMustCreateAUserProfile;
-        }
+        if (UserProfile is null) return UserErrors.UserMustCreateAUserProfile;
 
         UserProfile = updatedUserProfile;
 
@@ -155,21 +151,16 @@ public sealed class User : AggregateRoot
 
     public ErrorOr<Success> ActivateUser()
     {
-        if (IsActive)
-        {
-            return UserErrors.UserAlreadyActivated;
-        }
+        if (IsActive) return UserErrors.UserAlreadyActivated;
         IsActive = true;
 
         // _domainEvents.Add(new UserActivated(Id));
         return Result.Success;
     }
+
     public ErrorOr<Success> DeactivateUser()
     {
-        if (!IsActive)
-        {
-            return UserErrors.UserAlreadyDeactivated;
-        }
+        if (!IsActive) return UserErrors.UserAlreadyDeactivated;
         IsActive = false;
 
         DomainEvents.Add(new UserProfileDeactivatedEvent(Id));
@@ -185,10 +176,7 @@ public sealed class User : AggregateRoot
 
     public ErrorOr<Success> ApplyRatingRemoval(int ratingValue)
     {
-        if (RatingSummary.NumberOfReviews == 0)
-        {
-            return UserErrors.RatingMismatch;
-        }
+        if (RatingSummary.NumberOfReviews == 0) return UserErrors.RatingMismatch;
         RatingSummary = RatingSummary.RemoveRating(ratingValue);
 
         return Result.Success;
@@ -196,10 +184,7 @@ public sealed class User : AggregateRoot
 
     public ErrorOr<Success> ApplyRatingUpdate(int oldRating, int newRating)
     {
-        if (RatingSummary.NumberOfReviews == 0)
-        {
-            return UserErrors.RatingMismatch;
-        }
+        if (RatingSummary.NumberOfReviews == 0) return UserErrors.RatingMismatch;
 
         RatingSummary = RatingSummary
             .RemoveRating(oldRating)
@@ -207,12 +192,9 @@ public sealed class User : AggregateRoot
 
         return Result.Success;
     }
+
     public bool CanSell()
     {
         return IsActive && UserProfile is not null;
     }
-
-    // TODO: Метод для генерации токуна подтверждения
-    // TODO: ConfirmEmail(string token)
-    private User() { }
 }

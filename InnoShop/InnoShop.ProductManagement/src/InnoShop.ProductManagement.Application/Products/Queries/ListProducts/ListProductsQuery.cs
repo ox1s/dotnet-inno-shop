@@ -6,4 +6,12 @@ namespace InnoShop.ProductManagement.Application.Products.Queries.ListProducts;
 
 public record ListProductsQuery(
     int Page = 1,
-    int PageSize = 10) : IRequest<ErrorOr<PagedProductResponse>>;
+    int PageSize = 10,
+    string? SearchTerm = null,
+    decimal? MinPrice = null,
+    decimal? MaxPrice = null,
+    Guid? SellerId = null,
+    Guid? CategoryId = null,
+    bool? IsAvailable = null,
+    string? SortBy = null,
+    string? SortOrder = null) : IRequest<ErrorOr<PagedProductResponse>>;

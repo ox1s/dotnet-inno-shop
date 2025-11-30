@@ -1,7 +1,5 @@
 using System.Text.RegularExpressions;
 using ErrorOr;
-
-
 using InnoShop.UserManagement.Domain.Common.Interfaces;
 
 namespace InnoShop.UserManagement.Infrastructure.Security.PasswordHasher;

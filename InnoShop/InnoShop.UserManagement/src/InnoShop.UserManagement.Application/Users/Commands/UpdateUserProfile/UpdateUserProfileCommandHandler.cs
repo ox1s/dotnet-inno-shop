@@ -11,7 +11,8 @@ public class UpdateUserProfileCommandHandler(
     IUnitOfWork unitOfWork)
     : IRequestHandler<UpdateUserProfileCommand, ErrorOr<UserProfileResponse>>
 {
-    public async Task<ErrorOr<UserProfileResponse>> Handle(UpdateUserProfileCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserProfileResponse>> Handle(UpdateUserProfileCommand command,
+        CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetByIdAsync(command.UserId, cancellationToken);
 
@@ -57,13 +58,12 @@ public class UpdateUserProfileCommandHandler(
 
         var profile = user.UserProfile!;
         return new UserProfileResponse(
-            UserId: user.Id,
-            FirstName: profile.FirstName.Value,
-            LastName: profile.LastName.Value,
-            AvatarUrl: profile.AvatarUrl.Value,
-            PhoneNumber: profile.PhoneNumber.Value,
-            Country: profile.Location.Country.Name,
-            City: profile.Location.City);
+            user.Id,
+            profile.FirstName.Value,
+            profile.LastName.Value,
+            profile.AvatarUrl.Value,
+            profile.PhoneNumber.Value,
+            profile.Location.Country.Name,
+            profile.Location.City);
     }
 }
-

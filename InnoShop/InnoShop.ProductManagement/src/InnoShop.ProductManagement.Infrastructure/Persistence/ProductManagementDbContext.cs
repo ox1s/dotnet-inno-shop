@@ -1,3 +1,4 @@
+using System.Reflection;
 using InnoShop.ProductManagement.Application.Common.Interfaces;
 using InnoShop.ProductManagement.Domain.CategoryAggregate;
 using InnoShop.ProductManagement.Domain.ProductAggregate;
@@ -8,7 +9,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Reflection;
 
 namespace InnoShop.ProductManagement.Infrastructure.Persistence;
 
@@ -23,6 +23,11 @@ public class ProductManagementDbContext(
     public DbSet<Category> Categories { get; set; } = null!;
     public DbSet<Wishlist> Wishlists { get; set; } = null!;
     public DbSet<OutboxIntegrationEvent> OutboxIntegrationEvents { get; set; } = null!;
+
+    public async Task CommitChangesAsync(CancellationToken cancellationToken = default)
+    {
+        await base.SaveChangesAsync(cancellationToken);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,10 +47,7 @@ public class ProductManagementDbContext(
 
             var result = await base.SaveChangesAsync(cancellationToken);
 
-            if (domainEvents.Any())
-            {
-                await PublishDomainEventsAsync(domainEvents);
-            }
+            if (domainEvents.Any()) await PublishDomainEventsAsync(domainEvents);
 
             await transaction.CommitAsync(cancellationToken);
 
@@ -61,7 +63,6 @@ public class ProductManagementDbContext(
     private async Task PublishDomainEventsAsync(IEnumerable<IDomainEvent> domainEvents)
     {
         foreach (var domainEvent in domainEvents)
-        {
             try
             {
                 await publisher.Publish(domainEvent);
@@ -72,11 +73,5 @@ public class ProductManagementDbContext(
                 logger.LogError(ex, "Failed to publish domain event: {EventType}", domainEvent.GetType().Name);
                 throw;
             }
-        }
-    }
-
-    public async Task CommitChangesAsync(CancellationToken cancellationToken = default)
-    {
-        await base.SaveChangesAsync(cancellationToken);
     }
 }

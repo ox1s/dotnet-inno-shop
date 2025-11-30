@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace InnoShop.UserManagement.Infrastructure.Migrations
+namespace InnoShop.ProductManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class UniqueReview : Migration
+    public partial class ChangeILikeMethod : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

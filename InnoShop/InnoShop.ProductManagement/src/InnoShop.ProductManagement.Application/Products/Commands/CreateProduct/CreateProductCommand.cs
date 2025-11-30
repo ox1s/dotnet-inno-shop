@@ -1,7 +1,6 @@
 using ErrorOr;
-using MediatR;
-
 using InnoShop.ProductManagement.Contracts.Products;
+using MediatR;
 
 namespace InnoShop.ProductManagement.Application.Products.Commands.CreateProduct;
 

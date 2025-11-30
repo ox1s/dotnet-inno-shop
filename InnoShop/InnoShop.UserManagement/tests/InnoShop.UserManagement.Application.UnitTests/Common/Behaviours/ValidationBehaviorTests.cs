@@ -2,21 +2,20 @@ using ErrorOr;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
-using MediatR;
-using NSubstitute;
 using InnoShop.UserManagement.Application.Common.Behaviours;
 using InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
-using InnoShop.UserManagement.TestCommon.ReviewAggregate;
 using InnoShop.UserManagement.Contracts.Reviews;
-
+using InnoShop.UserManagement.TestCommon.ReviewAggregate;
+using MediatR;
+using NSubstitute;
 
 namespace InnoShop.UserManagement.Application.UnitTests.Common.Behaviours;
 
 public class ValidationBehaviorTests
 {
-    private readonly ValidationBehavior<CreateReviewCommand, ErrorOr<ReviewResponse>> _validationBehavior;
-    private readonly IValidator<CreateReviewCommand> _mockValidator;
     private readonly RequestHandlerDelegate<ErrorOr<ReviewResponse>> _mockNextBehavior;
+    private readonly IValidator<CreateReviewCommand> _mockValidator;
+    private readonly ValidationBehavior<CreateReviewCommand, ErrorOr<ReviewResponse>> _validationBehavior;
 
     public ValidationBehaviorTests()
     {
@@ -58,7 +57,7 @@ public class ValidationBehaviorTests
     {
         // Arrange
         var createReviewRequest = ReviewCommandFactory.CreateCreateReviewCommand();
-        List<ValidationFailure> validationFailures = [new(propertyName: "бяка", errorMessage: "бяка случилась")];
+        List<ValidationFailure> validationFailures = [new("бяка", "бяка случилась")];
 
         _mockValidator
             .ValidateAsync(createReviewRequest, Arg.Any<CancellationToken>())
@@ -72,11 +71,12 @@ public class ValidationBehaviorTests
         result.FirstError.Code.Should().Be("бяка");
         result.FirstError.Description.Should().Be("бяка случилась");
     }
+
     [Fact]
     public async Task InvokeBehavior_WhenValidatorIsNull_ShouldInvokeNextBehavior()
     {
         // Arrange
-        var behaviorWithoutValidator = new ValidationBehavior<CreateReviewCommand, ErrorOr<ReviewResponse>>(validator: null);
+        var behaviorWithoutValidator = new ValidationBehavior<CreateReviewCommand, ErrorOr<ReviewResponse>>(null);
 
         var createReviewRequest = ReviewCommandFactory.CreateCreateReviewCommand();
         var reviewResponse = new ReviewResponse(
@@ -98,4 +98,3 @@ public class ValidationBehaviorTests
         await _mockNextBehavior.Received(1).Invoke();
     }
 }
-

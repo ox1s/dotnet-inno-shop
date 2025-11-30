@@ -11,7 +11,8 @@ public class CreateUserProfileCommandHandler(
     IUnitOfWork unitOfWork)
     : IRequestHandler<CreateUserProfileCommand, ErrorOr<UserProfileResponse>>
 {
-    public async Task<ErrorOr<UserProfileResponse>> Handle(CreateUserProfileCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserProfileResponse>> Handle(CreateUserProfileCommand command,
+        CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetByIdAsync(command.UserId, cancellationToken);
 
@@ -57,5 +58,4 @@ public class CreateUserProfileCommandHandler(
             profile.Location.Country.Name,
             profile.Location.City);
     }
-
 }

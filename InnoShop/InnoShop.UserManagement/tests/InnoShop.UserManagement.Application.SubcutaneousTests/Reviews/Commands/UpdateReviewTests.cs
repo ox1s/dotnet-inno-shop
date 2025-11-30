@@ -2,7 +2,6 @@ using ErrorOr;
 using FluentAssertions;
 using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Application.SubcutaneousTests.Common;
-using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using InnoShop.UserManagement.TestCommon.ReviewAggregate;
@@ -32,19 +31,19 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
 
         // Arrange
         var authorEmail = Email.Create("author@test.com").Value;
-        var author = UserFactory.CreateUserWithProfile(email: authorEmail);
+        var author = UserFactory.CreateUserWithProfile(authorEmail);
         typeof(Entity).GetProperty("Id")!.SetValue(author, mediatorFactory.DefaultUserId);
 
         var targetEmail = Email.Create("target@test.com").Value;
-        var targetUser = UserFactory.CreateUserWithProfile(email: targetEmail);
+        var targetUser = UserFactory.CreateUserWithProfile(targetEmail);
 
         dbContext.Users.AddRange(author, targetUser);
         await dbContext.SaveChangesAsync();
 
         var createCommand = ReviewCommandFactory.CreateCreateReviewCommand(
-            targetUserId: targetUser.Id,
-            rating: 4,
-            comment: "Оке"
+            targetUser.Id,
+            4,
+            "Оке"
         );
 
         var createResult = await mediator.Send(createCommand);
@@ -53,15 +52,15 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
 
         // Act
         var updateCommand = ReviewCommandFactory.CreateUpdateReviewCommand(
-            reviewId: reviewId,
-            userId: mediatorFactory.DefaultUserId,
-            rating: 5,
-            comment: "Умопропроай"
+            reviewId,
+            mediatorFactory.DefaultUserId,
+            5,
+            "Умопропроай"
         );
 
         var updateResult = await mediator.Send(updateCommand);
 
-        var getReviewQuery = ReviewQueryFactory.CreateGetReviewQuery(reviewId: reviewId);
+        var getReviewQuery = ReviewQueryFactory.CreateGetReviewQuery(reviewId);
         var getReviewResult = await mediator.Send(getReviewQuery);
 
         // Assert
@@ -84,22 +83,22 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
         // --------------------------------------------------------------------------------
 
         // Arrange
-        var author1 = UserFactory.CreateUserWithProfile(email: Email.Create("a@test.com").Value);
+        var author1 = UserFactory.CreateUserWithProfile(Email.Create("a@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(author1, Guid.NewGuid());
 
-        var author2 = UserFactory.CreateUserWithProfile(email: Email.Create("b@test.com").Value);
+        var author2 = UserFactory.CreateUserWithProfile(Email.Create("b@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(author2, mediatorFactory.DefaultUserId);
 
-        var target = UserFactory.CreateUserWithProfile(email: Email.Create("t@test.com").Value);
+        var target = UserFactory.CreateUserWithProfile(Email.Create("t@test.com").Value);
         typeof(Entity).GetProperty("Id")!.SetValue(author2, Guid.NewGuid());
 
         dbContext.Users.AddRange(author1, author2, target);
         await dbContext.SaveChangesAsync();
 
         var createCommand = ReviewCommandFactory.CreateCreateReviewCommand(
-            targetUserId: target.Id,
-            rating: 3,
-            comment: "Ok."
+            target.Id,
+            3,
+            "Ok."
         );
 
         mediatorFactory.SetCurrentUser(author1.Id);
@@ -111,7 +110,7 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
 
         // Act
         var updateCommand = ReviewCommandFactory.CreateUpdateReviewCommand(
-            reviewId: reviewId,
+            reviewId,
             rating: 4
         );
 

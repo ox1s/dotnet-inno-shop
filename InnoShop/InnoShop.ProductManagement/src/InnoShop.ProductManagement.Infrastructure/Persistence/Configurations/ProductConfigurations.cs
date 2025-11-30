@@ -1,6 +1,8 @@
+using InnoShop.ProductManagement.Domain.CategoryAggregate;
+using InnoShop.ProductManagement.Domain.ProductAggregate;
+using InnoShop.ProductManagement.Infrastructure.Persistence.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using InnoShop.ProductManagement.Domain.ProductAggregate;
 
 namespace InnoShop.ProductManagement.Infrastructure.Persistence.Configurations;
 
@@ -14,12 +16,26 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Id)
             .ValueGeneratedNever();
 
-        builder.Property(p => p.Title).IsRequired().HasMaxLength(500);
-        builder.Property(p => p.Description).HasMaxLength(5000);
+        builder.Property(p => p.Title)
+            .IsRequired()
+            .HasMaxLength(500)
+            .HasConversion(v => v.Value, v => new Title(v));
+
+        builder.Property(p => p.Description)
+            .IsRequired()
+            .HasMaxLength(5000)
+            .HasConversion(v => v.Value, v => new Description(v));
+
         builder.Property(p => p.SellerId).IsRequired();
+        builder.Property(p => p.CategoryId).IsRequired(false);
         builder.Property(p => p.CreatedAt).IsRequired();
         builder.Property(p => p.UpdatedAt).IsRequired();
         builder.Property(p => p.IsActive).IsRequired();
+
+        builder.HasOne<Category>()
+            .WithMany()
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.Property(p => p.Price)
             .HasConversion(
@@ -43,6 +59,10 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
             si.Property(s => s.Rating)
                 .HasColumnName("seller_rating")
                 .HasPrecision(3, 2);
+
+            si.Property(s => s.ReviewCount)
+                .HasColumnName("seller_review_count")
+                .IsRequired();
         });
 
 
@@ -53,15 +73,15 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
             image.WithOwner().HasForeignKey("product_id");
 
             image.Property(i => i.Url)
-                 .HasColumnName("url")
-                 .HasMaxLength(2048)
-                 .IsRequired();
+                .HasColumnName("url")
+                .HasMaxLength(2048)
+                .IsRequired();
 
             image.HasKey("product_id", "Url");
         });
         builder.Navigation(p => p.Images)
-               .UsePropertyAccessMode(PropertyAccessMode.Field);
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-        builder.HasQueryFilter(p => p.IsActive);
+        builder.HasQueryFilter(ProductsFilters.ActiveProducts, p => p.IsActive);
     }
 }

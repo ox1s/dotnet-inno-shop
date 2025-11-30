@@ -25,8 +25,8 @@ public class CreateUserTests(MediatorFactory mediatorFactory)
 
 
         var command = UserCommandFactory.CreateCreateUserCommand(
-            email: "newuser@test.com",
-            password: "P@ssw0rd!");
+            "newuser@test.com",
+            "P@ssw0rd!");
 
         var result = await mediator.Send(command);
 
@@ -50,13 +50,13 @@ public class CreateUserTests(MediatorFactory mediatorFactory)
         // --------------------------------------------------------------------------------
 
 
-        var existing = UserFactory.CreateUserWithProfile(email: Email.Create("dup@test.com").Value);
+        var existing = UserFactory.CreateUserWithProfile(Email.Create("dup@test.com").Value);
         dbContext.Users.Add(existing);
         await dbContext.SaveChangesAsync();
 
         var command = UserCommandFactory.CreateCreateUserCommand(
-            email: "dup@test.com",
-            password: "P@ssw0rd!"
+            "dup@test.com",
+            "P@ssw0rd!"
         );
 
         var result = await mediator.Send(command);

@@ -1,8 +1,8 @@
-﻿using InnoShop.UserManagement.Infrastructure.Security.TokenGenerator;
+﻿using System.Text;
+using InnoShop.UserManagement.Infrastructure.Security.TokenGenerator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace InnoShop.UserManagement.Infrastructure.Security.TokenValidation;
 
@@ -11,7 +11,10 @@ public sealed class JwtBearerTokenValidationConfiguration(IOptions<JwtSettings> 
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
-    public void Configure(string? name, JwtBearerOptions options) => Configure(options);
+    public void Configure(string? name, JwtBearerOptions options)
+    {
+        Configure(options);
+    }
 
     public void Configure(JwtBearerOptions options)
     {
@@ -24,7 +27,7 @@ public sealed class JwtBearerTokenValidationConfiguration(IOptions<JwtSettings> 
             ValidIssuer = _jwtSettings.Issuer,
             ValidAudience = _jwtSettings.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
+                Encoding.UTF8.GetBytes(_jwtSettings.Secret))
         };
     }
 }

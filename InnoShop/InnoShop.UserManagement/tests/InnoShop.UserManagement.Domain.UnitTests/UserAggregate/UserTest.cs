@@ -9,7 +9,6 @@ namespace InnoShop.UserManagement.Domain.UnitTests;
 
 public class UserTests
 {
-
     [Fact]
     public void CreateUserProfile_WhenValidData_ShouldCreateProfile()
     {
@@ -109,6 +108,7 @@ public class UserTests
         user.UserProfile.Should().NotBeNull();
         user.UserProfile!.Location.Country.Should().Be(Country.Belarus);
     }
+
     [Fact]
     public void UpdateUserProfile_WhenNewPhoneIsNotFromBelarus_ShouldFail()
     {
@@ -171,6 +171,7 @@ public class UserTests
         activatedUserResult.IsError.Should().BeFalse();
         user.IsActive.Should().BeTrue();
     }
+
     [Fact]
     public void ActivateUser_WhenUserIsActivated_ShouldSuccess()
     {

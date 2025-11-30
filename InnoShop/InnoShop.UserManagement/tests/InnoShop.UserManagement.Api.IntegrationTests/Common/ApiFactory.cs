@@ -26,6 +26,12 @@ public class ApiFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLifetime
         return Task.CompletedTask;
     }
 
+    public new Task DisposeAsync()
+    {
+        _testDatabase.Dispose();
+        return Task.CompletedTask;
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         // Отключаем переменные Aspire, чтобы Program.cs не пытался подключиться к реальным сервисам
@@ -50,16 +56,13 @@ public class ApiFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLifetime
         builder.ConfigureTestServices(services =>
         {
             // Инициализируем базу данных, если еще не инициализирована
-            if (_testDatabase == null)
-            {
-                _testDatabase = SqliteTestDatabase.CreateAndInitialize();
-            }
+            if (_testDatabase == null) _testDatabase = SqliteTestDatabase.CreateAndInitialize();
 
             // --- 1. База Данных (SQLite) ---
             services.RemoveAll<DbContextOptions<UserManagementDbContext>>();
             services.AddDbContext<UserManagementDbContext>(options =>
                 options.UseSqlite(_testDatabase.Connection)
-                       .ConfigureWarnings(x => x.Ignore(RelationalEventId.PendingModelChangesWarning)));
+                    .ConfigureWarnings(x => x.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
             // --- 2. RabbitMQ (Убираем Background Services и мокаем соединение) ---
             // Убираем сервисы, которые слушают очередь (иначе приложение упадет при старте)
@@ -79,7 +82,7 @@ public class ApiFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLifetime
             // --- 4. MinIO (Мокаем хранилище файлов) ---
             services.RemoveAll<IFileStorage>();
             var mockStorage = Substitute.For<IFileStorage>();
-            mockStorage.UploadAsync(default, default, default, default).ReturnsForAnyArgs("http://mock-url.com/avatar.jpg");
+            mockStorage.UploadAsync(default, default, default).ReturnsForAnyArgs("http://mock-url.com/avatar.jpg");
             services.AddScoped(_ => mockStorage);
 
             // --- 5. Email (Мокаем отправку) ---
@@ -108,11 +111,5 @@ public class ApiFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLifetime
     {
         var scope = Services.CreateScope();
         return scope.ServiceProvider.GetRequiredService<UserManagementDbContext>();
-    }
-
-    public new Task DisposeAsync()
-    {
-        _testDatabase.Dispose();
-        return Task.CompletedTask;
     }
 }

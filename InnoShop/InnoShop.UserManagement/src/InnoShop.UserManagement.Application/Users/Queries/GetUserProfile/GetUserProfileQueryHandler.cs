@@ -10,7 +10,8 @@ public class GetUserProfileQueryHandler(
     IUsersRepository usersRepository)
     : IRequestHandler<GetUserProfileQuery, ErrorOr<UserProfileResponse>>
 {
-    public async Task<ErrorOr<UserProfileResponse>> Handle(GetUserProfileQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserProfileResponse>> Handle(GetUserProfileQuery query,
+        CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetByIdAsync(query.UserId, cancellationToken);
 

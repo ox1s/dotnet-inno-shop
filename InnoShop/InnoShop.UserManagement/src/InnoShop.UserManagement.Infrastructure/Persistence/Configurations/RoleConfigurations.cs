@@ -21,6 +21,5 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
             Role.Verified,
             Role.Admin,
             Role.Registered);
-
     }
 }

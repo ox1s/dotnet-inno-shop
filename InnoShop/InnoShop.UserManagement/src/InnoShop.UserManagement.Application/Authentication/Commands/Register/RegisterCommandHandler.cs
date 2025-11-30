@@ -13,20 +13,19 @@ public class RegisterCommandHandler(
     IUsersRepository usersRepository,
     IUnitOfWork unitOfWork,
     IEmailSender emailSender,
-     IEmailVerificationLinkFactory linkFactory
-    )
-        : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
+    IEmailVerificationLinkFactory linkFactory
+)
+    : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
 {
-    public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command,
+        CancellationToken cancellationToken)
     {
         var emailResult = Email.Create(command.Email);
         if (emailResult.IsError) return emailResult.Errors;
 
         var email = emailResult.Value;
         if (await usersRepository.ExistsByEmailAsync(email, cancellationToken))
-        {
             return Error.Conflict(description: "User already exists");
-        }
 
         var hashPasswordResult = passwordHasher.HashPassword(command.Password);
         if (hashPasswordResult.IsError) return hashPasswordResult.Errors;
@@ -44,10 +43,10 @@ public class RegisterCommandHandler(
 
 
         await emailSender.SendEmailAsync(
-            to: user.Email.Value,
-            from: "noreply@innoshop.com",
-            subject: "Welcome to InnoShop! Please verify your email.",
-            body: $"Hello! Click here to verify: <a href='{verificationLink}'>Verify Email</a>"
+            user.Email.Value,
+            "noreply@innoshop.com",
+            "Welcome to InnoShop! Please verify your email.",
+            $"Hello! Click here to verify: <a href='{verificationLink}'>Verify Email</a>"
         );
 
         var token = jwtTokenGenerator.GenerateToken(user);

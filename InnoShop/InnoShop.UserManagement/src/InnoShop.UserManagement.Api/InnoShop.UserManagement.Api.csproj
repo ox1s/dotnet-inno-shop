@@ -1,27 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <InternalsVisibleTo>InnoShop.UserManagement.Application.SubcutaneousTests</InternalsVisibleTo>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
-    <PackageReference Include="Aspire.StackExchange.Redis" />
-    <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" />
-    <PackageReference Include="CommunityToolkit.Aspire.Minio.Client" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\InnoShop.UserManagement.Application\InnoShop.UserManagement.Application.csproj" />
-    <ProjectReference Include="..\InnoShop.UserManagement.Contracts\InnoShop.UserManagement.Contracts.csproj" />
-    <ProjectReference Include="..\InnoShop.UserManagement.Infrastructure\InnoShop.UserManagement.Infrastructure.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <InternalsVisibleTo>InnoShop.UserManagement.Application.SubcutaneousTests</InternalsVisibleTo>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <PackageReference Include="Aspire.StackExchange.Redis"/>
+        <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching"/>
+        <PackageReference Include="CommunityToolkit.Aspire.Minio.Client"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Swashbuckle.AspNetCore"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\InnoShop.UserManagement.Application\InnoShop.UserManagement.Application.csproj"/>
+        <ProjectReference Include="..\InnoShop.UserManagement.Contracts\InnoShop.UserManagement.Contracts.csproj"/>
+        <ProjectReference Include="..\InnoShop.UserManagement.Infrastructure\InnoShop.UserManagement.Infrastructure.csproj"/>
+    </ItemGroup>
 </Project>

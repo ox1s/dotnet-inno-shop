@@ -1,6 +1,4 @@
 using ErrorOr;
-using MediatR;
-
 using InnoShop.SharedKernel.Security.Permissions;
 using InnoShop.SharedKernel.Security.Policies;
 using InnoShop.UserManagement.Application.Common.Interfaces;

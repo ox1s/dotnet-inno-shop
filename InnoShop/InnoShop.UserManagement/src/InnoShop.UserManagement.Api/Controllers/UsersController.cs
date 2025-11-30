@@ -8,7 +8,6 @@ using InnoShop.UserManagement.Application.Users.Queries.GetUserProfile;
 using InnoShop.UserManagement.Contracts.Users;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InnoShop.UserManagement.Api.Controllers;
@@ -22,7 +21,6 @@ public class UsersController(ISender sender) : ApiController
         [FromBody] CreateUserProfileRequest request,
         CancellationToken cancellationToken)
     {
-
         var countryResult = CountryUtils.ToDomain(request.Country);
         if (countryResult.IsError) return Problem(countryResult.Errors);
 
@@ -119,5 +117,4 @@ public class UsersController(ISender sender) : ApiController
 
         return result.Match(_ => NoContent(), Problem);
     }
-
 }

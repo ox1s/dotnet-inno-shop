@@ -7,7 +7,6 @@ internal sealed class GlobalExceptionHandler(
     IProblemDetailsService problemDetailsService,
     ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
-
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,
@@ -36,6 +35,4 @@ internal sealed class GlobalExceptionHandler(
             }
         );
     }
-
-
 }

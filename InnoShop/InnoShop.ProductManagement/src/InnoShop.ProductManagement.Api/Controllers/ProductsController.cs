@@ -1,5 +1,3 @@
-using ErrorOr;
-
 using InnoShop.ProductManagement.Application.Products.Commands.CreateProduct;
 using InnoShop.ProductManagement.Application.Products.Commands.DeleteProduct;
 using InnoShop.ProductManagement.Application.Products.Commands.UpdateProduct;
@@ -56,9 +54,27 @@ public class ProductsController(ISender mediator) : ApiController
     public async Task<IActionResult> GetProducts(
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
+        [FromQuery] string? searchTerm = null,
+        [FromQuery] decimal? minPrice = null,
+        [FromQuery] decimal? maxPrice = null,
+        [FromQuery] Guid? sellerId = null,
+        [FromQuery] Guid? categoryId = null,
+        [FromQuery] bool? isAvailable = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortOrder = null,
         CancellationToken cancellationToken = default)
     {
-        var query = new ListProductsQuery(page, pageSize);
+        var query = new ListProductsQuery(
+            page,
+            pageSize,
+            searchTerm,
+            minPrice,
+            maxPrice,
+            sellerId,
+            categoryId,
+            isAvailable,
+            sortBy,
+            sortOrder);
         var result = await mediator.Send(query, cancellationToken);
 
         return result.Match(
@@ -97,5 +113,4 @@ public class ProductsController(ISender mediator) : ApiController
             _ => NoContent(),
             Problem);
     }
-
 }

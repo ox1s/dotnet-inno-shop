@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
 using InnoShop.UserManagement.Application.Reviews.Commands.DeleteReview;
@@ -13,28 +16,25 @@ namespace InnoShop.UserManagement.Api.Controllers;
 [Route("api/v1/users/{targetUserId:guid}/reviews")]
 public class ReviewsController(ISender sender, ICurrentUserProvider currentUserProvider) : ApiController
 {
-
     [HttpPost]
     public async Task<IActionResult> CreateReview(
         CreateReviewRequest request,
         Guid targetUserId,
         CancellationToken cancellationToken)
     {
-
         var command = new CreateReviewCommand(
-           TargetUserId: targetUserId,
-           Rating: request.Rating,
-           Comment: request.Comment);
+            targetUserId,
+            request.Rating,
+            request.Comment);
 
         var createReviewResult = await sender.Send(command, cancellationToken);
 
         return createReviewResult.Match(
             review => CreatedAtAction(
                 nameof(GetReview),
-                new { targetUserId = targetUserId, reviewId = review.Id },
+                new { targetUserId, reviewId = review.Id },
                 review),
-                Problem);
-
+            Problem);
     }
 
     [HttpPut("{reviewId:guid}")]
@@ -61,8 +61,8 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
         var currentUserId = currentUserProvider.GetCurrentUser().Id;
 
         var command = new DeleteReviewCommand(
-            UserId: currentUserId,
-            ReviewId: reviewId);
+            currentUserId,
+            reviewId);
 
         var deleteReviewResult = await sender.Send(command);
 
@@ -97,5 +97,4 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
             reviews => Ok(reviews),
             Problem);
     }
-
 }

@@ -5,27 +5,35 @@ namespace InnoShop.ProductManagement.Domain.ProductAggregate;
 
 public sealed class Product : AggregateRoot
 {
-    public string Title { get; private set; } = null!;
-    public string Description { get; private set; } = null!;
+    private readonly List<Image> _images = new();
+
+    private Product(Guid id) : base(id)
+    {
+    }
+
+    private Product()
+    {
+    }
+
+    public Title Title { get; private set; } = null!;
+    public Description Description { get; private set; } = null!;
     public Price Price { get; private set; } = null!;
     public Guid SellerId { get; private set; }
+    public Guid? CategoryId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public bool IsActive { get; private set; } = true;
     public SellerSnapshot SellerInfo { get; private set; } = null!;
-
-    private readonly List<Image> _images = new();
     public IReadOnlyList<Image> Images => _images.ToList();
-
-    private Product(Guid id) : base(id) { }
 
     public static Product CreateProduct(
         Guid id,
-        string title,
-        string description,
+        Title title,
+        Description description,
         Price price,
         Guid sellerId,
         SellerSnapshot sellerInfo,
+        Guid? categoryId = null,
         IEnumerable<Image>? images = null)
     {
         var product = new Product(id)
@@ -34,23 +42,19 @@ public sealed class Product : AggregateRoot
             Description = description,
             Price = price,
             SellerId = sellerId,
+            CategoryId = categoryId,
             SellerInfo = sellerInfo,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
 
-        if (images != null)
-        {
-            product._images.AddRange(images);
-        }
+        if (images != null) product._images.AddRange(images);
 
         return product;
     }
 
-    public ErrorOr<Success> Update(string title, string description, Price price)
+    public ErrorOr<Success> Update(Title title, Description description, Price price)
     {
-        if (string.IsNullOrWhiteSpace(title)) return ProductErrors.InvalidTitle;
-
         Title = title;
         Description = description;
         Price = price;
@@ -90,6 +94,4 @@ public sealed class Product : AggregateRoot
         SellerInfo = newInfo;
         UpdatedAt = DateTime.UtcNow;
     }
-
-    private Product() { }
 }

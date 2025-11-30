@@ -99,6 +99,18 @@
             </GhostTextMetaData>
           </value>
         </entry>
+        <entry key="For the following code:&#10;```&#10;            query = query.Where(p =&gt; &#10;                EF.Functions.ILike(p.Title.Value, $&quot;%{searchTerm}%&quot;) ||&#10;                EF.Functions.ILike(p.Description.Value, $&quot;%{searchTerm}%&quot;));&#10;```&#10;We have the error: Database function must not be called in non-database context&#10;Please fix this. If needed, you can use the get_errors tool on this file.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764517307131" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
         <entry key="For the following code:&#10;```&#10;        {&#10;            DbContext.Attach(role);&#10;        }&#10;```&#10;We have the error: Cannot access non-static method 'Attach' in static context&#10;Please fix this. If needed, you can use the get_errors tool on this file.">
           <value>
             <GhostTextMetaData>
@@ -108,6 +120,18 @@
                   <option value="1764345738671" />
                   <option value="1764345644245" />
                   <option value="1764345622582" />
+                </list>
+              </option>
+            </GhostTextMetaData>
+          </value>
+        </entry>
+        <entry key="For the following code:&#10;```&#10;using Microsoft.OpenApi;&#10;using Microsoft.OpenApi.Models;&#10;&#10;```&#10;We have the error: Cannot resolve symbol 'Models'&#10;Please fix this. If needed, you can use the get_errors tool on this file.">
+          <value>
+            <GhostTextMetaData>
+              <option name="count" value="1.0" />
+              <option name="timestamps">
+                <list>
+                  <option value="1764525601685" />
                 </list>
               </option>
             </GhostTextMetaData>

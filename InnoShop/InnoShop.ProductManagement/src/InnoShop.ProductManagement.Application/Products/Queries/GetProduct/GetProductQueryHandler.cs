@@ -12,13 +12,13 @@ public class GetProductQueryHandler(IProductsRepository productsRepository)
     public async Task<ErrorOr<ProductResponse>> Handle(GetProductQuery query, CancellationToken cancellationToken)
     {
         var product = await productsRepository.GetByIdAsync(query.Id, cancellationToken);
-        
+
         if (product is null) return ProductErrors.NotFound;
 
         return new ProductResponse(
             product.Id,
-            product.Title,
-            product.Description,
+            product.Title.Value,
+            product.Description.Value,
             product.Price.Value,
             product.SellerId,
             new SellerInfoResponse(

@@ -3,10 +3,12 @@
 ## Permissions (Разрешения)
 
 ### User Permissions
+
 - `user:read` - Чтение информации о пользователях
 - `user:delete` - Удаление пользователей
 
 ### User Profile Permissions
+
 - `profile:create` - Создание профиля пользователя
 - `profile:read` - Чтение профиля пользователя
 - `profile:update` - Обновление профиля пользователя
@@ -14,6 +16,7 @@
 - `profile:deactivate` - Деактивация пользователя (только админ)
 
 ### Review Permissions
+
 - `review:create` - Создание отзыва
 - `review:read` - Чтение отзывов
 - `review:update` - Обновление отзыва
@@ -22,24 +25,30 @@
 ## Роли и их разрешения
 
 ### Registered (Зарегистрированный)
+
 Базовая роль для всех зарегистрированных пользователей.
 
 **Разрешения:**
+
 - `user:read` - Может просматривать пользователей
 - `profile:read` - Может просматривать профили
 - `review:read` - Может читать отзывы
 
 ### Verified (Подтвержденный email)
+
 Пользователь подтвердил email и может создать профиль.
 
 **Разрешения:**
+
 - Все разрешения Registered +
 - `profile:create` - Может создать профиль
 
 ### Seller (Продавец)
+
 Пользователь создал профиль и может работать с отзывами.
 
 **Разрешения:**
+
 - Все разрешения Verified +
 - `profile:update` - Может обновлять свой профиль
 - `review:create` - Может создавать отзывы
@@ -47,9 +56,11 @@
 - `review:delete` - Может удалять свои отзывы
 
 ### Admin (Администратор)
+
 Полные права на управление пользователями.
 
 **Разрешения:**
+
 - Все разрешения Seller +
 - `user:delete` - Может удалять пользователей
 - `profile:activate` - Может активировать пользователей
@@ -83,11 +94,13 @@ Permissions проверяются автоматически через `Author
 После изменения permissions необходимо:
 
 1. Создать миграцию:
+
 ```bash
 dotnet ef migrations add UpdatePermissions --project src/InnoShop.UserManagement.Infrastructure --startup-project src/InnoShop.UserManagement.Api
 ```
 
 2. Применить миграцию:
+
 ```bash
 dotnet ef database update --project src/InnoShop.UserManagement.Infrastructure --startup-project src/InnoShop.UserManagement.Api
 ```

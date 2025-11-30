@@ -1,5 +1,3 @@
-using System;
-
 namespace InnoShop.SharedKernel.Common.Interfaces;
 
 public interface IDateTimeProvider

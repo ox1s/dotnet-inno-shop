@@ -8,10 +8,7 @@ public class UsersRepository(UserManagementDbContext dbContext) : IUsersReposito
 {
     public async Task AddUserAsync(User user, CancellationToken cancellationToken = default)
     {
-        foreach (var role in user.Roles)
-        {
-            dbContext.Attach(role);
-        }
+        foreach (var role in user.Roles) dbContext.Attach(role);
         await dbContext.Users.AddAsync(user, cancellationToken);
     }
 
@@ -49,5 +46,4 @@ public class UsersRepository(UserManagementDbContext dbContext) : IUsersReposito
 
         return Task.CompletedTask;
     }
-
 }

@@ -27,21 +27,17 @@ public class EmailVerificationLinkFactory(
         {
             var appUrl = configuration["AppUrl"];
             if (string.IsNullOrEmpty(appUrl))
-            {
                 throw new Exception("AppUrl is not configured. Cannot generate email link in background.");
-            }
 
             if (!Uri.TryCreate(appUrl, UriKind.Absolute, out var baseUrl))
-            {
                 throw new Exception($"Invalid AppUrl configuration: {appUrl}");
-            }
 
 
             uri = linkGenerator.GetUriByName(
                 "VerifyEmailRoute",
                 new { userId, token },
-                scheme: baseUrl.Scheme,
-                host: HostString.FromUriComponent(baseUrl));
+                baseUrl.Scheme,
+                HostString.FromUriComponent(baseUrl));
         }
 
         return uri ?? throw new Exception("Could not generate email verification link");

@@ -6,13 +6,15 @@ namespace InnoShop.ProductManagement.Infrastructure.Services;
 
 public class UserGateway : IUserGateway
 {
-    public Task<ErrorOr<SellerSnapshot>> GetSellerSnapshotAsync(Guid userId, CancellationToken cancellationToken = default)
+    public Task<ErrorOr<SellerSnapshot>> GetSellerSnapshotAsync(Guid userId,
+        CancellationToken cancellationToken = default)
     {
         // TODO: 
         var placeholder = new SellerSnapshot(
-            FullName: "Placeholder Seller",
-            AvatarUrl: "",
-            Rating: 0.0);
+            "Placeholder Seller",
+            "",
+            0.0,
+            0);
 
         return Task.FromResult<ErrorOr<SellerSnapshot>>(placeholder);
     }

@@ -11,4 +11,3 @@ public class ForgotPasswordCommandValidator : AbstractValidator<ForgotPasswordCo
             .EmailAddress();
     }
 }
-

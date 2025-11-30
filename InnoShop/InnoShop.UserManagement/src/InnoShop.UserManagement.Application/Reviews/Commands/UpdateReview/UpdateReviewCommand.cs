@@ -3,7 +3,6 @@ using InnoShop.SharedKernel.Security.Permissions;
 using InnoShop.SharedKernel.Security.Policies;
 using InnoShop.UserManagement.Application.Common.Security;
 using InnoShop.UserManagement.Contracts.Reviews;
-using MediatR;
 
 namespace InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
 

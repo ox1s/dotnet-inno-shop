@@ -1,5 +1,4 @@
 using ErrorOr;
-using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using MediatR;
@@ -10,7 +9,7 @@ namespace InnoShop.UserManagement.Application.Authentication.Commands.ForgotPass
 public class ForgotPasswordCommandHandler(
     IUsersRepository usersRepository,
     IUnitOfWork unitOfWork,
-    IDistributedCache cache) 
+    IDistributedCache cache)
     : IRequestHandler<ForgotPasswordCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
@@ -22,9 +21,7 @@ public class ForgotPasswordCommandHandler(
         var attemptsStr = await cache.GetStringAsync(cacheKey, cancellationToken);
 
         if (!string.IsNullOrEmpty(attemptsStr) && int.Parse(attemptsStr) >= 3)
-        {
             return Error.Failure("RateLimit.Exceeded", "Too many requests. Please try again in an hour.");
-        }
 
         var user = await usersRepository.GetByEmailAsync(emailResult.Value, cancellationToken);
         if (user is null) return Result.Success;
@@ -33,7 +30,7 @@ public class ForgotPasswordCommandHandler(
         await usersRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);
 
-        int newAttempts = string.IsNullOrEmpty(attemptsStr) ? 1 : int.Parse(attemptsStr) + 1;
+        var newAttempts = string.IsNullOrEmpty(attemptsStr) ? 1 : int.Parse(attemptsStr) + 1;
         await cache.SetStringAsync(
             cacheKey,
             newAttempts.ToString(),
@@ -43,4 +40,3 @@ public class ForgotPasswordCommandHandler(
         return Result.Success;
     }
 }
-

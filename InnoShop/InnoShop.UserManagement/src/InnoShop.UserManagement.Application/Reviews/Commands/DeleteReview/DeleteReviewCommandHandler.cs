@@ -13,7 +13,6 @@ public class DeleteReviewCommandHandler(
     IDateTimeProvider dateTimeProvider)
     : IRequestHandler<DeleteReviewCommand, ErrorOr<Deleted>>
 {
-
     public async Task<ErrorOr<Deleted>> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
     {
         var review = await reviewsRepository.GetByIdAsync(request.ReviewId, cancellationToken);
@@ -29,5 +28,4 @@ public class DeleteReviewCommandHandler(
 
         return Result.Deleted;
     }
-
 }

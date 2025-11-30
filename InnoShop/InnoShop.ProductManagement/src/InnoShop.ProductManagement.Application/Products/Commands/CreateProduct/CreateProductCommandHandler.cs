@@ -13,14 +13,15 @@ public class CreateProductCommandHandler(
     IUserGateway userGateway)
     : IRequestHandler<CreateProductCommand, ErrorOr<ProductResponse>>
 {
-    public async Task<ErrorOr<ProductResponse>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<ProductResponse>> Handle(CreateProductCommand command,
+        CancellationToken cancellationToken)
     {
         var currentUser = currentUserProvider.GetCurrentUser();
         var sellerId = currentUser.Id;
 
         var sellerSnapshotResult = await userGateway.GetSellerSnapshotAsync(sellerId, cancellationToken);
         if (sellerSnapshotResult.IsError) return sellerSnapshotResult.Errors;
-    
+
         var priceResult = Price.Create(command.Price);
         if (priceResult.IsError) return priceResult.Errors;
 
@@ -32,13 +33,21 @@ public class CreateProductCommandHandler(
             images.Add(imageResult.Value);
         }
 
+        var titleResult = Title.Create(command.Title);
+        if (titleResult.IsError) return titleResult.Errors;
+        var title = titleResult.Value;
+
+        var descriptionResult = Description.Create(command.Description);
+        if (descriptionResult.IsError) return descriptionResult.Errors;
+        var description = descriptionResult.Value;
+
         var product = Product.CreateProduct(
-            id: Guid.NewGuid(),
-            title: command.Title,
-            description: command.Description,
-            price: priceResult.Value,
-            sellerId: sellerId,
-            sellerInfo: sellerSnapshotResult.Value,
+            Guid.NewGuid(),
+            title,
+            description,
+            priceResult.Value,
+            sellerId,
+            sellerSnapshotResult.Value,
             images: images);
 
         await productsRepository.AddAsync(product, cancellationToken);
@@ -46,8 +55,8 @@ public class CreateProductCommandHandler(
 
         return new ProductResponse(
             product.Id,
-            product.Title,
-            product.Description,
+            product.Title.Value,
+            product.Description.Value,
             product.Price.Value,
             product.SellerId,
             new SellerInfoResponse(

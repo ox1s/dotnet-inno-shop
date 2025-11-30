@@ -1,12 +1,11 @@
+using System.Text.Json;
+using ErrorOr;
 using InnoShop.UserManagement.Application.Common.Interfaces;
-using InnoShop.UserManagement.Domain.UserAggregate;
+using InnoShop.UserManagement.Application.Common.Security;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using InnoShop.UserManagement.Infrastructure.Security.PolicyEnforcer;
-using ErrorOr;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
-using InnoShop.UserManagement.Application.Common.Security;
 
 namespace InnoShop.UserManagement.Infrastructure.Security;
 
@@ -15,17 +14,14 @@ public class AuthorizationService(
     IDistributedCache cache,
     IPolicyEnforcer policyEnforcer,
     ICurrentUserProvider currentUserProvider)
-        : IAuthorizationService
+    : IAuthorizationService
 {
     public async Task<HashSet<string>> GetPermissionsForUserAsync(Guid userId)
     {
-        string cacheKey = $"auth:permissions-{userId}";
+        var cacheKey = $"auth:permissions-{userId}";
 
         var cachedPermissions = await cache.GetStringAsync(cacheKey);
-        if (cachedPermissions is not null)
-        {
-            return JsonSerializer.Deserialize<HashSet<string>>(cachedPermissions)!;
-        }
+        if (cachedPermissions is not null) return JsonSerializer.Deserialize<HashSet<string>>(cachedPermissions)!;
 
 
         var permissions = await dbContext.Users
@@ -48,13 +44,10 @@ public class AuthorizationService(
 
     public async Task<HashSet<string>> GetRolesForUserAsync(Guid userId)
     {
-        string cacheKey = $"auth:roles-{userId}";
+        var cacheKey = $"auth:roles-{userId}";
 
         var cachedRoles = await cache.GetStringAsync(cacheKey);
-        if (cachedRoles is not null)
-        {
-            return JsonSerializer.Deserialize<HashSet<string>>(cachedRoles)!;
-        }
+        if (cachedRoles is not null) return JsonSerializer.Deserialize<HashSet<string>>(cachedRoles)!;
 
         var roles = await dbContext.Users
             .AsNoTracking()
@@ -85,14 +78,10 @@ public class AuthorizationService(
         var userRoles = await GetRolesForUserAsync(currentUser.Id);
 
         if (requiredPermissions.Except(userPermissions).Any())
-        {
             return Error.Unauthorized(description: "User is missing required permissions.");
-        }
 
         if (requiredRoles.Except(userRoles).Any())
-        {
             return Error.Forbidden(description: "User is missing required roles.");
-        }
 
         foreach (var policy in requiredPolicies)
         {
@@ -105,8 +94,8 @@ public class AuthorizationService(
 
     public async Task InvalidateUserCacheAsync(Guid userId)
     {
-        string permissionsCacheKey = $"auth:permissions-{userId}";
-        string rolesCacheKey = $"auth:roles-{userId}";
+        var permissionsCacheKey = $"auth:permissions-{userId}";
+        var rolesCacheKey = $"auth:roles-{userId}";
 
         await cache.RemoveAsync(permissionsCacheKey);
         await cache.RemoveAsync(rolesCacheKey);

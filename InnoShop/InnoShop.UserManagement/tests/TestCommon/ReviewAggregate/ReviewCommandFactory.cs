@@ -1,4 +1,3 @@
-using System.Data;
 using InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
 using InnoShop.UserManagement.Application.Reviews.Commands.DeleteReview;
 using InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
@@ -15,28 +14,32 @@ public static class ReviewCommandFactory
     )
     {
         return new CreateReviewCommand(
-            TargetUserId: targetUserId ?? Constants.Review.TargetUserId,
-            Rating: rating ?? Constants.Review.Rating.Value,
-            Comment: comment ?? Constants.Review.Comment.Value
+            targetUserId ?? Constants.Review.TargetUserId,
+            rating ?? Constants.Review.Rating.Value,
+            comment ?? Constants.Review.Comment.Value
         );
     }
 
     public static DeleteReviewCommand CreateDeleteReviewCommand(
         Guid? userId = null,
         Guid? reviewId = null)
-        => new DeleteReviewCommand(
-            UserId: userId ?? Constants.Review.AuthorId,
-            ReviewId: reviewId ?? Guid.NewGuid()
+    {
+        return new DeleteReviewCommand(
+            userId ?? Constants.Review.AuthorId,
+            reviewId ?? Guid.NewGuid()
         );
+    }
 
     public static UpdateReviewCommand CreateUpdateReviewCommand(
         Guid? reviewId,
         Guid? userId = null,
         int? rating = null,
         string? comment = null)
-        => new UpdateReviewCommand(
-            Id: reviewId ?? Guid.NewGuid(),
-            UserId: userId ?? Constants.Review.AuthorId,
-            Rating: rating ?? Constants.Review.Rating.Value,
-            Comment : comment ?? Constants.Review.Comment.Value);
+    {
+        return new UpdateReviewCommand(
+            reviewId ?? Guid.NewGuid(),
+            userId ?? Constants.Review.AuthorId,
+            rating ?? Constants.Review.Rating.Value,
+            comment ?? Constants.Review.Comment.Value);
+    }
 }

@@ -1,7 +1,6 @@
-using ErrorOr;
-using InnoShop.SharedKernel.IntegrationEvents.UserManagement;
 using InnoShop.ProductManagement.Application.Common.Interfaces;
 using InnoShop.ProductManagement.Domain.ProductAggregate;
+using InnoShop.SharedKernel.IntegrationEvents.UserManagement;
 using MediatR;
 
 namespace InnoShop.ProductManagement.Application.Products.IntegrationEvents;
@@ -13,19 +12,20 @@ public class UserProfileUpdatedEventHandler(
 {
     public async Task Handle(UserProfileUpdatedIntegrationEvent notification, CancellationToken cancellationToken)
     {
-        var products = await productsRepository.GetBySellerIdAsync(notification.UserId, cancellationToken, ignoreQueryFilters: true);
-        
+        var products = await productsRepository.GetBySellerIdAsync(notification.UserId, cancellationToken, true);
+
         var sellerInfo = new SellerSnapshot(
-            FullName: $"{notification.FirstName} {notification.LastName}",
-            AvatarUrl: notification.AvatarUrl ?? string.Empty,
-            Rating: notification.Rating);
-        
+            $"{notification.FirstName} {notification.LastName}",
+            notification.AvatarUrl,
+            notification.Rating,
+            notification.ReviewCount);
+
         foreach (var product in products)
         {
             product.UpdateSellerInfo(sellerInfo);
             await productsRepository.UpdateAsync(product, cancellationToken);
         }
-        
+
         await unitOfWork.CommitChangesAsync(cancellationToken);
     }
 }

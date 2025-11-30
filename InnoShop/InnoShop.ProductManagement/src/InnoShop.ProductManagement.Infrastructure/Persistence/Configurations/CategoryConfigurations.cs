@@ -1,6 +1,6 @@
+using InnoShop.ProductManagement.Domain.CategoryAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using InnoShop.ProductManagement.Domain.CategoryAggregate;
 
 namespace InnoShop.ProductManagement.Infrastructure.Persistence.Configurations;
 
@@ -16,6 +16,7 @@ public class CategoryConfigurations : IEntityTypeConfiguration<Category>
 
         builder.Property(c => c.Name)
             .IsRequired()
+            .HasConversion(v => v.Value, v => new Name(v))
             .HasMaxLength(200);
 
         builder.Property(c => c.ParentId)

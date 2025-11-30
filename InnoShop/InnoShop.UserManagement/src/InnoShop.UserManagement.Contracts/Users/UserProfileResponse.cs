@@ -1,5 +1,4 @@
-﻿
-namespace InnoShop.UserManagement.Contracts.Users;
+﻿namespace InnoShop.UserManagement.Contracts.Users;
 
 public record UserProfileResponse(
     Guid UserId,
@@ -9,5 +8,3 @@ public record UserProfileResponse(
     string PhoneNumber,
     string Country,
     string City);
-
-

@@ -10,6 +10,6 @@ public class CreateReviewCommandValidator : AbstractValidator<CreateReviewComman
             .MinimumLength(3)
             .MaximumLength(500)
             .When(x => !string.IsNullOrEmpty(x.Comment)
-                        || x.Comment is not null);
+                       || x.Comment is not null);
     }
 }

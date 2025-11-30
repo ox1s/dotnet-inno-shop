@@ -6,8 +6,8 @@ namespace InnoShop.UserManagement.Application.Common.Behaviours;
 
 public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? validator = null)
     : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
-        where TResponse : IErrorOr
+    where TRequest : IRequest<TResponse>
+    where TResponse : IErrorOr
 {
     private readonly IValidator<TRequest>? _validator = validator;
 
@@ -18,22 +18,16 @@ public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? valid
         CancellationToken cancellationToken)
     {
         // Если валидатора няма - идет дальше
-        if (_validator is null)
-        {
-            return await next();
-        }
+        if (_validator is null) return await next();
         // Если есть, запускает его
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.IsValid)
-        {
-            return await next();
-        }
+        if (validationResult.IsValid) return await next();
 
         var errors = validationResult.Errors
             .ConvertAll(error => Error.Validation(
-                code: error.PropertyName,
-                description: error.ErrorMessage));
+                error.PropertyName,
+                error.ErrorMessage));
 
         return (dynamic)errors;
     }

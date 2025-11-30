@@ -25,7 +25,7 @@ public class ForgotPasswordTests(MediatorFactory mediatorFactory)
         var cache = scope.ServiceProvider.GetRequiredService<IDistributedCache>();
 
         dbContext.AttachRange(Role.List);
-        var user = UserFactory.CreateUser(email: Email.Create("test@example.com").Value);
+        var user = UserFactory.CreateUser(Email.Create("test@example.com").Value);
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
 
@@ -35,7 +35,7 @@ public class ForgotPasswordTests(MediatorFactory mediatorFactory)
 
         // Assert
         result.IsError.Should().BeFalse();
-        
+
         var updatedUser = await dbContext.Users.FindAsync(user.Id);
         updatedUser.Should().NotBeNull();
         updatedUser!.PasswordResetToken.Should().NotBeNull();
@@ -75,15 +75,15 @@ public class ForgotPasswordTests(MediatorFactory mediatorFactory)
         var cache = scope.ServiceProvider.GetRequiredService<IDistributedCache>();
 
         dbContext.AttachRange(Role.List);
-        var user = UserFactory.CreateUser(email: Email.Create("ratelimit@example.com").Value);
+        var user = UserFactory.CreateUser(Email.Create("ratelimit@example.com").Value);
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
 
         // Set rate limit to 3 attempts
-        var cacheKey = $"reset-password-limit:ratelimit@example.com";
-        await cache.SetStringAsync(cacheKey, "3", new DistributedCacheEntryOptions 
-        { 
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) 
+        var cacheKey = "reset-password-limit:ratelimit@example.com";
+        await cache.SetStringAsync(cacheKey, "3", new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1)
         });
 
         // Act
@@ -107,7 +107,7 @@ public class ForgotPasswordTests(MediatorFactory mediatorFactory)
         var cache = scope.ServiceProvider.GetRequiredService<IDistributedCache>();
 
         dbContext.AttachRange(Role.List);
-        var user = UserFactory.CreateUser(email: Email.Create("counter@example.com").Value);
+        var user = UserFactory.CreateUser(Email.Create("counter@example.com").Value);
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
 
@@ -116,7 +116,7 @@ public class ForgotPasswordTests(MediatorFactory mediatorFactory)
         await mediator.Send(command);
 
         // Assert
-        var cacheKey = $"reset-password-limit:counter@example.com";
+        var cacheKey = "reset-password-limit:counter@example.com";
         var attempts = await cache.GetStringAsync(cacheKey);
         attempts.Should().Be("1");
 
@@ -128,4 +128,3 @@ public class ForgotPasswordTests(MediatorFactory mediatorFactory)
         attempts.Should().Be("2");
     }
 }
-

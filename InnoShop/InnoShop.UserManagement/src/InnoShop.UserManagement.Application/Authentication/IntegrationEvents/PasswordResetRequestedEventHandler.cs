@@ -14,10 +14,10 @@ public class PasswordResetRequestedEventHandler(
         var resetLink = linkFactory.CreateResetPasswordLink(notification.Email, notification.Token);
 
         await emailSender.SendEmailAsync(
-            to: notification.Email,
-            from: "security@innoshop.com",
-            subject: "Reset Your Password",
-            body: $@"
+            notification.Email,
+            "security@innoshop.com",
+            "Reset Your Password",
+            $@"
                 <h3>Password Reset Request</h3>
                 <p>You requested a password reset. Click the link below to set a new password:</p>
                 <p><a href='{resetLink}'>Reset Password</a></p>

@@ -1,4 +1,3 @@
-using InnoShop.UserManagement.Domain.ReviewAggregate;
 using InnoShop.UserManagement.Domain.UserAggregate;
 
 namespace InnoShop.UserManagement.Application.Common.Interfaces;

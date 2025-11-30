@@ -12,16 +12,14 @@ public class ReviewUpdatedEventHandler(
     public async Task Handle(ReviewUpdatedEvent notification, CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetByIdAsync(notification.TargetUserId, cancellationToken)
-            ?? throw new EventualConsistencyException(ReviewUpdatedEvent.UserNotFound);
+                   ?? throw new EventualConsistencyException(ReviewUpdatedEvent.UserNotFound);
 
         var updateReviewResult = user.ApplyRatingUpdate(notification.OldRating, notification.NewRating);
 
         if (updateReviewResult.IsError)
-        {
             throw new EventualConsistencyException(
                 ReviewUpdatedEvent.ReviewUpdatingFailed,
                 updateReviewResult.Errors);
-        }
 
         await usersRepository.UpdateAsync(user, cancellationToken);
     }

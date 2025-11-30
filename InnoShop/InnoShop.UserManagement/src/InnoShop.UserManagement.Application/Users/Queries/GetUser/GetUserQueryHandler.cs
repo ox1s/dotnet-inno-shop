@@ -22,13 +22,15 @@ public class GetUserQueryHandler(
             user.Roles.Select(r => r.Name).ToList(),
             user.IsEmailVerified,
             user.IsActive,
-            user.UserProfile != null ? new UserProfileResponse(
-                user.Id,
-                user.UserProfile.FirstName.Value,
-                user.UserProfile.LastName.Value,
-                user.UserProfile.AvatarUrl.Value,
-                user.UserProfile.PhoneNumber.Value,
-                user.UserProfile.Location.Country.Name,
-                user.UserProfile.Location.City) : null);
+            user.UserProfile != null
+                ? new UserProfileResponse(
+                    user.Id,
+                    user.UserProfile.FirstName.Value,
+                    user.UserProfile.LastName.Value,
+                    user.UserProfile.AvatarUrl.Value,
+                    user.UserProfile.PhoneNumber.Value,
+                    user.UserProfile.Location.Country.Name,
+                    user.UserProfile.Location.City)
+                : null);
     }
 }

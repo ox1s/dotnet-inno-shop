@@ -1,22 +1,18 @@
-﻿using InnoShop.SharedKernel.IntegrationEvents;
+﻿using System.Text.Json;
+using InnoShop.SharedKernel.IntegrationEvents;
 using InnoShop.UserManagement.Infrastructure.IntegrationEvents.IntegrationEventsPublisher;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
-using Throw;
 
 namespace InnoShop.UserManagement.Infrastructure.IntegrationEvents.BackgroundServices;
 
 public class PublishIntegrationEventsBackgroundService : BackgroundService
 {
     private readonly IIntegrationEventsPublisher _integrationEventPublisher;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly ILogger<PublishIntegrationEventsBackgroundService> _logger;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
     private PeriodicTimer _timer = null!;
 
@@ -30,14 +26,13 @@ public class PublishIntegrationEventsBackgroundService : BackgroundService
         _logger = logger;
     }
 
-    protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Starting integration event publisher background service.");
 
         _timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
 
         while (await _timer.WaitForNextTickAsync(stoppingToken))
-        {
             try
             {
                 await PublishIntegrationEventsFromDbAsync();
@@ -46,7 +41,6 @@ public class PublishIntegrationEventsBackgroundService : BackgroundService
             {
                 _logger.LogError(e, "Exception occurred while publishing integration events.");
             }
-        }
     }
 
     private async Task PublishIntegrationEventsFromDbAsync()
@@ -83,6 +77,7 @@ public class PublishIntegrationEventsBackgroundService : BackgroundService
                 break;
             }
         }
+
         await dbContext.CommitChangesAsync();
     }
 }

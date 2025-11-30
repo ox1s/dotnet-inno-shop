@@ -1,15 +1,12 @@
 using FluentAssertions;
+using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Application.SubcutaneousTests.Common;
-using InnoShop.UserManagement.Domain.Common;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.Infrastructure.Persistence;
+using InnoShop.UserManagement.TestCommon.ReviewAggregate;
 using InnoShop.UserManagement.TestCommon.UserAggregate;
-using InnoShop.UserManagementTestCommon.ReviewAggregate;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-using InnoShop.SharedKernel.Common;
-using InnoShop.UserManagement.TestCommon.ReviewAggregate;
 
 namespace InnoShop.UserManagement.Application.SubcutaneousTests.Reviews.Commands;
 
@@ -31,17 +28,17 @@ public class CreateReviewTests(MediatorFactory mediatorFactory)
 
         // Arrange
         var authorEmail = Email.Create("author@test.com").Value;
-        var author = UserFactory.CreateUserWithProfile(email: authorEmail);
+        var author = UserFactory.CreateUserWithProfile(authorEmail);
         typeof(Entity).GetProperty("Id")!.SetValue(author, mediatorFactory.DefaultUserId);
 
         var targetEmail = Email.Create("target@test.com").Value;
-        var targetUser = UserFactory.CreateUserWithProfile(email: targetEmail);
+        var targetUser = UserFactory.CreateUserWithProfile(targetEmail);
 
         dbContext.Users.AddRange(author, targetUser);
         await dbContext.SaveChangesAsync();
 
         var createReviewCommand = ReviewCommandFactory.CreateCreateReviewCommand(
-            targetUserId: targetUser.Id
+            targetUser.Id
         );
 
         // Act
@@ -71,19 +68,19 @@ public class CreateReviewTests(MediatorFactory mediatorFactory)
 
         // Arrange
         var authorEmail = Email.Create("author@test.com").Value;
-        var author = UserFactory.CreateUserWithProfile(email: authorEmail);
+        var author = UserFactory.CreateUserWithProfile(authorEmail);
         typeof(Entity).GetProperty("Id")!.SetValue(author, mediatorFactory.DefaultUserId);
 
         var targetEmail = Email.Create("target@test.com").Value;
-        var targetUser = UserFactory.CreateUserWithProfile(email: targetEmail);
+        var targetUser = UserFactory.CreateUserWithProfile(targetEmail);
         typeof(Entity).GetProperty("Id")!.SetValue(targetUser, Guid.NewGuid());
 
         dbContext.Users.AddRange(author, targetUser);
         await dbContext.SaveChangesAsync();
 
         var command = ReviewCommandFactory.CreateCreateReviewCommand(
-            targetUserId: targetUser.Id,
-            rating: invalidRating
+            targetUser.Id,
+            invalidRating
         );
 
         // Act

@@ -1,24 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
-    <PackageReference Include="Throw" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\InnoShop.ProductManagement.Application\InnoShop.ProductManagement.Application.csproj" />
-    <ProjectReference Include="..\InnoShop.ProductManagement.Contracts\InnoShop.ProductManagement.Contracts.csproj" />
-    <ProjectReference Include="..\InnoShop.ProductManagement.Infrastructure\InnoShop.ProductManagement.Infrastructure.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI"/>
+        <PackageReference Include="Throw"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\InnoShop.ProductManagement.Application\InnoShop.ProductManagement.Application.csproj"/>
+        <ProjectReference Include="..\InnoShop.ProductManagement.Contracts\InnoShop.ProductManagement.Contracts.csproj"/>
+        <ProjectReference Include="..\InnoShop.ProductManagement.Infrastructure\InnoShop.ProductManagement.Infrastructure.csproj"/>
+    </ItemGroup>
 </Project>

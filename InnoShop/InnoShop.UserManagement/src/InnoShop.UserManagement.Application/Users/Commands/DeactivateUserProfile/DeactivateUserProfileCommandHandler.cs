@@ -11,7 +11,8 @@ public class DeactivateUserProfileCommandHandler(
     IUnitOfWork unitOfWork)
     : IRequestHandler<DeactivateUserProfileCommand, ErrorOr<Success>>
 {
-    public async Task<ErrorOr<Success>> Handle(DeactivateUserProfileCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Success>> Handle(DeactivateUserProfileCommand request,
+        CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetByIdAsync(request.UserId, cancellationToken);
 

@@ -19,4 +19,3 @@ public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordComm
             .WithMessage("Password must be at least 6 characters long.");
     }
 }
-

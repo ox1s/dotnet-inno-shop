@@ -14,23 +14,17 @@ public class UserRegisteredEventHandler(
     {
         var user = await usersRepository.GetByIdAsync(notification.UserId, cancellationToken);
 
-        if (user is null)
-        {
-            return;
-        }
+        if (user is null) return;
 
-        if (user.IsEmailVerified)
-        {
-            return;
-        }
+        if (user.IsEmailVerified) return;
 
         var verificationLink = linkFactory.Create(user.Id, user.EmailVerificationToken!);
 
         await emailSender.SendEmailAsync(
-            to: user.Email.Value,
-            from: "noreply@innoshop.com",
-            subject: "Welcome to InnoShop! Verify your email",
-            body: $"Please verify: <a href='{verificationLink}'>Click here</a>"
+            user.Email.Value,
+            "noreply@innoshop.com",
+            "Welcome to InnoShop! Verify your email",
+            $"Please verify: <a href='{verificationLink}'>Click here</a>"
         );
     }
 }

@@ -1,6 +1,6 @@
+using FluentValidation;
 using InnoShop.UserManagement.Application.Common.Behaviours;
 using Microsoft.Extensions.DependencyInjection;
-using FluentValidation;
 
 namespace InnoShop.UserManagement.Application;
 

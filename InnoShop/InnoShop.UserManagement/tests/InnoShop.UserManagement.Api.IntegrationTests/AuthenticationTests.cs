@@ -1,9 +1,9 @@
+using System.Net.Http.Json;
 using FluentAssertions;
 using InnoShop.UserManagement.Api.IntegrationTests.Common;
 using InnoShop.UserManagement.Contracts.Authentication;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Json;
 
 namespace InnoShop.UserManagement.Api.IntegrationTests;
 

@@ -82,8 +82,7 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
             .HasColumnName("password_hash");
 
         builder.HasMany(u => u.Roles)
-               .WithMany()
-               .UsingEntity("user_roles");
-
+            .WithMany()
+            .UsingEntity("user_roles");
     }
 }

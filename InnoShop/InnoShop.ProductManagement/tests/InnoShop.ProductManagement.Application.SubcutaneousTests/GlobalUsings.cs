@@ -1,6 +1,1 @@
-﻿namespace InnoShop.ProductManagement.Application.SubcutaneousTests;
-
-public class GlobalUsings
-{
-    
-}
+﻿global using Xunit;

@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Ardalis.SmartEnum" />
-    <PackageReference Include="ErrorOr" />
-    <PackageReference Include="libphonenumber-csharp" />
-    <PackageReference Include="MediatR" />
-    <PackageReference Include="Throw" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Ardalis.SmartEnum"/>
+        <PackageReference Include="ErrorOr"/>
+        <PackageReference Include="libphonenumber-csharp"/>
+        <PackageReference Include="MediatR"/>
+        <PackageReference Include="Throw"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Common\"/>
+    </ItemGroup>
 </Project>

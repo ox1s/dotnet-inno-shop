@@ -1,4 +1,4 @@
-using InnoShop.UserManagement.Domain.Common.Interfaces;
+using InnoShop.SharedKernel.Common.Interfaces;
 using InnoShop.UserManagement.Domain.ReviewAggregate;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.TestCommon.TestConstants;

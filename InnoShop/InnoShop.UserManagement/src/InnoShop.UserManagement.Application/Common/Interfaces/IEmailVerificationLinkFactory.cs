@@ -3,4 +3,5 @@
 public interface IEmailVerificationLinkFactory
 {
     string Create(Guid userId, string token);
+    string CreateResetPasswordLink(string email, string token);
 }

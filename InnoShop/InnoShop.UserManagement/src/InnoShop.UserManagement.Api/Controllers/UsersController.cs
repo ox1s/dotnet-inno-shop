@@ -40,10 +40,10 @@ public class UsersController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
 
         return result.Match(
-            userResult => CreatedAtAction(
+            userProfile => CreatedAtAction(
                 actionName: nameof(GetUserProfile),
                 routeValues: new { UserId = userId },
-                value: MapToProfileResponse(userResult)),
+                value: userProfile),
             Problem);
     }
 
@@ -75,7 +75,7 @@ public class UsersController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
 
         return result.Match(
-            _ => NoContent(),
+            userProfile => Ok(userProfile),
             Problem);
     }
 
@@ -87,7 +87,7 @@ public class UsersController(ISender sender) : ApiController
         var result = await sender.Send(query);
 
         return result.Match(
-            userResult => Ok(MapToProfileResponse(userResult)),
+            userProfile => Ok(userProfile),
             Problem);
     }
 
@@ -98,14 +98,7 @@ public class UsersController(ISender sender) : ApiController
         var result = await sender.Send(query);
 
         return result.Match(
-            user => Ok(new UserResponse(
-                user.Id,
-                user.Email.Value,
-                user.Roles.Select(r => r.Name).ToList(),
-                user.IsEmailVerified,
-                user.IsActive,
-                user.UserProfile != null ? MapToProfileResponse(user) : null
-            )),
+            user => Ok(user),
             Problem);
     }
 
@@ -127,17 +120,4 @@ public class UsersController(ISender sender) : ApiController
         return result.Match(_ => NoContent(), Problem);
     }
 
-    private static UserProfileResponse MapToProfileResponse(User user)
-    {
-        var profile = user.UserProfile!;
-
-        return new UserProfileResponse(
-            UserId: user.Id,
-            FirstName: profile.FirstName.Value,
-            LastName: profile.LastName.Value,
-            AvatarUrl: profile.AvatarUrl.Value,
-            PhoneNumber: profile.PhoneNumber.Value,
-            Country: profile.Location.Country.Name,
-            City: profile.Location.City);
-    }
 }

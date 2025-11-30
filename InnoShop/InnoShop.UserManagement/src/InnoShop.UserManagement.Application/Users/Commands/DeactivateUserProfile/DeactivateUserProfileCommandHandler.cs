@@ -15,17 +15,10 @@ public class DeactivateUserProfileCommandHandler(
     {
         var user = await usersRepository.GetByIdAsync(request.UserId, cancellationToken);
 
-        if (user is null)
-        {
-            return UserErrors.UserNotFound;
-        }
+        if (user is null) return UserErrors.UserNotFound;
 
         var deactivateUserResult = user.DeactivateUser();
-
-        if (deactivateUserResult.IsError)
-        {
-            return deactivateUserResult.Errors;
-        }
+        if (deactivateUserResult.IsError) return deactivateUserResult.Errors;
 
         await usersRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);

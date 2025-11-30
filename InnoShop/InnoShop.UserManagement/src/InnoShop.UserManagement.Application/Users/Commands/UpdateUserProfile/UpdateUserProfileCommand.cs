@@ -2,6 +2,7 @@ using ErrorOr;
 using InnoShop.SharedKernel.Security.Permissions;
 using InnoShop.SharedKernel.Security.Policies;
 using InnoShop.UserManagement.Application.Common.Security;
+using InnoShop.UserManagement.Contracts.Users;
 using MediatR;
 
 
@@ -19,4 +20,4 @@ public record UpdateUserProfileCommand(
     Country? Country,
     string? State,
     string? City)
-    : IAuthorizeableRequest<ErrorOr<Success>>;
+    : IAuthorizeableRequest<ErrorOr<UserProfileResponse>>;

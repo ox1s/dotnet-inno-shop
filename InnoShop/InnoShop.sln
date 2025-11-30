@@ -22,6 +22,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.SharedKernel", "InnoShop.SharedKernel\InnoShop.SharedKernel.csproj", "{01D86ABF-53BF-4250-98C3-A56700844E6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InnoShop.UserManagement", "InnoShop.UserManagement", "{CEBFBBCA-5594-058F-1B4F-7859BC665445}"
+	ProjectSection(SolutionItems) = preProject
+		InnoShop.UserManagement\request\Authentication\ForgotPassword.http = InnoShop.UserManagement\request\Authentication\ForgotPassword.http
+		InnoShop.UserManagement\request\Authentication\Login.http = InnoShop.UserManagement\request\Authentication\Login.http
+		InnoShop.UserManagement\request\Authentication\Register.http = InnoShop.UserManagement\request\Authentication\Register.http
+		InnoShop.UserManagement\request\Authentication\VerifyEmail.http = InnoShop.UserManagement\request\Authentication\VerifyEmail.http
+		InnoShop.UserManagement\request\Reviews\Reviews.http = InnoShop.UserManagement\request\Reviews\Reviews.http
+		InnoShop.UserManagement\request\Users\Users.http = InnoShop.UserManagement\request\Users\Users.http
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{36590625-CBD7-341E-9646-3E4D171B6B53}"
 EndProject
@@ -51,6 +59,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.UserManagement.Api.IntegrationTests", "InnoShop.UserManagement\tests\InnoShop.UserManagement.Api.IntegrationTests\InnoShop.UserManagement.Api.IntegrationTests.csproj", "{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.ProductManagement.Contracts", "InnoShop.ProductManagement\src\InnoShop.ProductManagement.Contracts\InnoShop.ProductManagement.Contracts.csproj", "{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -266,6 +276,18 @@ Global
 		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Release|x64.Build.0 = Release|Any CPU
 		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Release|x86.ActiveCfg = Release|Any CPU
 		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A}.Release|x86.Build.0 = Release|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Debug|x64.Build.0 = Debug|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Debug|x86.Build.0 = Debug|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Release|x64.ActiveCfg = Release|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Release|x64.Build.0 = Release|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Release|x86.ActiveCfg = Release|Any CPU
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -288,6 +310,7 @@ Global
 		{006DDA1C-44AC-41E4-AF0F-AA88D18B06E5} = {A910A633-008A-E96C-ADE8-E734DAD8F51F}
 		{48D84537-E2AE-4A37-BC5D-58A8BD0D5B76} = {A910A633-008A-E96C-ADE8-E734DAD8F51F}
 		{1A3B634D-1032-4A4C-BC73-8F8F19CEF27A} = {A910A633-008A-E96C-ADE8-E734DAD8F51F}
+		{F9AC3AA2-5CEB-4A0C-AA7C-1E68CE2CE194} = {C3763A35-48D5-FC42-A1D2-F95B9D6D048D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E8F19A4D-9E18-4ECF-BDD8-26A150831403}

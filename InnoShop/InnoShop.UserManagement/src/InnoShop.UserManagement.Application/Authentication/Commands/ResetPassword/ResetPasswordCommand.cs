@@ -1,0 +1,10 @@
+using ErrorOr;
+using MediatR;
+
+namespace InnoShop.UserManagement.Application.Authentication.Commands.ResetPassword;
+
+public record ResetPasswordCommand(
+    string Email,
+    string Token,
+    string NewPassword) : IRequest<ErrorOr<Success>>;
+

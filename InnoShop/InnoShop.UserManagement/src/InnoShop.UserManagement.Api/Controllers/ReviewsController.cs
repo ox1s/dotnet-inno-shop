@@ -3,9 +3,8 @@ using InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
 using InnoShop.UserManagement.Application.Reviews.Commands.DeleteReview;
 using InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
 using InnoShop.UserManagement.Application.Reviews.Queries.GetReview;
-using InnoShop.UserManagement.Application.Reviews.Queries.GetReviews;
+using InnoShop.UserManagement.Application.Reviews.Queries.ListReviews;
 using InnoShop.UserManagement.Contracts.Reviews;
-using InnoShop.UserManagement.Domain.ReviewAggregate;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +32,7 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
             review => CreatedAtAction(
                 nameof(GetReview),
                 new { reviewId = review.Id },
-                MapToResponse(review)),
+                review),
                 Problem);
 
     }
@@ -52,7 +51,7 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
         var updateReviewResult = await sender.Send(command);
 
         return updateReviewResult.Match(
-            _ => NoContent(),
+            review => Ok(review),
             Problem);
     }
 
@@ -80,7 +79,7 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
         var getReviewResult = await sender.Send(query);
 
         return getReviewResult.Match(
-            review => Ok(MapToResponse(review)),
+            review => Ok(review),
             Problem);
     }
 
@@ -90,24 +89,13 @@ public class ReviewsController(ISender sender, ICurrentUserProvider currentUserP
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10)
     {
-        var query = new GetReviewsQuery(targetUserId, page, pageSize);
+        var query = new ListReviewsQuery(targetUserId, page, pageSize);
 
         var getReviewsResult = await sender.Send(query);
 
         return getReviewsResult.Match(
-            reviews => Ok(reviews.Select(MapToResponse)),
+            reviews => Ok(reviews),
             Problem);
     }
 
-    private static ReviewResponse MapToResponse(Review review)
-    {
-        return new ReviewResponse(
-            review.Id,
-            review.AuthorId,
-            review.TargetUserId,
-            review.Rating.Value,
-            review.Comment?.Value,
-            review.CreatedAt,
-            review.UpdatedAt);
-    }
 }

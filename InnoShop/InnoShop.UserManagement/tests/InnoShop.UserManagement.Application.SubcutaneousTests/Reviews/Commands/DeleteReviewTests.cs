@@ -59,7 +59,7 @@ public class DeleteReviewTests(MediatorFactory mediatorFactory)
         var deleteCommand = ReviewCommandFactory.CreateDeleteReviewCommand(
             userId: author.Id,
             reviewId: reviewId);
-            
+
         var deletedResult = await mediator.Send(deleteCommand);
 
         deletedResult.IsError.Should().BeFalse();
@@ -67,6 +67,8 @@ public class DeleteReviewTests(MediatorFactory mediatorFactory)
 
         // Assert
         dbReview!.IsDeleted.Should().BeTrue();
+
+        // Почему-то если тесты проходят вместе - FAILED, но в отдельности - OK. Почему?
     }
 
     [Fact]

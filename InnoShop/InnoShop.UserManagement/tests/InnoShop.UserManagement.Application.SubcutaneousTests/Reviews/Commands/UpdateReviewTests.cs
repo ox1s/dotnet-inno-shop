@@ -66,8 +66,8 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
 
         // Assert
         updateResult.IsError.Should().BeFalse();
-        getReviewResult.Value.Rating.Value.Should().Be(5);
-        getReviewResult.Value.Comment?.Value.Should().Be("Умопропроай");
+        getReviewResult.Value.Rating.Should().Be(5);
+        getReviewResult.Value.Comment.Should().Be("Умопропроай");
     }
 
     [Fact]

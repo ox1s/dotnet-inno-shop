@@ -27,8 +27,10 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
         builder.Property(u => u.IsEmailVerified);
         builder.Property(u => u.EmailVerificationToken);
         builder.Property(u => u.EmailVerificationTokenExpiration);
-        builder.Property(u => u.PasswordResetToken);
-        builder.Property(u => u.PasswordResetTokenExpiration);
+        builder.Property(u => u.PasswordResetToken)
+            .IsRequired(false);
+        builder.Property(u => u.PasswordResetTokenExpiration)
+            .IsRequired(false);
 
         builder.OwnsOne(u => u.RatingSummary, ratingSummary =>
         {

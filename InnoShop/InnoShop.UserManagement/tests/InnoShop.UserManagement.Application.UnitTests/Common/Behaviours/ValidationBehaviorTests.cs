@@ -5,28 +5,24 @@ using FluentValidation.Results;
 using MediatR;
 using NSubstitute;
 using InnoShop.UserManagement.Application.Common.Behaviours;
-using InnoShop.UserManagement.Application.Authentication.Common;
-using InnoShop.UserManagement.Application.Authentication.Commands.Register;
-using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.Application.Reviews.Commands.CreateReview;
-using InnoShop.UserManagement.Domain.ReviewAggregate;
-using InnoShop.UserManagementTestCommon.ReviewAggregate;
 using InnoShop.UserManagement.TestCommon.ReviewAggregate;
+using InnoShop.UserManagement.Contracts.Reviews;
 
 
 namespace InnoShop.UserManagement.Application.UnitTests.Common.Behaviours;
 
 public class ValidationBehaviorTests
 {
-    private readonly ValidationBehavior<CreateReviewCommand, ErrorOr<Review>> _validationBehavior;
+    private readonly ValidationBehavior<CreateReviewCommand, ErrorOr<ReviewResponse>> _validationBehavior;
     private readonly IValidator<CreateReviewCommand> _mockValidator;
-    private readonly RequestHandlerDelegate<ErrorOr<Review>> _mockNextBehavior;
+    private readonly RequestHandlerDelegate<ErrorOr<ReviewResponse>> _mockNextBehavior;
 
     public ValidationBehaviorTests()
     {
         _mockValidator = Substitute.For<IValidator<CreateReviewCommand>>();
-        _mockNextBehavior = Substitute.For<RequestHandlerDelegate<ErrorOr<Review>>>();
-        _validationBehavior = new ValidationBehavior<CreateReviewCommand, ErrorOr<Review>>(_mockValidator);
+        _mockNextBehavior = Substitute.For<RequestHandlerDelegate<ErrorOr<ReviewResponse>>>();
+        _validationBehavior = new ValidationBehavior<CreateReviewCommand, ErrorOr<ReviewResponse>>(_mockValidator);
     }
 
     [Fact]
@@ -34,20 +30,27 @@ public class ValidationBehaviorTests
     {
         // Arrange
         var createReviewRequest = ReviewCommandFactory.CreateCreateReviewCommand();
-        var review = ReviewFactory.CreateReview();
+        var reviewResponse = new ReviewResponse(
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            5,
+            "Test comment",
+            DateTime.UtcNow,
+            DateTime.UtcNow);
 
         _mockValidator
             .ValidateAsync(createReviewRequest, Arg.Any<CancellationToken>())
             .Returns(new ValidationResult());
 
-        _mockNextBehavior.Invoke().Returns(review);
+        _mockNextBehavior.Invoke().Returns((ErrorOr<ReviewResponse>)reviewResponse);
 
         // Act
         var result = await _validationBehavior.Handle(createReviewRequest, _mockNextBehavior, default);
 
         // Assert
         result.IsError.Should().BeFalse();
-        result.Value.Should().BeEquivalentTo(review);
+        result.Value.Should().BeEquivalentTo(reviewResponse);
     }
 
     [Fact]
@@ -73,12 +76,19 @@ public class ValidationBehaviorTests
     public async Task InvokeBehavior_WhenValidatorIsNull_ShouldInvokeNextBehavior()
     {
         // Arrange
-        var behaviorWithoutValidator = new ValidationBehavior<CreateReviewCommand, ErrorOr<Review>>(validator: null);
+        var behaviorWithoutValidator = new ValidationBehavior<CreateReviewCommand, ErrorOr<ReviewResponse>>(validator: null);
 
         var createReviewRequest = ReviewCommandFactory.CreateCreateReviewCommand();
-        var review = ReviewFactory.CreateReview();
+        var reviewResponse = new ReviewResponse(
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            5,
+            "Test comment",
+            DateTime.UtcNow,
+            DateTime.UtcNow);
 
-        _mockNextBehavior.Invoke().Returns((ErrorOr<Review>)review);
+        _mockNextBehavior.Invoke().Returns((ErrorOr<ReviewResponse>)reviewResponse);
 
         // Act
         var result = await behaviorWithoutValidator.Handle(createReviewRequest, _mockNextBehavior, default);

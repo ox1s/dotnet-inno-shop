@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace InnoShop.UserManagement.Domain.Common.Interfaces;
+namespace InnoShop.SharedKernel.Common.Interfaces;
 
 public interface IDateTimeProvider
 {

@@ -1,10 +1,12 @@
 using ErrorOr;
+using MediatR;
+
 using InnoShop.SharedKernel.Security.Permissions;
 using InnoShop.SharedKernel.Security.Policies;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Application.Common.Security;
+using InnoShop.UserManagement.Contracts.Users;
 using InnoShop.UserManagement.Domain.UserAggregate;
-using MediatR;
 
 namespace InnoShop.UserManagement.Application.Users.Commands.CreateUserProfile;
 
@@ -18,4 +20,4 @@ public record CreateUserProfileCommand(
     Country Country,
     string State,
     string City)
-    : IAuthorizeableRequest<ErrorOr<User>>, IInvalidatesUserCache;
+    : IAuthorizeableRequest<ErrorOr<UserProfileResponse>>, IInvalidatesUserCache;

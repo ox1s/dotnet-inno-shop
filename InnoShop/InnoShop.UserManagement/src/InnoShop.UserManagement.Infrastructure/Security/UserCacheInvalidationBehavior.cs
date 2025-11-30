@@ -7,7 +7,7 @@ namespace InnoShop.UserManagement.Infrastructure.Security;
 public class UserCacheInvalidationBehavior<TRequest, TResponse>(
     IAuthorizationService authService)
     : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>, IInvalidatesUserCache  // Уточните constraints
+    where TRequest : IRequest<TResponse>, IInvalidatesUserCache
     where TResponse : IErrorOr
 {
     public async Task<TResponse> Handle(

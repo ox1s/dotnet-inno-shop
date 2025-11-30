@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
@@ -63,7 +64,13 @@ public class MediatorFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLif
             var linkFactory = Substitute.For<IEmailVerificationLinkFactory>();
             linkFactory.Create(Arg.Any<Guid>(), Arg.Any<string>())
                 .Returns(callInfo => $"http://localhost:5000/verify?userId={callInfo.ArgAt<Guid>(0)}&token={callInfo.ArgAt<string>(1)}");
+            linkFactory.CreateResetPasswordLink(Arg.Any<string>(), Arg.Any<string>())
+                .Returns(callInfo => $"http://localhost:5173/reset-password?email={callInfo.ArgAt<string>(0)}&token={callInfo.ArgAt<string>(1)}");
             services.AddScoped(_ => linkFactory);
+            
+            // Add in-memory distributed cache for rate limiting
+            services.RemoveAll<IDistributedCache>();
+            services.AddDistributedMemoryCache();
 
             services.RemoveAll<ICurrentUserProvider>();
             var currentUserProvider = Substitute.For<ICurrentUserProvider>();

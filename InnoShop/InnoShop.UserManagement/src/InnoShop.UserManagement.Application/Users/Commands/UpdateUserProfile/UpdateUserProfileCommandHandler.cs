@@ -1,5 +1,6 @@
 using ErrorOr;
 using InnoShop.UserManagement.Application.Common.Interfaces;
+using InnoShop.UserManagement.Contracts.Users;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using MediatR;
 
@@ -8,21 +9,14 @@ namespace InnoShop.UserManagement.Application.Users.Commands.UpdateUserProfile;
 public class UpdateUserProfileCommandHandler(
     IUsersRepository usersRepository,
     IUnitOfWork unitOfWork)
-    : IRequestHandler<UpdateUserProfileCommand, ErrorOr<Success>>
+    : IRequestHandler<UpdateUserProfileCommand, ErrorOr<UserProfileResponse>>
 {
-    public async Task<ErrorOr<Success>> Handle(UpdateUserProfileCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserProfileResponse>> Handle(UpdateUserProfileCommand command, CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetByIdAsync(command.UserId, cancellationToken);
 
-        if (user is null)
-        {
-            return UserErrors.UserNotFound;
-        }
-
-        if (user.UserProfile is null)
-        {
-            return UserErrors.UserMustCreateAUserProfile;
-        }
+        if (user is null) return UserErrors.UserNotFound;
+        if (user.UserProfile is null) return UserErrors.UserMustCreateAUserProfile;
 
         var countryInput = command.Country ?? user.UserProfile.Location.Country;
 
@@ -61,7 +55,15 @@ public class UpdateUserProfileCommandHandler(
         await usersRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);
 
-        return Result.Success;
+        var profile = user.UserProfile!;
+        return new UserProfileResponse(
+            UserId: user.Id,
+            FirstName: profile.FirstName.Value,
+            LastName: profile.LastName.Value,
+            AvatarUrl: profile.AvatarUrl.Value,
+            PhoneNumber: profile.PhoneNumber.Value,
+            Country: profile.Location.Country.Name,
+            City: profile.Location.City);
     }
 }
 

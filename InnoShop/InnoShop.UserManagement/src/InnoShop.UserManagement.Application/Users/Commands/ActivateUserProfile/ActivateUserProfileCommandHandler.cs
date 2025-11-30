@@ -14,17 +14,10 @@ public class ActivateUserProfileCommandHandler(
     {
         var user = await usersRepository.GetByIdAsync(request.UserId, cancellationToken);
 
-        if (user is null)
-        {
-            return UserErrors.UserNotFound;
-        }
+        if (user is null) return UserErrors.UserNotFound;
 
         var activateUserResult = user.ActivateUser();
-
-        if (activateUserResult.IsError)
-        {
-            return activateUserResult.Errors;
-        }
+        if (activateUserResult.IsError) return activateUserResult.Errors;
 
         await usersRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);

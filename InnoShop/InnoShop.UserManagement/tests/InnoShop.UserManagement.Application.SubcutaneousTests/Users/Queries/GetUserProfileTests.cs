@@ -36,7 +36,7 @@ public class GetUserProfileTests(MediatorFactory mediatorFactory)
         var result = await mediator.Send(query);
 
         result.IsError.Should().BeFalse();
-        result.Value.Email.Value.Should().Be("get@test.com");
-        result.Value.UserProfile.Should().NotBeNull();
+        result.Value.Should().NotBeNull();
+        result.Value.UserId.Should().Be(mediatorFactory.DefaultUserId);
     }
 }

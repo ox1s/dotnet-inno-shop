@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using ErrorOr;
 using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Domain.Common;
@@ -28,7 +29,7 @@ public sealed class User : AggregateRoot
     public double AverageRating => RatingSummary.Average;
     public int ReviewCount => RatingSummary.NumberOfReviews;
 
-    private readonly string _passwordHash = null!;
+    private string _passwordHash = null!;
 
 
     private User(
@@ -63,27 +64,37 @@ public sealed class User : AggregateRoot
         return Result.Success;
     }
 
-    // public void RequestPasswordReset()
-    // {
-    //     PasswordResetToken = Guid.NewGuid().ToString();
-    //     PasswordResetTokenExpiration = DateTime.UtcNow.AddHours(1);
+    public void RequestPasswordReset()
+    {
+        byte[] tokenBytes = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(tokenBytes);
+        PasswordResetToken = Convert.ToBase64String(tokenBytes)
+            .Replace('+', '-')
+            .Replace('/', '_')
+            .TrimEnd('=');
+        PasswordResetTokenExpiration = DateTime.UtcNow.AddHours(1);
 
-    //     // _domainEvents.Add(new PasswordResetRequestedEvent(this));
-    // }
+        DomainEvents.Add(new PasswordResetRequestedEvent(Id, Email.Value, PasswordResetToken));
+    }
 
-    // public ErrorOr<Success> ResetPassword(string token, string newPasswordHash)
-    // {
-    //     if (PasswordResetToken != token) return Error.Validation(description: "Invalid token");
-
-    //     if (DateTime.UtcNow > PasswordResetTokenExpiration)
-    //         return Error.Validation(description: "Token expired");
-
-    //     _passwordHash = newPasswordHash;
-    //     PasswordResetToken = null;
-    //     PasswordResetTokenExpiration = null;
-
-    //     return Result.Success;
-    // }
+    public ErrorOr<Success> ResetPassword(string token, string newPassword, IPasswordHasher passwordHasher)
+    {
+        if (PasswordResetToken != token)
+        {
+            return Error.Validation("User.InvalidResetToken", "Invalid or expired password reset token.");
+        }
+        if (DateTime.UtcNow > PasswordResetTokenExpiration)
+        {
+            return Error.Validation("User.ExpiredResetToken", "The password reset token has expired.");
+        }
+        var hashResult = passwordHasher.HashPassword(newPassword);
+        if (hashResult.IsError) return hashResult.Errors;
+        _passwordHash = hashResult.Value;
+        PasswordResetToken = null;
+        PasswordResetTokenExpiration = null;
+        return Result.Success;
+    }
 
     public bool IsCorrectPasswordHash(string password, IPasswordHasher passwordHasher)
     {
@@ -121,7 +132,7 @@ public sealed class User : AggregateRoot
 
         UserProfile = userProfile;
 
-        DomainEvents.Add(new UserProfileUpdatedEvent(Id));
+        DomainEvents.Add(new UserProfileUpdatedEvent(this));
 
         _roles.Add(Role.Seller);
 
@@ -137,7 +148,7 @@ public sealed class User : AggregateRoot
 
         UserProfile = updatedUserProfile;
 
-        DomainEvents.Add(new UserProfileUpdatedEvent(Id));
+        DomainEvents.Add(new UserProfileUpdatedEvent(this));
 
         return Result.Success;
     }

@@ -1,3 +1,8 @@
-﻿namespace InnoShop.SharedKernel.IntegrationEvents.UserManagement;
+namespace InnoShop.SharedKernel.IntegrationEvents.UserManagement;
 
-public record UserProfileUpdatedIntegrationEvent(Guid UserId) : IIntegrationEvent;
+public record UserProfileUpdatedIntegrationEvent(
+    Guid UserId,
+    string FirstName,
+    string LastName,
+    string? AvatarUrl,
+    double Rating) : IIntegrationEvent;

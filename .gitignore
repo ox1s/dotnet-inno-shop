@@ -59,3 +59,4 @@ nunit-*.xml
 .vscode/
 .kiro/
 .cursor/
+.fake

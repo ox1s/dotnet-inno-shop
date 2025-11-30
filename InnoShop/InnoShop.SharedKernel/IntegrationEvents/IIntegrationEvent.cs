@@ -9,4 +9,5 @@ namespace InnoShop.SharedKernel.IntegrationEvents;
 [JsonDerivedType(typeof(UserProfileDeactivatedIntegrationEvent), typeDiscriminator: nameof(UserProfileDeactivatedIntegrationEvent))]
 [JsonDerivedType(typeof(UserRegisteredIntegrationEvent), typeDiscriminator: nameof(UserRegisteredIntegrationEvent))]
 [JsonDerivedType(typeof(UserProfileUpdatedIntegrationEvent), typeDiscriminator: nameof(UserProfileUpdatedIntegrationEvent))]
+[JsonDerivedType(typeof(PasswordResetRequestedIntegrationEvent), typeDiscriminator: nameof(PasswordResetRequestedIntegrationEvent))]
 public interface IIntegrationEvent : INotification { }

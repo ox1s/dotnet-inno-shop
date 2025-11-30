@@ -1,5 +1,6 @@
 using ErrorOr;
 using InnoShop.UserManagement.Application.Common.Interfaces;
+using InnoShop.UserManagement.Contracts.Users;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using MediatR;
 
@@ -8,16 +9,13 @@ namespace InnoShop.UserManagement.Application.Users.Commands.CreateUserProfile;
 public class CreateUserProfileCommandHandler(
     IUsersRepository usersRepository,
     IUnitOfWork unitOfWork)
-    : IRequestHandler<CreateUserProfileCommand, ErrorOr<User>>
+    : IRequestHandler<CreateUserProfileCommand, ErrorOr<UserProfileResponse>>
 {
-    public async Task<ErrorOr<User>> Handle(CreateUserProfileCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserProfileResponse>> Handle(CreateUserProfileCommand command, CancellationToken cancellationToken)
     {
         var user = await usersRepository.GetByIdAsync(command.UserId, cancellationToken);
 
-        if (user is null)
-        {
-            return UserErrors.UserNotFound;
-        }
+        if (user is null) return UserErrors.UserNotFound;
 
         var firstNameResult = FirstName.Create(command.FirstName);
         if (firstNameResult.IsError) return firstNameResult.Errors;
@@ -49,7 +47,15 @@ public class CreateUserProfileCommandHandler(
         await usersRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);
 
-        return user;
+        var profile = user.UserProfile!;
+        return new UserProfileResponse(
+            user.Id,
+            profile.FirstName.Value,
+            profile.LastName.Value,
+            profile.AvatarUrl.Value,
+            profile.PhoneNumber.Value,
+            profile.Location.Country.Name,
+            profile.Location.City);
     }
 
 }

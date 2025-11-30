@@ -1,4 +1,4 @@
-﻿using InnoShop.UserManagement.Infrastructure.IntegrationEvents;
+using InnoShop.UserManagement.Infrastructure.IntegrationEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

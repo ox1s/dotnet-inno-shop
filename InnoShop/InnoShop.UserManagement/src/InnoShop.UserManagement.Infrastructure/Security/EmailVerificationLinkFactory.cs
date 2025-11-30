@@ -46,4 +46,11 @@ public class EmailVerificationLinkFactory(
 
         return uri ?? throw new Exception("Could not generate email verification link");
     }
+
+    public string CreateResetPasswordLink(string email, string token)
+    {
+        // TODO: Сделать не через контентинацию
+        var frontendUrl = configuration["WebAppUrl"] ?? "http://localhost:5173";
+        return $"{frontendUrl}/reset-password?email={Uri.EscapeDataString(email)}&token={Uri.EscapeDataString(token)}";
+    }
 }

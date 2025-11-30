@@ -1,9 +1,10 @@
-﻿using InnoShop.SharedKernel.IntegrationEvents;
+using InnoShop.SharedKernel.IntegrationEvents;
 using InnoShop.SharedKernel.IntegrationEvents.UserManagement;
 using InnoShop.UserManagement.Domain.UserAggregate.Events;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using MediatR;
 using System.Text.Json;
+using Throw;
 
 namespace InnoShop.UserManagement.Infrastructure.IntegrationEvents.OutboxWriter;
 
@@ -11,11 +12,13 @@ public class OutboxWriterEventHandler
     : INotificationHandler<UserProfileDeactivatedEvent>,
       INotificationHandler<UserProfileActivatedEvent>,
       INotificationHandler<UserRegisteredEvent>,
-      INotificationHandler<UserProfileUpdatedEvent>
+      INotificationHandler<UserProfileUpdatedEvent>,
+      INotificationHandler<PasswordResetRequestedEvent>
 {
     private readonly UserManagementDbContext _dbContext;
 
-    public OutboxWriterEventHandler(UserManagementDbContext dbContext)
+    public OutboxWriterEventHandler(
+        UserManagementDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -46,8 +49,27 @@ public class OutboxWriterEventHandler
 
     public async Task Handle(UserProfileUpdatedEvent notification, CancellationToken cancellationToken)
     {
+        if (notification.User?.UserProfile == null)
+        {
+            throw new ArgumentNullException(nameof(notification.User.UserProfile));
+        }
+
         var integrationEvent = new UserProfileUpdatedIntegrationEvent(
-            UserId: notification.UserId);
+            UserId: notification.User.Id,
+            FirstName: notification.User.UserProfile.FirstName.Value,
+            LastName: notification.User.UserProfile.LastName.Value,
+            AvatarUrl: notification.User.UserProfile.AvatarUrl?.Value,
+            Rating: notification.User.AverageRating);
+
+        await AddOutboxIntegrationEventAsync(integrationEvent, cancellationToken);
+    }
+
+    public async Task Handle(PasswordResetRequestedEvent notification, CancellationToken cancellationToken)
+    {
+        var integrationEvent = new PasswordResetRequestedIntegrationEvent(
+            UserId: notification.UserId,
+            Email: notification.Email,
+            Token: notification.Token);
 
         await AddOutboxIntegrationEventAsync(integrationEvent, cancellationToken);
     }
@@ -58,6 +80,4 @@ public class OutboxWriterEventHandler
             EventName: integrationEvent.GetType().Name,
             EventContent: JsonSerializer.Serialize(integrationEvent)));
     }
-
-
 }

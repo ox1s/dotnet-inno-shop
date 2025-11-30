@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using ErrorOr;
+using FluentAssertions;
+using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.TestCommon.TestConstants;
 using InnoShop.UserManagement.TestCommon.UserAggregate;
@@ -182,5 +184,106 @@ public class UserTests
         activatedUserResult.IsError.Should().BeTrue();
         activatedUserResult.FirstError.Should().Be(UserErrors.UserAlreadyActivated);
         user.IsActive.Should().BeTrue();
+    }
+
+    [Fact]
+    public void RequestPasswordReset_ShouldGenerateTokenAndSetExpiration()
+    {
+        // Arrange
+        var user = UserFactory.CreateUser();
+
+        // Act
+        user.RequestPasswordReset();
+
+        // Assert
+        user.PasswordResetToken.Should().NotBeNull();
+        user.PasswordResetToken.Should().NotBeEmpty();
+        user.PasswordResetTokenExpiration.Should().NotBeNull();
+        user.PasswordResetTokenExpiration.Should().BeCloseTo(DateTime.UtcNow.AddHours(1), TimeSpan.FromMinutes(1));
+    }
+
+    [Fact]
+    public void RequestPasswordReset_ShouldGenerateUrlSafeToken()
+    {
+        // Arrange
+        var user = UserFactory.CreateUser();
+
+        // Act
+        user.RequestPasswordReset();
+
+        // Assert
+        user.PasswordResetToken.Should().NotContain("+");
+        user.PasswordResetToken.Should().NotContain("/");
+        user.PasswordResetToken.Should().NotContain("=");
+    }
+
+    [Fact]
+    public void ResetPassword_WhenValidToken_ShouldResetPassword()
+    {
+        // Arrange
+        var user = UserFactory.CreateUser();
+        user.RequestPasswordReset();
+        var token = user.PasswordResetToken!;
+        var newPassword = "NewPassword123!";
+        var passwordHasher = new TestPasswordHasher();
+
+        // Act
+        var result = user.ResetPassword(token, newPassword, passwordHasher);
+
+        // Assert
+        result.IsError.Should().BeFalse();
+        user.PasswordResetToken.Should().BeNull();
+        user.PasswordResetTokenExpiration.Should().BeNull();
+        user.IsCorrectPasswordHash(newPassword, passwordHasher).Should().BeTrue();
+    }
+
+    [Fact]
+    public void ResetPassword_WhenInvalidToken_ShouldReturnError()
+    {
+        // Arrange
+        var user = UserFactory.CreateUser();
+        user.RequestPasswordReset();
+        var invalidToken = "invalid-token";
+        var newPassword = "NewPassword123!";
+        var passwordHasher = new TestPasswordHasher();
+
+        // Act
+        var result = user.ResetPassword(invalidToken, newPassword, passwordHasher);
+
+        // Assert
+        result.IsError.Should().BeTrue();
+        result.FirstError.Code.Should().Be("User.InvalidResetToken");
+        user.PasswordResetToken.Should().NotBeNull(); // Token should still exist
+    }
+
+
+    [Fact]
+    public void ResetPassword_WhenTokenIsNull_ShouldReturnError()
+    {
+        // Arrange
+        var user = UserFactory.CreateUser();
+        // Don't request password reset, so token is null
+        var newPassword = "NewPassword123!";
+        var passwordHasher = new TestPasswordHasher();
+
+        // Act
+        var result = user.ResetPassword("some-token", newPassword, passwordHasher);
+
+        // Assert
+        result.IsError.Should().BeTrue();
+        result.FirstError.Code.Should().Be("User.InvalidResetToken");
+    }
+
+    private class TestPasswordHasher : IPasswordHasher
+    {
+        public ErrorOr<string> HashPassword(string password)
+        {
+            return $"hashed_{password}";
+        }
+
+        public bool IsCorrectPassword(string password, string hash)
+        {
+            return hash == $"hashed_{password}";
+        }
     }
 }

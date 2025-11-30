@@ -8,6 +8,6 @@ public static class ReviewErrors
         "Review.ReviewNotFound",
         "Review not found");
     public static readonly Error ReviewAlreadyDeleted = Error.Conflict(
-    "Review.ReviewAlreadyDeleted",
-    "The review is alredy deleted");
+        "Review.ReviewAlreadyDeleted",
+        "The review is alredy deleted");
 }

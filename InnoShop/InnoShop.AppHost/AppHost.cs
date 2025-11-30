@@ -39,9 +39,10 @@ builder.AddProject<Projects.InnoShop_UserManagement_Api>("users-api")
     .WaitFor(usersDatabase)
 
     .WithReference(productsApi)
-    .WaitFor(productsDatabase)
+     .WaitFor(productsDatabase)
 
-    .WithEnvironment("AppUrl", "https://localhost:7152");
+    .WithEnvironment("AppUrl", "https://localhost:7152")
+    .WithEnvironment("WebAppUrl", "http://localhost:5173");
 
 
 builder.Build().Run();

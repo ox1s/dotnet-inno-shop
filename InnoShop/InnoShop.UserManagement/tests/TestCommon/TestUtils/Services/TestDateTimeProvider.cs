@@ -1,4 +1,4 @@
-using InnoShop.UserManagement.Domain.Common.Interfaces;
+using InnoShop.SharedKernel.Common.Interfaces;
 
 namespace InnoShop.UserManagement.TestCommon.TestUtils.Services;
 

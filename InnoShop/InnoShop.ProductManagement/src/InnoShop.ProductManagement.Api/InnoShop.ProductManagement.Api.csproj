@@ -5,9 +5,21 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Aspire.Microsoft.Data.SqlClient" />
+    <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
+    <PackageReference Include="Throw" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InnoShop.ProductManagement.Application\InnoShop.ProductManagement.Application.csproj" />
+    <ProjectReference Include="..\InnoShop.ProductManagement.Contracts\InnoShop.ProductManagement.Contracts.csproj" />
+    <ProjectReference Include="..\InnoShop.ProductManagement.Infrastructure\InnoShop.ProductManagement.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

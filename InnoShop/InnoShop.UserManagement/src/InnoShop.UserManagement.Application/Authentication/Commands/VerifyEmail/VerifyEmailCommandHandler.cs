@@ -14,17 +14,10 @@ public class VerifyEmailCommandHandler(
     {
         var user = await usersRepository.GetByIdAsync(request.UserId, cancellationToken);
 
-        if (user is null)
-        {
-            return UserErrors.UserNotFound;
-        }
+        if (user is null) return UserErrors.UserNotFound;
 
         var result = user.VerifyEmail(request.Token);
-
-        if (result.IsError)
-        {
-            return result.Errors;
-        }
+        if (result.IsError) return result.Errors;
 
         await usersRepository.UpdateAsync(user, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);

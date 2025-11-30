@@ -1,93 +1,34 @@
-﻿using System.Net.Http.Json;
-using Aspire.Hosting;
-using Aspire.Hosting.Testing;
+using System.Net;
+using System.Net.Http.Json;
 using FluentAssertions;
 using InnoShop.UserManagement.Contracts.Authentication;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace InnoShop.UserManagement.Api.IntegrationTests.Tests;
+namespace InnoShop.UserManagement.Api.IntegrationTests;
 
-public class AuthenticationTests : IAsyncLifetime
+[Collection(nameof(AspireAppCollection))]
+public class AuthenticationTests
 {
-    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(300);
-    private DistributedApplication? _app;
-    private HttpClient? _httpClient;
+    private readonly AspireAppFixture _fixture;
 
-    public async Task InitializeAsync()
+    public AuthenticationTests(AspireAppFixture fixture)
     {
-        var cancellationToken = CancellationToken.None;
-
-        // Create testing builder based on AppHost
-        var appHost = await DistributedApplicationTestingBuilder
-            .CreateAsync<Projects.InnoShop_AppHost>(cancellationToken);
-        appHost.AddRedis("cache");
-        
-        appHost.Services.AddLogging(logging =>
-        {
-            logging.SetMinimumLevel(LogLevel.Debug);
-            logging.AddFilter(appHost.Environment.ApplicationName, LogLevel.Debug);
-            logging.AddFilter("Aspire.", LogLevel.Debug);
-        });
-
-        appHost.Services.ConfigureHttpClientDefaults(clientBuilder =>
-        {
-            clientBuilder.AddStandardResilienceHandler();
-        });
-
-        _app = await appHost.BuildAsync(cancellationToken)
-            .WaitAsync(DefaultTimeout, cancellationToken);
-
-        await _app.StartAsync(cancellationToken)
-            .WaitAsync(DefaultTimeout, cancellationToken);
-
-        // Wait for resources to be healthy
-        await _app.ResourceNotifications
-            .WaitForResourceHealthyAsync("innoshop-users", cancellationToken)
-            .WaitAsync(DefaultTimeout, cancellationToken);
-
-        await _app.ResourceNotifications
-            .WaitForResourceHealthyAsync("users-api", cancellationToken)
-            .WaitAsync(DefaultTimeout, cancellationToken);
-
-        // Initialize database (migrations + seed roles)
-        await InitializeDatabaseAsync(cancellationToken);
-
-        // Create HttpClient for API
-        _httpClient = _app.CreateHttpClient("users-api");
+        _fixture = fixture;
     }
 
-    private async Task InitializeDatabaseAsync(CancellationToken cancellationToken)
-    {
-        var connectionString = await _app!.GetConnectionStringAsync("innoshop-users", cancellationToken);
+    private HttpClient ApiClient => _fixture.UsersApiClient;
 
+    private async Task<UserManagementDbContext> CreateDbContextAsync()
+    {
+        var connectionString = await _fixture.App.GetConnectionStringAsync("innoshop-users");
         var options = new DbContextOptionsBuilder<UserManagementDbContext>()
             .UseSqlServer(connectionString)
             .Options;
 
-        await using var dbContext = new UserManagementDbContext(options, null!, null!, null!);
-        await dbContext.Database.MigrateAsync(cancellationToken);
-
-        // Seed roles
-        if (!await dbContext.Set<Role>().AnyAsync(cancellationToken))
-        {
-            dbContext.AttachRange(Role.List);
-            await dbContext.SaveChangesAsync(cancellationToken);
-        }
-    }
-
-    public async Task DisposeAsync()
-    {
-        if (_app != null)
-        {
-            await _app.StopAsync();
-            await _app.DisposeAsync();
-        }
-
-        _httpClient?.Dispose();
+        return new UserManagementDbContext(options, null!, null!, null!);
     }
 
     [Fact]
@@ -95,32 +36,136 @@ public class AuthenticationTests : IAsyncLifetime
     {
         // Arrange
         var registerData = new { Email = "testuser@example.com", Password = "P@ssw0rd123" };
-        var cancellationToken = CancellationToken.None;
 
         // Act: POST /authentication/register
-        using var response = await _httpClient!.PostAsJsonAsync(
+        using var response = await ApiClient.PostAsJsonAsync(
             "/authentication/register",
-            registerData,
-            cancellationToken);
+            registerData);
 
+        // Assert
         response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadFromJsonAsync<AuthenticationResponse>(cancellationToken: cancellationToken);
+        var content = await response.Content.ReadFromJsonAsync<AuthenticationResponse>();
         content.Should().NotBeNull();
         content!.Email.Should().Be("testuser@example.com");
 
-        // Assert: Verify in database
-        var connectionString = await _app!.GetConnectionStringAsync("innoshop-users", cancellationToken);
-        var options = new DbContextOptionsBuilder<UserManagementDbContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-
-        await using var dbContext = new UserManagementDbContext(options, null!, null!, null!);
+        // Verify in database
+        await using var dbContext = await CreateDbContextAsync();
         var user = await dbContext.Users.FirstOrDefaultAsync(
-            u => u.Email.Value == "testuser@example.com",
-            cancellationToken);
+            u => u.Email.Value == "testuser@example.com");
 
         user.Should().NotBeNull();
         user!.IsEmailVerified.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task PostForgotPassword_WhenValidEmail_ShouldReturnSuccess()
+    {
+        // Arrange
+        var email = "forgotpassword@example.com";
+        var password = "P@ssw0rd123";
+
+        // First register a user
+        var registerData = new { Email = email, Password = password };
+        await ApiClient.PostAsJsonAsync("/authentication/register", registerData);
+
+        // Act: POST /authentication/forgot-password
+        var forgotPasswordData = new { Email = email };
+        using var response = await ApiClient.PostAsJsonAsync(
+            "/authentication/forgot-password",
+            forgotPasswordData);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var content = await response.Content.ReadAsStringAsync();
+        content.Should().Contain("reset link");
+
+        // Verify token was generated in database
+        await using var dbContext = await CreateDbContextAsync();
+        var user = await dbContext.Users.FirstOrDefaultAsync(
+            u => u.Email.Value == email);
+
+        user.Should().NotBeNull();
+        user!.PasswordResetToken.Should().NotBeNull();
+        user.PasswordResetTokenExpiration.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task PostForgotPassword_WhenEmailNotFound_ShouldStillReturnSuccess()
+    {
+        // Arrange - Security best practice: don't reveal if email exists
+        var forgotPasswordData = new { Email = "nonexistent@example.com" };
+
+        // Act: POST /authentication/forgot-password
+        using var response = await ApiClient.PostAsJsonAsync(
+            "/authentication/forgot-password",
+            forgotPasswordData);
+
+        // Assert - Should return 200 OK even if email doesn't exist
+        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task PostResetPassword_WhenValidToken_ShouldResetPassword()
+    {
+        // Arrange
+        var email = "resetpassword@example.com";
+        var password = "P@ssw0rd123";
+        var newPassword = "NewP@ssw0rd456";
+
+        // Register a user
+        var registerData = new { Email = email, Password = password };
+        await ApiClient.PostAsJsonAsync("/authentication/register", registerData);
+
+        // Request password reset
+        var forgotPasswordData = new { Email = email };
+        await ApiClient.PostAsJsonAsync("/authentication/forgot-password", forgotPasswordData);
+
+        // Get token from database
+        await using var dbContext = await CreateDbContextAsync();
+        var user = await dbContext.Users.FirstOrDefaultAsync(
+            u => u.Email.Value == email);
+        var token = user!.PasswordResetToken!;
+
+        // Act: POST /authentication/reset-password
+        var resetPasswordData = new { Email = email, Token = token, NewPassword = newPassword };
+        using var response = await ApiClient.PostAsJsonAsync(
+            "/authentication/reset-password",
+            resetPasswordData);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        // Verify token was cleared
+        await dbContext.Entry(user).ReloadAsync();
+        user.PasswordResetToken.Should().BeNull();
+        user.PasswordResetTokenExpiration.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task PostResetPassword_WhenInvalidToken_ShouldReturnError()
+    {
+        // Arrange
+        var email = "invalidtoken@example.com";
+        var password = "P@ssw0rd123";
+
+        // Register a user
+        var registerData = new { Email = email, Password = password };
+        await ApiClient.PostAsJsonAsync("/authentication/register", registerData);
+
+        // Act: POST /authentication/reset-password with invalid token
+        var resetPasswordData = new { Email = email, Token = "invalid-token", NewPassword = "NewPassword123!" };
+        using var response = await ApiClient.PostAsJsonAsync(
+            "/authentication/reset-password",
+            resetPasswordData);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }

@@ -1,3 +1,4 @@
+using InnoShop.SharedKernel.Common.Interfaces;
 using InnoShop.UserManagement.Application.Common.Interfaces;
 using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Infrastructure.EmailService;
@@ -14,14 +15,11 @@ using InnoShop.UserManagement.Infrastructure.Security.TokenValidation;
 using InnoShop.UserManagement.Infrastructure.Services;
 using InnoShop.UserManagement.Infrastructure.Storage;
 
-
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Mail;
-using Microsoft.Extensions.Hosting;
 using Throw;
 using ICustomAuthorizationService = InnoShop.UserManagement.Application.Common.Interfaces.IAuthorizationService;
 using MediatR;

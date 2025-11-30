@@ -1,7 +1,7 @@
 using ErrorOr;
 using InnoShop.SharedKernel.Common;
+using InnoShop.SharedKernel.Common.Interfaces;
 using InnoShop.UserManagement.Domain.Common;
-using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Domain.ReviewAggregate.Events;
 using InnoShop.UserManagement.Domain.UserAggregate;
 

@@ -1,19 +1,20 @@
 using ErrorOr;
 using MediatR;
 
+using InnoShop.SharedKernel.Common.Interfaces;
 using InnoShop.UserManagement.Application.Common.Interfaces;
-using InnoShop.UserManagement.Domain.Common.Interfaces;
 using InnoShop.UserManagement.Domain.ReviewAggregate;
 using InnoShop.UserManagement.Domain.UserAggregate;
+using InnoShop.UserManagement.Contracts.Reviews;
 
 namespace InnoShop.UserManagement.Application.Reviews.Commands.UpdateReview;
 
 public class UpdateReviewCommandHandler(
     IReviewsRepository reviewsRepository,
     IUnitOfWork unitOfWork,
-    IDateTimeProvider dateTimeProvider) : IRequestHandler<UpdateReviewCommand, ErrorOr<Success>>
+    IDateTimeProvider dateTimeProvider) : IRequestHandler<UpdateReviewCommand, ErrorOr<ReviewResponse>>
 {
-    public async Task<ErrorOr<Success>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<ReviewResponse>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
     {
         var review = await reviewsRepository.GetByIdAsync(request.Id, cancellationToken);
         if (review is null) return ReviewErrors.NotFound;
@@ -44,7 +45,14 @@ public class UpdateReviewCommandHandler(
         await reviewsRepository.UpdateAsync(review, cancellationToken);
         await unitOfWork.CommitChangesAsync(cancellationToken);
 
-        return Result.Success;
+        return new ReviewResponse(
+            review.Id,
+            review.AuthorId,
+            review.TargetUserId,
+            review.Rating.Value,
+            review.Comment?.Value,
+            review.CreatedAt,
+            review.UpdatedAt);
     }
 
 }

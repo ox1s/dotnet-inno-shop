@@ -21,6 +21,7 @@
 	</PackageReference>
 	<PackageReference Include="Microsoft.Extensions.Identity.Core" />
 	<PackageReference Include="Minio" />
+	<PackageReference Include="Throw" />
 	<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
 	<PackageReference Include="Aspire.Hosting.RabbitMQ" />
   </ItemGroup>

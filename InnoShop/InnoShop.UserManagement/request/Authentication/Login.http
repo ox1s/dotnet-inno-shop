@@ -5,6 +5,6 @@ Content-Type: application/json
 
 {
   "email": "test1@test.com",
-  "password": "NewStrongPassword123!",
+  "password": "123Q!231ew123",
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJpZCI6IjdjZWNlMzZiLWQyY2UtNDAzOS05MDg3LTdjOGU2MDIyODcwYyIsImV4cCI6MTc2NDQzNjAxNywiaXNzIjoiSW5ub1Nob3AiLCJhdWQiOiJJbm5vU2hvcCJ9.FqdZ3FCETtJXgfH7zlTy3vkUIbMNNg4U9gdJx5xv68w"
 }

@@ -1,8 +1,8 @@
 @HostAddress = https://localhost:7152
 # ID пользователя, с которым будем работать (должен существовать в базе)
-@UserId = 10191f52-e1da-4163-ab00-c4d3c017c159
+@UserId = d6ff4c69-488c-429e-ad87-41eb2616fc68
 # JWT Токен (получите его через /authentication/login или /authentication/register)
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWQiOiIxMDE5MWY1Mi1lMWRhLTQxNjMtYWIwMC1jNGQzYzAxN2MxNTkiLCJleHAiOjE3NjQ0NDY3NDksImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.3gFBBT7Nv6OpiS_SdsOs5mdmUuNiR5omy--7CarvPYQ
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWQiOiJkNmZmNGM2OS00ODhjLTQyOWUtYWQ4Ny00MWViMjYxNmZjNjgiLCJleHAiOjE3NjQ0NzI4NDgsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.LQXyIsWKvzyIb4L9VjVlKU3L9wLorbocYoMDIXoH-no
 
 ### 1. Получить информацию о пользователе (основная инфа + профиль, если есть)
 GET {{HostAddress}}/api/v1/users/{{UserId}}

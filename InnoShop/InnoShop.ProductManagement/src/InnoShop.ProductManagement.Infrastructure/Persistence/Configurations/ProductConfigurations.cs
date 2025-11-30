@@ -46,23 +46,21 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
         });
 
 
-        builder.OwnsMany<Image>("_images", image =>
+        builder.OwnsMany(p => p.Images, image =>
         {
             image.ToTable("product_images");
-            
-            image
-                .WithOwner()
-                .HasForeignKey("product_id");
 
-            image
-                .Property<string>("Url")
-                .HasColumnName("url")   
-                .HasMaxLength(2048)
-                .IsRequired();
+            image.WithOwner().HasForeignKey("product_id");
 
-            image
-                .HasKey("product_id", "url");
+            image.Property(i => i.Url)
+                 .HasColumnName("url")
+                 .HasMaxLength(2048)
+                 .IsRequired();
+
+            image.HasKey("product_id", "Url");
         });
+        builder.Navigation(p => p.Images)
+               .UsePropertyAccessMode(PropertyAccessMode.Field);
 
         builder.HasQueryFilter(p => p.IsActive);
     }

@@ -20,10 +20,7 @@ public class RegisterCommandHandler(
     public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
         var emailResult = Email.Create(command.Email);
-        if (emailResult.IsError)
-        {
-            return emailResult.Errors;
-        }
+        if (emailResult.IsError) return emailResult.Errors;
 
         var email = emailResult.Value;
         if (await usersRepository.ExistsByEmailAsync(email, cancellationToken))
@@ -32,10 +29,8 @@ public class RegisterCommandHandler(
         }
 
         var hashPasswordResult = passwordHasher.HashPassword(command.Password);
-        if (hashPasswordResult.IsError)
-        {
-            return hashPasswordResult.Errors;
-        }
+        if (hashPasswordResult.IsError) return hashPasswordResult.Errors;
+
 
         var user = User.CreateUser(
             email,
@@ -56,7 +51,7 @@ public class RegisterCommandHandler(
         );
 
         var token = jwtTokenGenerator.GenerateToken(user);
-        
+
         return new AuthenticationResult(user, token);
     }
 }

@@ -60,7 +60,7 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
         );
 
         var updateResult = await mediator.Send(updateCommand);
-        
+
         var getReviewQuery = ReviewQueryFactory.CreateGetReviewQuery(reviewId: reviewId);
         var getReviewResult = await mediator.Send(getReviewQuery);
 
@@ -119,6 +119,6 @@ public class UpdateReviewTests(MediatorFactory mediatorFactory)
 
         // Assert
         updateResult.IsError.Should().BeTrue();
-        updateResult.FirstError.Type.Should().Be(ErrorType.Forbidden); 
+        updateResult.FirstError.Type.Should().Be(ErrorType.Forbidden);
     }
 }

@@ -10,4 +10,4 @@ namespace InnoShop.UserManagement.Application.Users.Commands.DeactivateUserProfi
 [Authorize(Permissions = AppPermissions.UserProfile.Deactivate)]
 public record DeactivateUserProfileCommand(
     Guid UserId
-) : IRequest<ErrorOr<Success>>; 
+) : IAuthorizeableRequest<ErrorOr<Success>>;

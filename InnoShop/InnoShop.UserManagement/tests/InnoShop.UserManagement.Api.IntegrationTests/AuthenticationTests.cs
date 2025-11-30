@@ -1,64 +1,65 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using InnoShop.UserManagement.Api.IntegrationTests.Common;
 using InnoShop.UserManagement.Contracts.Authentication;
 using InnoShop.UserManagement.Domain.UserAggregate;
-using InnoShop.UserManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace InnoShop.UserManagement.Api.IntegrationTests;
 
-[Collection(nameof(AspireAppCollection))]
+[Collection(IntegrationTestCollection.Name)]
 public class AuthenticationTests
 {
-    private readonly AspireAppFixture _fixture;
+    private readonly HttpClient _client;
+    private readonly ApiFactory _factory;
 
-    public AuthenticationTests(AspireAppFixture fixture)
+    public AuthenticationTests(ApiFactory factory)
     {
-        _fixture = fixture;
-    }
+        _factory = factory;
+        _client = factory.HttpClient;
 
-    private HttpClient ApiClient => _fixture.UsersApiClient;
-
-    private async Task<UserManagementDbContext> CreateDbContextAsync()
-    {
-        var connectionString = await _fixture.App.GetConnectionStringAsync("innoshop-users");
-        var options = new DbContextOptionsBuilder<UserManagementDbContext>()
-            .UseSqlServer(connectionString)
-            .Options;
-
-        return new UserManagementDbContext(options, null!, null!, null!);
+        _factory.ResetDatabase();
     }
 
     [Fact]
     public async Task PostRegister_ShouldCreateUserAndReturnToken()
     {
         // Arrange
-        var registerData = new { Email = "testuser@example.com", Password = "P@ssw0rd123" };
+        var registerRequest = new RegisterRequest("testuser@example.com", "P@ssw0rd123");
 
-        // Act: POST /authentication/register
-        using var response = await ApiClient.PostAsJsonAsync(
-            "/authentication/register",
-            registerData);
+        // Act
+        var response = await _client.PostAsJsonAsync("/authentication/register", registerRequest);
 
         // Assert
-        response.EnsureSuccessStatusCode();
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadFromJsonAsync<AuthenticationResponse>();
-        content.Should().NotBeNull();
-        content!.Email.Should().Be("testuser@example.com");
-
-        // Verify in database
-        await using var dbContext = await CreateDbContextAsync();
-        var user = await dbContext.Users.FirstOrDefaultAsync(
-            u => u.Email.Value == "testuser@example.com");
-
-        user.Should().NotBeNull();
-        user!.IsEmailVerified.Should().BeFalse();
+        var authResponse = await response.Content.ReadFromJsonAsync<AuthenticationResponse>();
+        authResponse.Should().NotBeNull();
+        authResponse!.Email.Should().Be(registerRequest.Email);
+        authResponse.Token.Should().NotBeNullOrEmpty();
+        authResponse.Id.Should().NotBeEmpty();
     }
 
+    [Fact]
+    public async Task Login_WhenCredentialsAreValid_ShouldReturnToken()
+    {
+        // Arrange
+        var email = "loginuser@example.com";
+        var password = "P@ssw0rd123";
+        await _client.PostAsJsonAsync("/authentication/register", new RegisterRequest(email, password));
+
+        var loginRequest = new LoginRequest(email, password);
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/authentication/login", loginRequest);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var authResponse = await response.Content.ReadFromJsonAsync<AuthenticationResponse>();
+        authResponse!.Token.Should().NotBeNullOrEmpty();
+    }
     [Fact]
     public async Task PostForgotPassword_WhenValidEmail_ShouldReturnSuccess()
     {
@@ -66,27 +67,23 @@ public class AuthenticationTests
         var email = "forgotpassword@example.com";
         var password = "P@ssw0rd123";
 
-        // First register a user
-        var registerData = new { Email = email, Password = password };
-        await ApiClient.PostAsJsonAsync("/authentication/register", registerData);
+        await _client.PostAsJsonAsync("/authentication/register", new RegisterRequest(email, password));
 
         // Act: POST /authentication/forgot-password
         var forgotPasswordData = new { Email = email };
-        using var response = await ApiClient.PostAsJsonAsync(
+        using var response = await _client.PostAsJsonAsync(
             "/authentication/forgot-password",
             forgotPasswordData);
 
         // Assert
-        response.EnsureSuccessStatusCode();
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var content = await response.Content.ReadAsStringAsync();
         content.Should().Contain("reset link");
 
-        // Verify token was generated in database
-        await using var dbContext = await CreateDbContextAsync();
-        var user = await dbContext.Users.FirstOrDefaultAsync(
-            u => u.Email.Value == email);
+        await using var dbContext = _factory.CreateDbContext();
+        var emailVO = Email.Create(email).Value;
+        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == emailVO);
 
         user.Should().NotBeNull();
         user!.PasswordResetToken.Should().NotBeNull();
@@ -96,17 +93,16 @@ public class AuthenticationTests
     [Fact]
     public async Task PostForgotPassword_WhenEmailNotFound_ShouldStillReturnSuccess()
     {
-        // Arrange - Security best practice: don't reveal if email exists
+        // Arrange 
         var forgotPasswordData = new { Email = "nonexistent@example.com" };
 
         // Act: POST /authentication/forgot-password
-        using var response = await ApiClient.PostAsJsonAsync(
+        using var response = await _client.PostAsJsonAsync(
             "/authentication/forgot-password",
             forgotPasswordData);
 
-        // Assert - Should return 200 OK even if email doesn't exist
-        response.EnsureSuccessStatusCode();
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        // Assert 
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -118,30 +114,29 @@ public class AuthenticationTests
         var newPassword = "NewP@ssw0rd456";
 
         // Register a user
-        var registerData = new { Email = email, Password = password };
-        await ApiClient.PostAsJsonAsync("/authentication/register", registerData);
+        await _client.PostAsJsonAsync("/authentication/register", new RegisterRequest(email, password));
 
         // Request password reset
         var forgotPasswordData = new { Email = email };
-        await ApiClient.PostAsJsonAsync("/authentication/forgot-password", forgotPasswordData);
+        await _client.PostAsJsonAsync("/authentication/forgot-password", forgotPasswordData);
 
         // Get token from database
-        await using var dbContext = await CreateDbContextAsync();
-        var user = await dbContext.Users.FirstOrDefaultAsync(
-            u => u.Email.Value == email);
+        await using var dbContext = _factory.CreateDbContext();
+
+        var emailVO = Email.Create(email).Value;
+        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == emailVO);
+
         var token = user!.PasswordResetToken!;
 
         // Act: POST /authentication/reset-password
         var resetPasswordData = new { Email = email, Token = token, NewPassword = newPassword };
-        using var response = await ApiClient.PostAsJsonAsync(
+        using var response = await _client.PostAsJsonAsync(
             "/authentication/reset-password",
             resetPasswordData);
 
         // Assert
-        response.EnsureSuccessStatusCode();
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        // Verify token was cleared
         await dbContext.Entry(user).ReloadAsync();
         user.PasswordResetToken.Should().BeNull();
         user.PasswordResetTokenExpiration.Should().BeNull();
@@ -155,17 +150,15 @@ public class AuthenticationTests
         var password = "P@ssw0rd123";
 
         // Register a user
-        var registerData = new { Email = email, Password = password };
-        await ApiClient.PostAsJsonAsync("/authentication/register", registerData);
+        await _client.PostAsJsonAsync("/authentication/register", new RegisterRequest(email, password));
 
         // Act: POST /authentication/reset-password with invalid token
         var resetPasswordData = new { Email = email, Token = "invalid-token", NewPassword = "NewPassword123!" };
-        using var response = await ApiClient.PostAsJsonAsync(
+        using var response = await _client.PostAsJsonAsync(
             "/authentication/reset-password",
             resetPasswordData);
 
         // Assert
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }

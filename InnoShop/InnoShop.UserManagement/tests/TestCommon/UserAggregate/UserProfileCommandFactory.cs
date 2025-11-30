@@ -1,4 +1,6 @@
 using InnoShop.UserManagement.Application.Authentication.Commands.Register;
+using InnoShop.UserManagement.Application.Users.Commands.ActivateUserProfile;
+using InnoShop.UserManagement.Application.Users.Commands.DeactivateUserProfile;
 using InnoShop.UserManagement.Application.Users.Commands.UpdateUserProfile;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.TestCommon.TestConstants;
@@ -36,5 +38,19 @@ public static class UserProfileCommandFactory
             Country: country ?? Constants.UserProfile.ValidLocationBelarus.Country,
             State: state ?? Constants.UserProfile.ValidLocationBelarus.State,
             City: city ?? Constants.UserProfile.ValidLocationBelarus.City);
+    }
+
+    public static DeactivateUserProfileCommand CreateDeactivateUserProfileCommand(
+        Guid? userId = null)
+    {
+        return new DeactivateUserProfileCommand(
+            UserId: userId ?? Guid.NewGuid());
+    }
+
+    public static ActivateUserProfileCommand CreateActivateUserProfileCommand(
+        Guid? userId = null)
+    {
+        return new ActivateUserProfileCommand(
+            UserId: userId ?? Guid.NewGuid());
     }
 }

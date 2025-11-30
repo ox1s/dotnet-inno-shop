@@ -11,4 +11,4 @@ namespace InnoShop.UserManagement.Application.Users.Commands.ActivateUserProfile
 [Authorize(Permissions = AppPermissions.UserProfile.Activate)]
 public record ActivateUserProfileCommand(
     Guid UserId
-) : IRequest<ErrorOr<Success>>;
+) : IAuthorizeableRequest<ErrorOr<Success>>;

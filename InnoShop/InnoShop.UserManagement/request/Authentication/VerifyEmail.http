@@ -1,6 +1,6 @@
 @host = localhost:7152
-@userId = 10191f52-e1da-4163-ab00-c4d3c017c159
-@token = 3d944fe0-0eab-4cb2-8594-d706b23314f1
+@userId = d6ff4c69-488c-429e-ad87-41eb2616fc68
+@token = 4609ecb9-438d-4624-9a2f-6b3e2edfee5c
 
 
 GET https://{{host}}/Authentication/verify-email?userId={{userId}}&token={{token}}

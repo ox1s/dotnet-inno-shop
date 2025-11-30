@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InnoShop.UserManagement.Api.Exceptions;
+namespace InnoShop.ProductManagement.Api.Exceptions;
 
 internal sealed class GlobalExceptionHandler(
     IProblemDetailsService problemDetailsService,

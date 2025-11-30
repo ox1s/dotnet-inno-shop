@@ -25,6 +25,7 @@ var mailpit = builder.AddMailPit("mailpit");
 
 var productsApi = builder.AddProject<InnoShop_ProductManagement_Api>("products-api")
     .WithReference(rabbit)
+    .WithReference(cache)
     .WithReference(productsDatabase)
     .WaitFor(productsDatabase);
 

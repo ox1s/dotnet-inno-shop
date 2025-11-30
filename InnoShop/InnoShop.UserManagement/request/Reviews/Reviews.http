@@ -1,13 +1,13 @@
 @HostAddress = https://localhost:7152
 # ID пользователя, КОТОРОМУ оставляем отзыв (Продавец)
-@TargetUserId = b731d706-3220-4ddd-acfe-39fd4bcc7695
+@TargetUserId = 8bdafabe-5628-478b-b99b-6ab8988c8dc9
 
 # ID отзыва (заполняется после создания)
-@ReviewId = caa8909a-ce0c-40ff-a6c4-ff503b2fe100
+@ReviewId = ea9805d1-5b21-4436-9377-243d8f19e16a
 
 # Токен АВТОРА отзыва (Покупателя).
 # Важно: Автор не может быть тем же человеком, что и TargetUserId (согласно логике домена)
-@Token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWQiOiI0MDI4YzBlYy00NDUxLTQyNzctOWU2ZC0xYzgxNzhmYjg0MmYiLCJleHAiOjE3NjQ1MjU2ODEsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.lSkew-jcn1pGVxax9q9L5WzrVq9UgZOU55wuGcQYcJY
+@Token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWQiOiJiZTJiMzA0Mi0xYzcxLTRjMzYtYTFiNi1mZWViMWExZmRiYTIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJSZWdpc3RlcmVkIiwicGVybWlzc2lvbnMiOlsidXNlcjpyZWFkIiwicHJvZmlsZTpyZWFkIiwicmV2aWV3OnJlYWQiLCJwcm9kdWN0OnJlYWQiXSwiZXhwIjoxNzY0NTQxMTQ5LCJpc3MiOiJJbm5vU2hvcCIsImF1ZCI6Iklubm9TaG9wIn0.8xeu2f6wqmpWIU-ZbbXWv3pCI6Gd8pyYAqHpZTxlSXM
 ### 1. Создать отзыв
 # Рейтинг от 1 до 5. Комментарий обязателен
 POST {{HostAddress}}/api/v1/users/{{TargetUserId}}/reviews

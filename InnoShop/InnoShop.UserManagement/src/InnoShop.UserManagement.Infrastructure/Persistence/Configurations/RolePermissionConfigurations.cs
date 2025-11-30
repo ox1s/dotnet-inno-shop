@@ -29,24 +29,74 @@ public class RolePermissionConfiguration : IEntityTypeConfiguration<RolePermissi
                 RoleId = Role.Registered.Id,
                 PermissionId = Permission.ReviewRead.Id
             },
+            new RolePermission
+            {
+                RoleId = Role.Registered.Id,
+                PermissionId = Permission.ProductRead.Id
+            },
 
-            // Verified - может создать профиль
+            // Verified - может создать профиль (все права Registered + UserProfileCreate)
+            new RolePermission
+            {
+                RoleId = Role.Verified.Id,
+                PermissionId = Permission.UserRead.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Verified.Id,
+                PermissionId = Permission.UserProfileRead.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Verified.Id,
+                PermissionId = Permission.ReviewRead.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Verified.Id,
+                PermissionId = Permission.ProductRead.Id
+            },
             new RolePermission
             {
                 RoleId = Role.Verified.Id,
                 PermissionId = Permission.UserProfileCreate.Id
             },
 
-            // Seller - полные права на отзывы и профиль
+            // Seller - полные права на отзывы, профиль и продукты (все права Verified + дополнительные)
             new RolePermission
             {
                 RoleId = Role.Seller.Id,
-                PermissionId = Permission.ReviewCreate.Id
+                PermissionId = Permission.UserRead.Id
             },
             new RolePermission
             {
                 RoleId = Role.Seller.Id,
-                PermissionId = Permission.ReviewDelete.Id
+                PermissionId = Permission.UserProfileRead.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Seller.Id,
+                PermissionId = Permission.ReviewRead.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Seller.Id,
+                PermissionId = Permission.ProductRead.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Seller.Id,
+                PermissionId = Permission.UserProfileCreate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Seller.Id,
+                PermissionId = Permission.UserProfileUpdate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Seller.Id,
+                PermissionId = Permission.ReviewCreate.Id
             },
             new RolePermission
             {
@@ -56,14 +106,49 @@ public class RolePermissionConfiguration : IEntityTypeConfiguration<RolePermissi
             new RolePermission
             {
                 RoleId = Role.Seller.Id,
-                PermissionId = Permission.UserProfileUpdate.Id
+                PermissionId = Permission.ReviewDelete.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Seller.Id,
+                PermissionId = Permission.ProductCreate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Seller.Id,
+                PermissionId = Permission.ProductUpdate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Seller.Id,
+                PermissionId = Permission.ProductDelete.Id
             },
 
-            // Admin - полные права
+            // Admin - полные права (все права Seller + административные)
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.UserRead.Id
+            },
             new RolePermission
             {
                 RoleId = Role.Admin.Id,
                 PermissionId = Permission.UserDelete.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.UserProfileCreate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.UserProfileUpdate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.UserProfileRead.Id
             },
             new RolePermission
             {
@@ -74,6 +159,46 @@ public class RolePermissionConfiguration : IEntityTypeConfiguration<RolePermissi
             {
                 RoleId = Role.Admin.Id,
                 PermissionId = Permission.UserProfileDeactivate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.ReviewCreate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.ReviewRead.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.ReviewUpdate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.ReviewDelete.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.ProductCreate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.ProductRead.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.ProductUpdate.Id
+            },
+            new RolePermission
+            {
+                RoleId = Role.Admin.Id,
+                PermissionId = Permission.ProductDelete.Id
             }
         );
     }

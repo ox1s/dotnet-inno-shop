@@ -28,6 +28,7 @@ public class UsersRepository(UserManagementDbContext dbContext) : IUsersReposito
     {
         return await dbContext.Users
             .Include(x => x.Roles)
+            .ThenInclude(r => r.Permissions)
             .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
     }
 
@@ -45,5 +46,11 @@ public class UsersRepository(UserManagementDbContext dbContext) : IUsersReposito
         dbContext.Users.Update(user);
 
         return Task.CompletedTask;
+    }
+
+    public async Task<bool> AnyAdminExistsAsync(CancellationToken cancellationToken = default)
+    {
+        return await dbContext.Users
+            .AnyAsync(u => u.Roles.Any(r => r.Id == Role.Admin.Id), cancellationToken);
     }
 }

@@ -1,6 +1,7 @@
-﻿using InnoShop.UserManagement.Application.Common.Interfaces;
+using InnoShop.UserManagement.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 
 namespace InnoShop.UserManagement.Infrastructure.Security;
@@ -45,8 +46,17 @@ public class EmailVerificationLinkFactory(
 
     public string CreateResetPasswordLink(string email, string token)
     {
-        // TODO: Сделать не через контентинацию
         var frontendUrl = configuration["WebAppUrl"] ?? "http://localhost:5173";
-        return $"{frontendUrl}/reset-password?email={Uri.EscapeDataString(email)}&token={Uri.EscapeDataString(token)}";
+        
+        if (!Uri.TryCreate(frontendUrl, UriKind.Absolute, out var baseUri))
+            throw new Exception($"Invalid WebAppUrl configuration: {frontendUrl}");
+
+        var queryParams = new Dictionary<string, string?>
+        {
+            { "email", email },
+            { "token", token }
+        };
+
+        return QueryHelpers.AddQueryString($"{baseUri.Scheme}://{baseUri.Authority}/reset-password", queryParams);
     }
 }

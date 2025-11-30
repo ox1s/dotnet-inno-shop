@@ -23,6 +23,10 @@ public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
             Permission.ReviewCreate,
             Permission.ReviewRead,
             Permission.ReviewDelete,
-            Permission.ReviewUpdate);
+            Permission.ReviewUpdate,
+            Permission.ProductCreate,     
+            Permission.ProductRead,       
+            Permission.ProductUpdate,      
+            Permission.ProductDelete);      
     }
 }

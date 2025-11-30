@@ -14,7 +14,6 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.AddRedisDistributedCache("cache");
     builder.AddRedisDistributedCache("cache", settings =>
     {
         settings.DisableTracing = false;
@@ -67,8 +66,8 @@ var app = builder.Build();
     }
 
     app.UseHttpsRedirection();
-    app.UseAuthorization();
     app.UseAuthentication();
+    app.UseAuthorization();
     app.MapControllers();
 
     app.Run();

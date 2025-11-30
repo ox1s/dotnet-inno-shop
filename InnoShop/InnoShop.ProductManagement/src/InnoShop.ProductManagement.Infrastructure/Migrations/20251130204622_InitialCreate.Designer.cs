@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InnoShop.ProductManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ProductManagementDbContext))]
-    [Migration("20251130155535_AddCategories")]
-    partial class AddCategories
+    [Migration("20251130204622_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,7 +164,8 @@ namespace InnoShop.ProductManagement.Infrastructure.Migrations
                                 .HasColumnName("seller_rating");
 
                             b1.Property<int>("ReviewCount")
-                                .HasColumnType("integer");
+                                .HasColumnType("integer")
+                                .HasColumnName("seller_review_count");
 
                             b1.HasKey("ProductId");
 

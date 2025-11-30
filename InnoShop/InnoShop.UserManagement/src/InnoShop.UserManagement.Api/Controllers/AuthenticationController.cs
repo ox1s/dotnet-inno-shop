@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using InnoShop.UserManagement.Application.Authentication.Commands.CreateAdmin;
 using InnoShop.UserManagement.Application.Authentication.Commands.ForgotPassword;
 using InnoShop.UserManagement.Application.Authentication.Commands.Register;
 using InnoShop.UserManagement.Application.Authentication.Commands.ResetPassword;
@@ -8,6 +9,7 @@ using InnoShop.UserManagement.Application.Authentication.Common;
 using InnoShop.UserManagement.Application.Authentication.Queries.Login;
 using InnoShop.UserManagement.Contracts.Authentication;
 using MediatR;
+using InnoShop.UserManagement.Contracts.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -75,6 +77,17 @@ public class AuthenticationController(ISender mediator) : ApiController
 
         return result.Match(
             _ => Ok("Password has been reset successfully."),
+            Problem);
+    }
+
+    [HttpPost("create-admin")]
+    public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminRequest request)
+    {
+        var command = new CreateAdminCommand(request.Email, request.Password);
+        var authResult = await mediator.Send(command);
+
+        return authResult.Match(
+            authResult => Ok(MapToAuthResponse(authResult)),
             Problem);
     }
 

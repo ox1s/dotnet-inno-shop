@@ -19,11 +19,13 @@ public class ProductConfigurations : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Title)
             .IsRequired()
             .HasMaxLength(500)
+            .HasColumnName("title")
             .HasConversion(v => v.Value, v => new Title(v));
 
         builder.Property(p => p.Description)
             .IsRequired()
             .HasMaxLength(5000)
+            .HasColumnName("description")
             .HasConversion(v => v.Value, v => new Description(v));
 
         builder.Property(p => p.SellerId).IsRequired();

@@ -5,24 +5,34 @@
 namespace InnoShop.ProductManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddReviewCount : Migration
+    public partial class AddExplicitConditions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "SellerInfo_ReviewCount",
+                name: "Title",
                 table: "products",
-                newName: "seller_review_count");
+                newName: "title");
+
+            migrationBuilder.RenameColumn(
+                name: "Description",
+                table: "products",
+                newName: "description");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "seller_review_count",
+                name: "title",
                 table: "products",
-                newName: "SellerInfo_ReviewCount");
+                newName: "Title");
+
+            migrationBuilder.RenameColumn(
+                name: "description",
+                table: "products",
+                newName: "Description");
         }
     }
 }

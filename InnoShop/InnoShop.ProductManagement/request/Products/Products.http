@@ -1,8 +1,8 @@
 @HostAddress = https://localhost:7148
 # ID продукта, с которым будем работать (должен существовать в базе)
-@ProductId = 00000000-0000-0000-0000-000000000000
+@ProductId = 90254ae5-6975-467c-a4b1-db26109ae885
 # JWT Токен (получите его через /authentication/login или /authentication/register из UserManagement API)
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWQiOiI0MDI4YzBlYy00NDUxLTQyNzctOWU2ZC0xYzgxNzhmYjg0MmYiLCJleHAiOjE3NjQ1MzQwNDEsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.CSAbLrWJuZ-KgP7Tv86tdz7cvjjS1lL5WnRMef_XEuU
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWQiOiJiZTJiMzA0Mi0xYzcxLTRjMzYtYTFiNi1mZWViMWExZmRiYTIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiUmVnaXN0ZXJlZCIsIlZlcmlmaWVkIiwiU2VsbGVyIl0sInBlcm1pc3Npb25zIjpbInVzZXI6cmVhZCIsInByb2ZpbGU6cmVhZCIsInJldmlldzpyZWFkIiwicHJvZHVjdDpyZWFkIiwicHJvZmlsZTpjcmVhdGUiLCJwcm9maWxlOnVwZGF0ZSIsInJldmlldzpjcmVhdGUiLCJyZXZpZXc6ZGVsZXRlIiwicmV2aWV3OnVwZGF0ZSIsInByb2R1Y3Q6Y3JlYXRlIiwicHJvZHVjdDp1cGRhdGUiLCJwcm9kdWN0OmRlbGV0ZSJdLCJleHAiOjE3NjQ1NDI0OTEsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.l25EefSrBebc98VEW6lqI5YEk80J-9SUQsPjEy5n8v4
 
 ### 1. Создать продукт (требуется авторизация)
 # Примечание: Пользователь может создавать продукты только от своего имени
@@ -11,9 +11,9 @@ Authorization: Bearer {{Token}}
 Content-Type: application/json
 
 {
-  "title": "Новый продукт",
+  "title": "Новый продукт 4",
   "description": "Описание нового продукта с подробной информацией",
-  "price": 99.99,
+  "price": 10000,
   "imageUrls": [
     "https://example.com/image1.jpg",
     "https://example.com/image2.jpg"
@@ -33,23 +33,13 @@ Accept: application/json
 GET {{HostAddress}}/api/v1/products?page=1&pageSize=10
 Accept: application/json
 
-###
 
-### 4. Получить список продуктов с поиском
-GET {{HostAddress}}/api/v1/products?page=1&pageSize=10&searchTerm=продукт
-Accept: application/json
-
-###
-
-### 5. Получить список продуктов с фильтрацией по цене
-GET {{HostAddress}}/api/v1/products?page=1&pageSize=10&minPrice=50&maxPrice=200
-Accept: application/json
 
 ###
 
 ### 6. Получить список продуктов по продавцу
 # Замените {{SellerId}} на реальный ID продавца
-GET {{HostAddress}}/api/v1/products?page=1&pageSize=10&sellerId=4028c0ec-4451-4277-9e6d-1c8178fb842f
+GET {{HostAddress}}/api/v1/products?page=1&pageSize=10&sellerId=be2b3042-1c71-4c36-a1b6-feeb1a1fdba2
 Accept: application/json
 
 ###
@@ -63,20 +53,6 @@ Accept: application/json
 
 ### 8. Получить список только доступных продуктов
 GET {{HostAddress}}/api/v1/products?page=1&pageSize=10&isAvailable=true
-Accept: application/json
-
-###
-
-### 9. Получить список продуктов с сортировкой
-# sortBy может быть: "price", "createdAt", "title" и т.д.
-# sortOrder может быть: "asc" или "desc"
-GET {{HostAddress}}/api/v1/products?page=1&pageSize=10&sortBy=price&sortOrder=asc
-Accept: application/json
-
-###
-
-### 10. Получить список продуктов с комбинированными фильтрами
-GET {{HostAddress}}/api/v1/products?page=1&pageSize=10&searchTerm=продукт&minPrice=50&maxPrice=200&isAvailable=true&sortBy=price&sortOrder=desc
 Accept: application/json
 
 ###

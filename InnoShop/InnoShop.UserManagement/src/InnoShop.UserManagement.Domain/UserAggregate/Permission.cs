@@ -15,6 +15,10 @@ public sealed class Permission
     public static readonly Permission ReviewRead = new(9, AppPermissions.Review.Read);
     public static readonly Permission ReviewDelete = new(10, AppPermissions.Review.Delete);
     public static readonly Permission ReviewUpdate = new(11, AppPermissions.Review.Update);
+    public static readonly Permission ProductCreate = new(12, AppPermissions.Product.Create);
+    public static readonly Permission ProductRead = new(13, AppPermissions.Product.Read);
+    public static readonly Permission ProductUpdate = new(14, AppPermissions.Product.Update);
+    public static readonly Permission ProductDelete = new(15, AppPermissions.Product.Delete);
 
 
     private Permission(int id, string name)
@@ -40,6 +44,10 @@ public sealed class Permission
         ReviewCreate,
         ReviewRead,
         ReviewDelete,
-        ReviewUpdate
+        ReviewUpdate,
+        ProductCreate,
+        ProductRead,
+        ProductUpdate,
+        ProductDelete
     ];
 }

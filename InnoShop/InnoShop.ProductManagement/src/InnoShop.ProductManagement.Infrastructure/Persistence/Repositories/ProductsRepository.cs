@@ -53,16 +53,25 @@ public class ProductsRepository(ProductManagementDbContext dbContext) : IProduct
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            var lowerSearchTerm = searchTerm.ToLower();
+            var escapedSearchTerm = searchTerm.Trim()
+                .Replace("\\", "\\\\")
+                .Replace("%", "\\%")
+                .Replace("_", "\\_");
+            var pattern = $"%{escapedSearchTerm}%";
+
 
             query = query.Where(p =>
-                p.Title.Value.Contains(lowerSearchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-                p.Description.Value.Contains(lowerSearchTerm, StringComparison.CurrentCultureIgnoreCase));
+                EF.Functions.Like(
+                    EF.Property<string>(p, "TitleValue"),
+                    pattern) ||
+                EF.Functions.Like(
+                    EF.Property<string>(p, "DescriptionValue"),
+                    pattern));
         }
 
-        if (minPrice.HasValue) query = query.Where(p => p.Price.Value >= minPrice.Value);
+        if (minPrice.HasValue) query = query.Where(p => EF.Property<decimal>(p, "Price") >= minPrice.Value);
 
-        if (maxPrice.HasValue) query = query.Where(p => p.Price.Value <= maxPrice.Value);
+        if (maxPrice.HasValue) query = query.Where(p => EF.Property<decimal>(p, "Price") <= maxPrice.Value);
 
         if (sellerId.HasValue) query = query.Where(p => p.SellerId == sellerId.Value);
 
@@ -78,11 +87,11 @@ public class ProductsRepository(ProductManagementDbContext dbContext) : IProduct
         query = sortBy?.ToLower() switch
         {
             "title" => isDescending
-                ? query.OrderByDescending(p => p.Title)
-                : query.OrderBy(p => p.Title),
+                ? query.OrderByDescending(p => p.Title.Value)
+                : query.OrderBy(p => p.Title.Value),
             "price" => isDescending
-                ? query.OrderByDescending(p => p.Price.Value)
-                : query.OrderBy(p => p.Price.Value),
+                ? query.OrderByDescending(p => EF.Property<decimal>(p, "Price"))
+                : query.OrderBy(p => EF.Property<decimal>(p, "Price")),
             "updatedat" => isDescending
                 ? query.OrderByDescending(p => p.UpdatedAt)
                 : query.OrderBy(p => p.UpdatedAt),

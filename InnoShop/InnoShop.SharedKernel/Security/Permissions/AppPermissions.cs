@@ -1,4 +1,4 @@
-﻿namespace InnoShop.SharedKernel.Security.Permissions;
+namespace InnoShop.SharedKernel.Security.Permissions;
 
 public static class AppPermissions
 {
@@ -24,5 +24,13 @@ public static class AppPermissions
         public const string Update = "profile:update";
         public const string Activate = "profile:activate";
         public const string Deactivate = "profile:deactivate";
+    }
+
+    public static class Product
+    {
+        public const string Create = "product:create";
+        public const string Read = "product:read";
+        public const string Update = "product:update";
+        public const string Delete = "product:delete";
     }
 }

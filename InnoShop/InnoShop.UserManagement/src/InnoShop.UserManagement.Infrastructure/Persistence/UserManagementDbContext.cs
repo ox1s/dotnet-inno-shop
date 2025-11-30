@@ -24,7 +24,6 @@ public class UserManagementDbContext(
 
     public DbSet<Review> Reviews { get; set; } = null!;
 
-    // public DbSet<Product> Products { get; set; } = null!;
     public DbSet<OutboxIntegrationEvent> OutboxIntegrationEvents { get; set; } = null!;
 
     public async Task CommitChangesAsync(CancellationToken cancellationToken = default)
@@ -54,7 +53,11 @@ public class UserManagementDbContext(
                 if (IsUserWaitingOnline())
                     AddDomainEventsToOfflineProcessingQueue(domainEvents);
                 else
+                {
                     await PublishDomainEventsAsync(domainEvents);
+                    // Save outbox entries in the same transaction
+                    await base.SaveChangesAsync(cancellationToken);
+                }
 
                 return result;
             }
@@ -67,7 +70,11 @@ public class UserManagementDbContext(
                 if (IsUserWaitingOnline())
                     AddDomainEventsToOfflineProcessingQueue(domainEvents);
                 else
+                {
                     await PublishDomainEventsAsync(domainEvents);
+                    // Save outbox entries in the same transaction before committing
+                    await base.SaveChangesAsync(cancellationToken);
+                }
 
                 await transaction.CommitAsync(cancellationToken);
 
@@ -77,7 +84,8 @@ public class UserManagementDbContext(
         catch (Exception ex)
         {
             logger.LogError(ex, "Error during SaveChangesAsync");
-            throw new EventualConsistencyException("Failed to publish domain events");
+            throw new EventualConsistencyException(
+                EventualConsistencyError.From("SaveChangesFailed", "Failed to publish domain events"));
         }
     }
 
@@ -98,16 +106,28 @@ public class UserManagementDbContext(
 
     private void AddDomainEventsToOfflineProcessingQueue(List<IDomainEvent> domainEvents)
     {
-        if (httpContextAccessor.HttpContext is null) return;
+        if (httpContextAccessor.HttpContext is null)
+        {
+            logger.LogWarning("HTTP context is null, cannot queue domain events for offline processing");
+            return;
+        }
 
         if (!httpContextAccessor.HttpContext.Items.TryGetValue(EventualConsistencyMiddleware.DomainEventsKey,
                 out var value)
             || value is not Queue<IDomainEvent> domainEventsQueue)
+        {
             domainEventsQueue = new Queue<IDomainEvent>();
+            logger.LogDebug("Created new domain events queue");
+        }
 
-        foreach (var domainEvent in domainEvents) domainEventsQueue.Enqueue(domainEvent);
+        foreach (var domainEvent in domainEvents)
+        {
+            domainEventsQueue.Enqueue(domainEvent);
+            logger.LogInformation("Queued domain event {EventType} for offline processing", domainEvent.GetType().Name);
+        }
 
         httpContextAccessor.HttpContext.Items[EventualConsistencyMiddleware.DomainEventsKey] = domainEventsQueue;
+        logger.LogInformation("Total {Count} domain events queued for offline processing", domainEventsQueue.Count);
     }
 
     private bool IsUserWaitingOnline()

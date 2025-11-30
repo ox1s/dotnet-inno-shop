@@ -28,8 +28,9 @@ public class CurrentUserProvider(IHttpContextAccessor httpContextAccessor) : ICu
 
     private string GetSingleClaimValue(string claimType)
     {
-        return httpContextAccessor.HttpContext!.User.Claims
-            .Single(claim => claim.Type == claimType)
-            .Value;
+        var claim = httpContextAccessor.HttpContext!.User.Claims
+            .FirstOrDefault(claim => claim.Type == claimType);
+        
+        return claim?.Value ?? throw new InvalidOperationException($"Claim '{claimType}' not found in token.");
     }
 }

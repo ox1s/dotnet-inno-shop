@@ -71,28 +71,40 @@ public class ConsumeIntegrationEventsBackgroundService(
             var body = eventArgs.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
+            logger.LogDebug("Received integration event message: {Message}", message);
+
             var integrationEvent = JsonSerializer.Deserialize<IIntegrationEvent>(message);
 
             if (integrationEvent is null)
             {
-                logger.LogWarning("Received null integration event");
+                logger.LogWarning("Received null integration event. Message content: {Message}", message);
                 if (_channel is not null) await _channel.BasicAckAsync(eventArgs.DeliveryTag, false);
                 return;
             }
 
-            logger.LogInformation("Handling integration event: {EventType}", integrationEvent.GetType().Name);
+            logger.LogInformation("Handling integration event: {EventType}. Event details: {@Event}", 
+                integrationEvent.GetType().Name, integrationEvent);
 
             using var scope = serviceScopeFactory.CreateScope();
             var publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
 
             await publisher.Publish(integrationEvent);
 
+            logger.LogInformation("Successfully processed integration event: {EventType}", integrationEvent.GetType().Name);
             if (_channel is not null) await _channel.BasicAckAsync(eventArgs.DeliveryTag, false);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error handling integration event");
-            if (_channel is not null) await _channel.BasicNackAsync(eventArgs.DeliveryTag, false, false);
+            logger.LogError(e, "Error handling integration event. Message will be requeued. Exception: {ExceptionType}, Message: {ExceptionMessage}", 
+                e.GetType().Name, e.Message);
+            
+            // Requeue the message so it can be retried later
+            // Set requeue=true to put the message back in the queue
+            if (_channel is not null)
+            {
+                await _channel.BasicNackAsync(eventArgs.DeliveryTag, false, requeue: true);
+                logger.LogWarning("Message has been requeued for retry");
+            }
         }
     }
 

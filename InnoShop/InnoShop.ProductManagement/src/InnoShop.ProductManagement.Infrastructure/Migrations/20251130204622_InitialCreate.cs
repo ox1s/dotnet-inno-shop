@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InnoShop.ProductManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCategories : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,7 +74,7 @@ namespace InnoShop.ProductManagement.Infrastructure.Migrations
                     seller_full_name = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false),
                     seller_avatar_url = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
                     seller_rating = table.Column<double>(type: "double precision", precision: 3, scale: 2, nullable: false),
-                    SellerInfo_ReviewCount = table.Column<int>(type: "integer", nullable: false)
+                    seller_review_count = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

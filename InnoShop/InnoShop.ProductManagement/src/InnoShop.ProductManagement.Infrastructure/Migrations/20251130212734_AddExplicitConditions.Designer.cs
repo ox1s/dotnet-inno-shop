@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InnoShop.ProductManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ProductManagementDbContext))]
-    [Migration("20251130163059_ChangeILikeMethod")]
-    partial class ChangeILikeMethod
+    [Migration("20251130212734_AddExplicitConditions")]
+    partial class AddExplicitConditions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,8 @@ namespace InnoShop.ProductManagement.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                        .HasColumnType("character varying(5000)")
+                        .HasColumnName("description");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -75,7 +76,8 @@ namespace InnoShop.ProductManagement.Infrastructure.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("title");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

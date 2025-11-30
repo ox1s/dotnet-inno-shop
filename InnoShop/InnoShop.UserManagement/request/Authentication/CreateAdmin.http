@@ -1,0 +1,23 @@
+
+@host = localhost:7152
+
+### Создание первого админа (без авторизации, если нет админов)
+POST https://{{host}}/authentication/create-admin
+Content-Type: application/json
+
+{
+  "email": "admin@innoshop.com",
+  "password": "Admin123!@#"
+}
+
+### Создание дополнительного админа (требуется авторизация существующего админа)
+### Сначала войдите в систему как админ, чтобы получить токен, затем используйте его ниже
+# @token = your_jwt_token_here
+# POST https://{{host}}/authentication/create-admin
+# Content-Type: application/json
+# Authorization: Bearer {{token}}
+# 
+# {
+#   "email": "admin2@innoshop.com",
+#   "password": "Admin123!@#"
+# }

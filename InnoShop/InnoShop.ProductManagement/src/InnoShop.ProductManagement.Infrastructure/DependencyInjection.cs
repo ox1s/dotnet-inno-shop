@@ -3,7 +3,10 @@ using InnoShop.ProductManagement.Infrastructure.IntegrationEvents.BackgroundServ
 using InnoShop.ProductManagement.Infrastructure.IntegrationEvents.Settings;
 using InnoShop.ProductManagement.Infrastructure.Persistence;
 using InnoShop.ProductManagement.Infrastructure.Persistence.Repositories;
+using InnoShop.ProductManagement.Infrastructure.Security;
+using InnoShop.ProductManagement.Infrastructure.Security.TokenValidation;
 using InnoShop.ProductManagement.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,17 +19,11 @@ public static class DependencyInjection
     {
         services
             .AddHttpContextAccessor()
-            .AddMediatR()
             .AddConfigurations(configuration)
             .AddBackgroundServices()
-            .AddPersistence(configuration);
-
-        return services;
-    }
-
-    public static IServiceCollection AddMediatR(this IServiceCollection services)
-    {
-        services.AddMediatR(options => options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection)));
+            .AddPersistence(configuration)
+            .AddAuthentication()
+            .AddAuthorization();
 
         return services;
     }
@@ -36,6 +33,7 @@ public static class DependencyInjection
         services.AddOptions();
 
         services.Configure<MessageBrokerSettings>(configuration.GetSection(MessageBrokerSettings.Section));
+        services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.Section));
 
         return services;
     }
@@ -64,6 +62,23 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ProductManagementDbContext>());
         services.AddScoped<IProductsRepository, ProductsRepository>();
         services.AddScoped<IUserGateway, UserGateway>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddAuthentication(this IServiceCollection services)
+    {
+        services
+            .ConfigureOptions<JwtBearerTokenValidationConfiguration>()
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();
+
+        return services;
+    }
+
+    private static IServiceCollection AddAuthorization(this IServiceCollection services)
+    {
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
 
         return services;
     }

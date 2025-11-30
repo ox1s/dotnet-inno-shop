@@ -17,11 +17,28 @@ public class JwtTokenGenerator(IOptions<JwtSettings> jwtOptions) : IJwtTokenGene
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Email, user.Email.Value),
             new Claim("id", user.Id.ToString())
         };
+
+        // Add roles
+        foreach (var role in user.Roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role.Name));
+        }
+
+        // Add permissions (flattened from all roles)
+        var permissions = user.Roles
+            .SelectMany(r => r.Permissions)
+            .Select(p => p.Name)
+            .Distinct();
+
+        foreach (var permission in permissions)
+        {
+            claims.Add(new Claim("permissions", permission));
+        }
 
         var token = new JwtSecurityToken(
             _jwtSettings.Issuer,

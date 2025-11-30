@@ -4,7 +4,6 @@ POST https://{{host}}/authentication/login
 Content-Type: application/json
 
 {
-  "email": "test2@test.com",
-  "password": "123Q!231ew123",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWQiOiI0MDI4YzBlYy00NDUxLTQyNzctOWU2ZC0xYzgxNzhmYjg0MmYiLCJleHAiOjE3NjQ1MDUwODAsImlzcyI6Iklubm9TaG9wIiwiYXVkIjoiSW5ub1Nob3AifQ.ZDxbxoLTtZFbOmKITlJbV8kxKThWVN5ERNYoKtjwS4c"
+  "email": "admin@innoshop.com",
+  "password": "Admin123!@#"
 }

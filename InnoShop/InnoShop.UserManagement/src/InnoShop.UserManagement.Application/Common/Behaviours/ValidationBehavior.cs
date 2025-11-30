@@ -9,8 +9,6 @@ public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? valid
     where TRequest : IRequest<TResponse>
     where TResponse : IErrorOr
 {
-    private readonly IValidator<TRequest>? _validator = validator;
-
     // Перехватывает любую команду
     public async Task<TResponse> Handle(
         TRequest request,
@@ -18,11 +16,11 @@ public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? valid
         CancellationToken cancellationToken)
     {
         // Если валидатора няма - идет дальше
-        if (_validator is null) return await next();
+        if (validator is null) return await next(cancellationToken);
         // Если есть, запускает его
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.IsValid) return await next();
+        if (validationResult.IsValid) return await next(cancellationToken);
 
         var errors = validationResult.Errors
             .ConvertAll(error => Error.Validation(

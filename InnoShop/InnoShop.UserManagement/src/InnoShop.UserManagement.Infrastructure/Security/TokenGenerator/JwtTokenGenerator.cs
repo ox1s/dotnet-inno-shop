@@ -23,13 +23,11 @@ public class JwtTokenGenerator(IOptions<JwtSettings> jwtOptions) : IJwtTokenGene
             new Claim("id", user.Id.ToString())
         };
 
-        // Add roles
         foreach (var role in user.Roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role.Name));
         }
 
-        // Add permissions (flattened from all roles)
         var permissions = user.Roles
             .SelectMany(r => r.Permissions)
             .Select(p => p.Name)

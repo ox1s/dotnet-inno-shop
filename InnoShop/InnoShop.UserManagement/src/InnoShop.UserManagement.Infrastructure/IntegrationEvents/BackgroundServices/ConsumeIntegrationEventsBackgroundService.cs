@@ -12,30 +12,20 @@ using RabbitMQ.Client.Events;
 
 namespace InnoShop.UserManagement.Infrastructure.IntegrationEvents.BackgroundServices;
 
-public class ConsumeIntegrationEventsBackgroundService : BackgroundService
+public class ConsumeIntegrationEventsBackgroundService(
+    ILogger<ConsumeIntegrationEventsBackgroundService> logger,
+    IServiceScopeFactory serviceScopeFactory,
+    IOptions<MessageBrokerSettings> settings,
+    IConnection connection)
+    : BackgroundService
 {
-    private readonly IConnection _connection;
-    private readonly ILogger<ConsumeIntegrationEventsBackgroundService> _logger;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly MessageBrokerSettings _settings;
+    private readonly MessageBrokerSettings _settings = settings.Value;
 
     private IChannel? _channel;
 
-    public ConsumeIntegrationEventsBackgroundService(
-        ILogger<ConsumeIntegrationEventsBackgroundService> logger,
-        IServiceScopeFactory serviceScopeFactory,
-        IOptions<MessageBrokerSettings> settings,
-        IConnection connection)
-    {
-        _logger = logger;
-        _serviceScopeFactory = serviceScopeFactory;
-        _settings = settings.Value;
-        _connection = connection;
-    }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
+        _channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
         await _channel.ExchangeDeclareAsync(
             _settings.ExchangeName,
@@ -64,14 +54,6 @@ public class ConsumeIntegrationEventsBackgroundService : BackgroundService
             false,
             consumer,
             stoppingToken);
-
-        try
-        {
-            await Task.Delay(Timeout.Infinite, stoppingToken);
-        }
-        catch (OperationCanceledException)
-        {
-        }
     }
 
     private async Task HandleMessageAsync(object sender, BasicDeliverEventArgs eventArgs)
@@ -83,32 +65,16 @@ public class ConsumeIntegrationEventsBackgroundService : BackgroundService
 
             var integrationEvent = JsonSerializer.Deserialize<IIntegrationEvent>(message);
 
-            if (integrationEvent is null)
-            {
-                _logger.LogWarning("Received null integration event");
-                if (_channel is not null) await _channel.BasicAckAsync(eventArgs.DeliveryTag, false);
-                return;
-            }
-
-            _logger.LogInformation("Handling integration event: {EventType}", integrationEvent.GetType().Name);
-
-            using var scope = _serviceScopeFactory.CreateScope();
+            using var scope = serviceScopeFactory.CreateScope();
             var publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
 
             await publisher.Publish(integrationEvent);
 
-            if (_channel is not null) await _channel.BasicAckAsync(eventArgs.DeliveryTag, false);
+            if (_channel != null) await _channel.BasicAckAsync(eventArgs.DeliveryTag, false);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error handling integration event");
-            if (_channel is not null) await _channel.BasicNackAsync(eventArgs.DeliveryTag, false, false);
+            logger.LogError(e, "Error handling integration event");
         }
-    }
-
-    public override void Dispose()
-    {
-        _channel?.Dispose();
-        base.Dispose();
     }
 }

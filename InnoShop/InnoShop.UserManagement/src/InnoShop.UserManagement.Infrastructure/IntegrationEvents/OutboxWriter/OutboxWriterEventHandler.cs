@@ -8,24 +8,15 @@ using Microsoft.Extensions.Logging;
 
 namespace InnoShop.UserManagement.Infrastructure.IntegrationEvents.OutboxWriter;
 
-public class OutboxWriterEventHandler
+public class OutboxWriterEventHandler(
+    UserManagementDbContext dbContext,
+    ILogger<OutboxWriterEventHandler> logger)
     : INotificationHandler<UserProfileDeactivatedEvent>,
         INotificationHandler<UserProfileActivatedEvent>,
         INotificationHandler<UserRegisteredEvent>,
         INotificationHandler<UserProfileUpdatedEvent>,
         INotificationHandler<PasswordResetRequestedEvent>
 {
-    private readonly UserManagementDbContext _dbContext;
-    private readonly ILogger<OutboxWriterEventHandler> _logger;
-
-    public OutboxWriterEventHandler(
-        UserManagementDbContext dbContext,
-        ILogger<OutboxWriterEventHandler> logger)
-    {
-        _dbContext = dbContext;
-        _logger = logger;
-    }
-
     public async Task Handle(PasswordResetRequestedEvent notification, CancellationToken cancellationToken)
     {
         var integrationEvent = new PasswordResetRequestedIntegrationEvent(
@@ -46,14 +37,14 @@ public class OutboxWriterEventHandler
 
     public async Task Handle(UserProfileDeactivatedEvent notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Writing UserProfileDeactivatedIntegrationEvent to outbox for user {UserId}", notification.UserId);
+        logger.LogInformation("Writing UserProfileDeactivatedIntegrationEvent to outbox for user {UserId}", notification.UserId);
         
         var integrationEvent = new UserProfileDeactivatedIntegrationEvent(
             notification.UserId);
 
         await AddOutboxIntegrationEventAsync(integrationEvent, cancellationToken);
         
-        _logger.LogInformation("UserProfileDeactivatedIntegrationEvent written to outbox for user {UserId}", notification.UserId);
+        logger.LogInformation("UserProfileDeactivatedIntegrationEvent written to outbox for user {UserId}", notification.UserId);
     }
 
     public async Task Handle(UserProfileUpdatedEvent notification, CancellationToken cancellationToken)
@@ -83,15 +74,11 @@ public class OutboxWriterEventHandler
     private async Task AddOutboxIntegrationEventAsync(IIntegrationEvent integrationEvent,
         CancellationToken cancellationToken)
     {
-        var outboxEvent = new OutboxIntegrationEvent(
-            integrationEvent.GetType().Name,
-            JsonSerializer.Serialize(integrationEvent));
-        
-        await _dbContext.OutboxIntegrationEvents.AddAsync(outboxEvent, cancellationToken);
-        
-        _logger.LogInformation("Added integration event {EventType} to outbox (EventName: {EventName}). ChangeTracker state: {State}", 
-            integrationEvent.GetType().Name, 
-            outboxEvent.EventName,
-            _dbContext.Entry(outboxEvent).State);
+        await dbContext.OutboxIntegrationEvents.AddAsync(new OutboxIntegrationEvent(
+            EventName: integrationEvent.GetType().Name,
+            EventContent: JsonSerializer.Serialize(integrationEvent)),
+            cancellationToken);
+
+        await dbContext.CommitChangesAsync(cancellationToken);
     }
 }

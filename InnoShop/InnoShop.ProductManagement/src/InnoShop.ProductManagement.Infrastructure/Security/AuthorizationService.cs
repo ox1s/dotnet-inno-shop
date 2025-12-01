@@ -18,16 +18,10 @@ public class AuthorizationService(
         var cachedPermissions = await cache.GetStringAsync(cacheKey);
         if (cachedPermissions is not null) return JsonSerializer.Deserialize<HashSet<string>>(cachedPermissions)!;
 
-        // Get permissions from JWT token claims (they're already in the token)
-        // Note: This assumes we're getting permissions for the current user
-        // For other users, we'd need to call UserManagement service
         var currentUser = currentUserProvider.GetCurrentUser();
-        
-        // Only return permissions if the requested user is the current user
+
         if (currentUser.Id != userId)
         {
-            // For now, return empty set if requesting for different user
-            // In a real scenario, you'd call UserManagement API to get permissions
             return new HashSet<string>();
         }
 
@@ -48,16 +42,10 @@ public class AuthorizationService(
         var cachedRoles = await cache.GetStringAsync(cacheKey);
         if (cachedRoles is not null) return JsonSerializer.Deserialize<HashSet<string>>(cachedRoles)!;
 
-        // Get roles from JWT token claims (they're already in the token)
-        // Note: This assumes we're getting roles for the current user
-        // For other users, we'd need to call UserManagement service
         var currentUser = currentUserProvider.GetCurrentUser();
-        
-        // Only return roles if the requested user is the current user
+
         if (currentUser.Id != userId)
         {
-            // For now, return empty set if requesting for different user
-            // In a real scenario, you'd call UserManagement API to get roles
             return new HashSet<string>();
         }
 
@@ -87,9 +75,6 @@ public class AuthorizationService(
 
         if (requiredRoles.Any() && requiredRoles.Except(userRoles).Any())
             return Error.Forbidden(description: "User is missing required roles.");
-
-        // Policies can be implemented later if needed
-        // For now, we'll skip policy enforcement
 
         return Result.Success;
     }

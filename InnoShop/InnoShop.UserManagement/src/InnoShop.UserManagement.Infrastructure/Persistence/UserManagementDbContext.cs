@@ -1,7 +1,5 @@
-using System.Reflection;
 using InnoShop.SharedKernel.Common;
 using InnoShop.UserManagement.Application.Common.Interfaces;
-using InnoShop.UserManagement.Domain.Common.EventualConsistency;
 using InnoShop.UserManagement.Domain.ReviewAggregate;
 using InnoShop.UserManagement.Domain.UserAggregate;
 using InnoShop.UserManagement.Infrastructure.IntegrationEvents;
@@ -10,14 +8,14 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace InnoShop.UserManagement.Infrastructure.Persistence;
 
 public class UserManagementDbContext(
     DbContextOptions<UserManagementDbContext> options,
     IHttpContextAccessor httpContextAccessor,
-    IPublisher publisher,
-    ILogger<UserManagementDbContext> logger)
+    IPublisher publisher)
     : DbContext(options), IUnitOfWork
 {
     public DbSet<User> Users { get; set; } = null!;
@@ -31,7 +29,6 @@ public class UserManagementDbContext(
         await base.SaveChangesAsync(cancellationToken);
     }
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
@@ -40,98 +37,41 @@ public class UserManagementDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        try
+        var domainEvents = ChangeTracker.Entries<AggregateRoot>()
+            .Select(entry => entry.Entity.PopDomainEvents())
+            .SelectMany(x => x)
+            .ToList();
+
+        if (IsUserWaitingOnline())
         {
-            var domainEvents = ChangeTracker.Entries<AggregateRoot>()
-                .SelectMany(entry => entry.Entity.PopDomainEvents())
-                .ToList();
-
-            if (Database.CurrentTransaction != null)
-            {
-                var result = await base.SaveChangesAsync(cancellationToken);
-
-                if (IsUserWaitingOnline())
-                    AddDomainEventsToOfflineProcessingQueue(domainEvents);
-                else
-                {
-                    await PublishDomainEventsAsync(domainEvents);
-                    // Save outbox entries in the same transaction
-                    await base.SaveChangesAsync(cancellationToken);
-                }
-
-                return result;
-            }
-            else
-            {
-                await using var transaction = await Database.BeginTransactionAsync(cancellationToken);
-
-                var result = await base.SaveChangesAsync(cancellationToken);
-
-                if (IsUserWaitingOnline())
-                    AddDomainEventsToOfflineProcessingQueue(domainEvents);
-                else
-                {
-                    await PublishDomainEventsAsync(domainEvents);
-                    // Save outbox entries in the same transaction before committing
-                    await base.SaveChangesAsync(cancellationToken);
-                }
-
-                await transaction.CommitAsync(cancellationToken);
-
-                return result;
-            }
+            AddDomainEventsToOfflineProcessingQueue(domainEvents);
+            return await base.SaveChangesAsync(cancellationToken);
         }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error during SaveChangesAsync");
-            throw new EventualConsistencyException(
-                EventualConsistencyError.From("SaveChangesFailed", "Failed to publish domain events"));
-        }
+
+        await PublishDomainEvents(domainEvents);
+        return await base.SaveChangesAsync(cancellationToken);
     }
 
-    private async Task PublishDomainEventsAsync(IEnumerable<IDomainEvent> domainEvents)
+    private bool IsUserWaitingOnline() => httpContextAccessor.HttpContext is not null;
+
+    private async Task PublishDomainEvents(List<IDomainEvent> domainEvents)
     {
         foreach (var domainEvent in domainEvents)
-            try
-            {
-                await publisher.Publish(domainEvent);
-                logger.LogInformation("Published domain event: {EventType}", domainEvent.GetType().Name);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Failed to publish domain event: {EventType}", domainEvent.GetType().Name);
-                throw;
-            }
+        {
+            await publisher.Publish(domainEvent);
+        }
     }
 
     private void AddDomainEventsToOfflineProcessingQueue(List<IDomainEvent> domainEvents)
     {
-        if (httpContextAccessor.HttpContext is null)
-        {
-            logger.LogWarning("HTTP context is null, cannot queue domain events for offline processing");
-            return;
-        }
+        var domainEventsQueue =
+            httpContextAccessor.HttpContext!.Items.TryGetValue(EventualConsistencyMiddleware.DomainEventsKey,
+                out var value) &&
+            value is Queue<IDomainEvent> existingDomainEvents
+                ? existingDomainEvents
+                : new();
 
-        if (!httpContextAccessor.HttpContext.Items.TryGetValue(EventualConsistencyMiddleware.DomainEventsKey,
-                out var value)
-            || value is not Queue<IDomainEvent> domainEventsQueue)
-        {
-            domainEventsQueue = new Queue<IDomainEvent>();
-            logger.LogDebug("Created new domain events queue");
-        }
-
-        foreach (var domainEvent in domainEvents)
-        {
-            domainEventsQueue.Enqueue(domainEvent);
-            logger.LogInformation("Queued domain event {EventType} for offline processing", domainEvent.GetType().Name);
-        }
-
+        domainEvents.ForEach(domainEventsQueue.Enqueue);
         httpContextAccessor.HttpContext.Items[EventualConsistencyMiddleware.DomainEventsKey] = domainEventsQueue;
-        logger.LogInformation("Total {Count} domain events queued for offline processing", domainEventsQueue.Count);
-    }
-
-    private bool IsUserWaitingOnline()
-    {
-        return httpContextAccessor.HttpContext is not null;
     }
 }

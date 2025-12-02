@@ -1,28 +1,28 @@
 <Project Sdk="Aspire.AppHost.Sdk/13.0.0">
-    <!-- <Sdk Name="Aspire.AppHost.Sdk" /> -->
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <UserSecretsId>b7edbfe4-9e37-42b8-99a2-f3a0bc37cb2f</UserSecretsId>
-    </PropertyGroup>
-    <ItemGroup>
-        <PackageReference Include="Aspire.Hosting.Docker"/>
-        <PackageReference Include="Aspire.Hosting.RabbitMQ"/>
-        <PackageReference Include="Aspire.Hosting.Redis"/>
-        <PackageReference Include="Aspire.Hosting.PostgreSQL"/>
-        <PackageReference Include="Aspire.RabbitMQ.Client"/>
-        <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit"/>
-        <PackageReference Include="CommunityToolkit.Aspire.Hosting.Minio"/>
-        <PackageReference Include="Npgsql.OpenTelemetry"/>
-        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol"/>
-        <PackageReference Include="OpenTelemetry.Extensions.Hosting"/>
-        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore"/>
-        <PackageReference Include="OpenTelemetry.Instrumentation.Http"/>
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\InnoShop.UserManagement\src\InnoShop.UserManagement.Api\InnoShop.UserManagement.Api.csproj"/>
-        <ProjectReference Include="..\InnoShop.ProductManagement\src\InnoShop.ProductManagement.Api\InnoShop.ProductManagement.Api.csproj"/>
-    </ItemGroup>
+  <!-- <Sdk Name="Aspire.AppHost.Sdk" /> -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>b7edbfe4-9e37-42b8-99a2-f3a0bc37cb2f</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Docker" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
+    <PackageReference Include="Aspire.Hosting.Redis" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" />
+    <PackageReference Include="Aspire.RabbitMQ.Client" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Minio" />
+    <PackageReference Include="Npgsql.OpenTelemetry" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InnoShop.UserManagement\src\InnoShop.UserManagement.Api\InnoShop.UserManagement.Api.csproj" />
+    <ProjectReference Include="..\InnoShop.ProductManagement\src\InnoShop.ProductManagement.Api\InnoShop.ProductManagement.Api.csproj" />
+  </ItemGroup>
 </Project>

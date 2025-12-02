@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    builder.AddServiceDefaults();
+
     builder.AddRedisDistributedCache("cache", settings =>
     {
         settings.DisableTracing = false;
@@ -57,6 +59,8 @@ var app = builder.Build();
     {
         dbContext.Database.EnsureCreated();
     }
+
+    app.MapDefaultEndpoints();
 
     app.UseExceptionHandler();
 

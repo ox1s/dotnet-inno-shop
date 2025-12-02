@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <ItemGroup>
-        <ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj"/>
-        <ProjectReference Include="..\InnoShop.UserManagement.Contracts\InnoShop.UserManagement.Contracts.csproj"/>
-        <ProjectReference Include="..\InnoShop.UserManagement.Domain\InnoShop.UserManagement.Domain.csproj"/>
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="FluentValidation"/>
-        <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
-        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions"/>
-    </ItemGroup>
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\InnoShop.SharedKernel\InnoShop.SharedKernel.csproj" />
+    <ProjectReference Include="..\InnoShop.UserManagement.Contracts\InnoShop.UserManagement.Contracts.csproj" />
+    <ProjectReference Include="..\InnoShop.UserManagement.Domain\InnoShop.UserManagement.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 </Project>

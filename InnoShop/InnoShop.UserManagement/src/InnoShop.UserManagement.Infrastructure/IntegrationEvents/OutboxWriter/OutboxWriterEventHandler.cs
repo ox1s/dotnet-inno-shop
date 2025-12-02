@@ -38,12 +38,12 @@ public class OutboxWriterEventHandler(
     public async Task Handle(UserProfileDeactivatedEvent notification, CancellationToken cancellationToken)
     {
         logger.LogInformation("Writing UserProfileDeactivatedIntegrationEvent to outbox for user {UserId}", notification.UserId);
-        
+
         var integrationEvent = new UserProfileDeactivatedIntegrationEvent(
             notification.UserId);
 
         await AddOutboxIntegrationEventAsync(integrationEvent, cancellationToken);
-        
+
         logger.LogInformation("UserProfileDeactivatedIntegrationEvent written to outbox for user {UserId}", notification.UserId);
     }
 

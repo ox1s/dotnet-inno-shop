@@ -18,7 +18,7 @@ public class UserProfileDeactivatedEventHandler(
             logger.LogInformation("Handling UserProfileDeactivatedIntegrationEvent for user {UserId}", notification.UserId);
 
             var products = await productsRepository.GetBySellerIdAsync(notification.UserId, cancellationToken, true);
-            
+
             logger.LogInformation("Found {ProductCount} products for seller {UserId}", products.Count, notification.UserId);
 
             if (products.Count == 0)
@@ -33,25 +33,25 @@ public class UserProfileDeactivatedEventHandler(
                 {
                     product.Hide();
                     await productsRepository.UpdateAsync(product, cancellationToken);
-                    logger.LogInformation("Hid product {ProductId} (Name: {ProductName}) for seller {UserId}", 
+                    logger.LogInformation("Hid product {ProductId} (Name: {ProductName}) for seller {UserId}",
                         product.Id, product.Title.Value, notification.UserId);
                 }
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Error hiding product {ProductId} for seller {UserId}", product.Id, notification.UserId);
-                    throw; // Re-throw to trigger transaction rollback
+                    throw;
                 }
             }
 
             await unitOfWork.CommitChangesAsync(cancellationToken);
-            
+
             logger.LogInformation("Successfully hid {ProductCount} products for seller {UserId}", products.Count, notification.UserId);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to handle UserProfileDeactivatedIntegrationEvent for user {UserId}. Error: {Error}", 
+            logger.LogError(ex, "Failed to handle UserProfileDeactivatedIntegrationEvent for user {UserId}. Error: {Error}",
                 notification.UserId, ex.Message);
-            throw; // Re-throw so the consumer can requeue the message
+            throw; 
         }
     }
 }

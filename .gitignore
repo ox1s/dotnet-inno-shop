@@ -66,6 +66,7 @@ API_STRUCTURE_AND_ARCHITECTURE.md
 IMPLEMENTATION_PROMPT.md
 IMPLEMENTATION_PROMPT_SHORT.md
 PROJECT_REVIEW_ISSUES.md
+PROJECT_ANALYSIS.md
 
 # Configuration files with secrets
 **/appsettings.Development.json

@@ -27,7 +27,7 @@ public class AuthenticationController(ISender mediator) : ApiController
         var authResult = await mediator.Send(command);
 
         return authResult.Match(
-            authResult => base.Ok(MapToAuthResponse(authResult)),
+            authenticationResult => base.Ok(MapToAuthResponse(authenticationResult)),
             Problem);
     }
 
@@ -43,7 +43,7 @@ public class AuthenticationController(ISender mediator) : ApiController
                 statusCode: StatusCodes.Status401Unauthorized);
 
         return authResult.Match(
-            authResult => Ok(MapToAuthResponse(authResult)),
+            authenticationResult => Ok(MapToAuthResponse(authenticationResult)),
             Problem);
     }
 
@@ -87,7 +87,7 @@ public class AuthenticationController(ISender mediator) : ApiController
         var authResult = await mediator.Send(command);
 
         return authResult.Match(
-            authResult => Ok(MapToAuthResponse(authResult)),
+            authenticationResult => Ok(MapToAuthResponse(authenticationResult)),
             Problem);
     }
 

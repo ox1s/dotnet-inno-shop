@@ -35,43 +35,22 @@ public class ProductManagementDbContext(
         base.OnModelCreating(modelBuilder);
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+  public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var domainEvents = ChangeTracker.Entries<AggregateRoot>()
-                .SelectMany(entry => entry.Entity.PopDomainEvents())
-                .ToList();
+        var domainEvents = ChangeTracker
+            .Entries<AggregateRoot>()
+            .SelectMany(e => e.Entity.PopDomainEvents())
+            .ToList();
 
-            await using var transaction = await Database.BeginTransactionAsync(cancellationToken);
-
-            var result = await base.SaveChangesAsync(cancellationToken);
-
-            if (domainEvents.Any()) await PublishDomainEventsAsync(domainEvents);
-
-            await transaction.CommitAsync(cancellationToken);
-
-            return result;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error during SaveChangesAsync");
-            throw;
-        }
-    }
-
-    private async Task PublishDomainEventsAsync(IEnumerable<IDomainEvent> domainEvents)
-    {
         foreach (var domainEvent in domainEvents)
-            try
-            {
-                await publisher.Publish(domainEvent);
-                logger.LogInformation("Published domain event: {EventType}", domainEvent.GetType().Name);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Failed to publish domain event: {EventType}", domainEvent.GetType().Name);
-                throw;
-            }
+        {
+            await publisher.Publish(domainEvent, cancellationToken);
+        }
+
+        logger.LogInformation("Publishing domain events");
+
+        int result = await base.SaveChangesAsync(cancellationToken);
+
+        return result;
     }
 }

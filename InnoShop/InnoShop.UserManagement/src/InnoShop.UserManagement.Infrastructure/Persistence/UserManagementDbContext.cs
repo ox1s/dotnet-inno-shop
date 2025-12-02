@@ -15,7 +15,8 @@ namespace InnoShop.UserManagement.Infrastructure.Persistence;
 public class UserManagementDbContext(
     DbContextOptions<UserManagementDbContext> options,
     IHttpContextAccessor httpContextAccessor,
-    IPublisher publisher)
+    IPublisher publisher,
+    ILogger<UserManagementDbContext> logger)
     : DbContext(options), IUnitOfWork
 {
     public DbSet<User> Users { get; set; } = null!;

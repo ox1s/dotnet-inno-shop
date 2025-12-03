@@ -28,22 +28,23 @@ public class ConsumeIntegrationEventsBackgroundService(
         _channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
         await _channel.ExchangeDeclareAsync(
-            _settings.ExchangeName,
-            ExchangeType.Fanout,
-            true,
+            exchange: _settings.ExchangeName,
+            type: ExchangeType.Fanout,
+            durable: true,
+            autoDelete: false,
             cancellationToken: stoppingToken);
 
         await _channel.QueueDeclareAsync(
-            _settings.QueueName,
-            true,
-            false,
-            false,
+            queue:_settings.QueueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
             cancellationToken: stoppingToken);
 
         await _channel.QueueBindAsync(
-            _settings.QueueName,
-            _settings.ExchangeName,
-            string.Empty,
+            queue:_settings.QueueName,
+            exchange:_settings.ExchangeName,
+            routingKey: string.Empty,
             cancellationToken: stoppingToken);
 
         var consumer = new AsyncEventingBasicConsumer(_channel);
@@ -82,7 +83,7 @@ public class ConsumeIntegrationEventsBackgroundService(
                 return;
             }
 
-            logger.LogInformation("Handling integration event: {EventType}. Event details: {@Event}", 
+            logger.LogInformation("Handling integration event: {EventType}. Event details: {@Event}",
                 integrationEvent.GetType().Name, integrationEvent);
 
             using var scope = serviceScopeFactory.CreateScope();
@@ -95,11 +96,9 @@ public class ConsumeIntegrationEventsBackgroundService(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error handling integration event. Message will be requeued. Exception: {ExceptionType}, Message: {ExceptionMessage}", 
+            logger.LogError(e, "Error handling integration event. Message will be requeued. Exception: {ExceptionType}, Message: {ExceptionMessage}",
                 e.GetType().Name, e.Message);
-            
-            // Requeue the message so it can be retried later
-            // Set requeue=true to put the message back in the queue
+
             if (_channel is not null)
             {
                 await _channel.BasicNackAsync(eventArgs.DeliveryTag, false, requeue: true);

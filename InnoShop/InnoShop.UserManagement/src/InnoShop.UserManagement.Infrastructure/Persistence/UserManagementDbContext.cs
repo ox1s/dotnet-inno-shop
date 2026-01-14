@@ -35,16 +35,15 @@ public class UserManagementDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+
+        var domainEvents = ChangeTracker.Entries<AggregateRoot>()
+            .SelectMany(entry => entry.Entity.PopDomainEvents())
+            .ToList();
+
+        await using var transaction = await Database.BeginTransactionAsync(cancellationToken);
+
         try
         {
-            var domainEvents = ChangeTracker.Entries<AggregateRoot>()
-                .SelectMany(entry => entry.Entity.PopDomainEvents())
-                .ToList();
-
-            await using var transaction = await Database.BeginTransactionAsync(cancellationToken);
-
-            var result = await base.SaveChangesAsync(cancellationToken);
-
             if (IsUserWaitingOnline())
             {
                 AddDomainEventsToOfflineProcessingQueue(domainEvents);
@@ -53,6 +52,8 @@ public class UserManagementDbContext(
             {
                 await PublishDomainEventsAsync(domainEvents);
             }
+
+            var result = await base.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
 

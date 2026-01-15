@@ -1,7 +1,6 @@
-#@host = localhost:7152
+@host = localhost:7152
 
-POST http://localhost:5095/authentication/login
-#POST https://{{host}}/authentication/login
+POST https://{{host}}/authentication/login
 Content-Type: application/json
 
 {

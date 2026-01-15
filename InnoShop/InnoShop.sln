@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoShop.ServiceDefaults", "InnoShop.ServiceDefaults\InnoShop.ServiceDefaults.csproj", "{1792CA22-2EE4-45A7-98E5-6993813B75CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InnoShop.ProductManagement", "InnoShop.ProductManagement", "{507B8A91-E4F7-728F-AB7D-FD2B6FCA00AD}"
+	ProjectSection(SolutionItems) = preProject
+		InnoShop.ProductManagement\request\Products\Products.http = InnoShop.ProductManagement\request\Products\Products.http
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C3763A35-48D5-FC42-A1D2-F95B9D6D048D}"
 EndProject
@@ -22,6 +25,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoShop.SharedKernel", "InnoShop.SharedKernel\InnoShop.SharedKernel.csproj", "{01D86ABF-53BF-4250-98C3-A56700844E6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InnoShop.UserManagement", "InnoShop.UserManagement", "{CEBFBBCA-5594-058F-1B4F-7859BC665445}"
+	ProjectSection(SolutionItems) = preProject
+		InnoShop.UserManagement\request\Authentication\ForgotPassword.http = InnoShop.UserManagement\request\Authentication\ForgotPassword.http
+		InnoShop.UserManagement\request\Authentication\CreateAdmin.http = InnoShop.UserManagement\request\Authentication\CreateAdmin.http
+		InnoShop.UserManagement\request\Authentication\Login.http = InnoShop.UserManagement\request\Authentication\Login.http
+		InnoShop.UserManagement\request\Authentication\Register.http = InnoShop.UserManagement\request\Authentication\Register.http
+		InnoShop.UserManagement\request\Authentication\VerifyEmail.http = InnoShop.UserManagement\request\Authentication\VerifyEmail.http
+		InnoShop.UserManagement\request\Reviews\Reviews.http = InnoShop.UserManagement\request\Reviews\Reviews.http
+		InnoShop.UserManagement\request\Users\Users.http = InnoShop.UserManagement\request\Users\Users.http
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{36590625-CBD7-341E-9646-3E4D171B6B53}"
 EndProject

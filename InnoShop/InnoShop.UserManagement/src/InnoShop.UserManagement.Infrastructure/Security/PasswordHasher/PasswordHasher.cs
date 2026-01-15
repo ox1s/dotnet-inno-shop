@@ -22,7 +22,8 @@ public partial class PasswordHasher : IPasswordHasher
         return BCrypt.Net.BCrypt.EnhancedVerify(password, hash);
     }
 
-    // https://stackoverflow.com/a/34715674/10091553
-    [GeneratedRegex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", RegexOptions.Compiled)]
-    private static partial Regex StrongPasswordRegex();
+    private static Regex StrongPasswordRegex()
+    {
+        return new Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", RegexOptions.Compiled);
+    }
 }

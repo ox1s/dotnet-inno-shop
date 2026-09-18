@@ -8,6 +8,7 @@
     <UserSecretsId>b7edbfe4-9e37-42b8-99a2-f3a0bc37cb2f</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Azure.Storage" />
     <PackageReference Include="Aspire.Hosting.Docker" />
     <PackageReference Include="Aspire.Hosting.RabbitMQ" />
     <PackageReference Include="Aspire.Hosting.Redis" />

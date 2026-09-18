@@ -5,8 +5,8 @@ var builder = DistributedApplication.CreateBuilder(args);
 var rabbit = builder.AddRabbitMQ("messaging");
 
 var cache = builder.AddRedis("cache")
-                   .WithDataVolume()
-                   .WithRedisCommander();
+    .WithDataVolume()
+    .WithRedisCommander();
 
 var sql = builder.AddSqlServer("sql")
     .WithHostPort(1433)
@@ -16,9 +16,9 @@ var sql = builder.AddSqlServer("sql")
 var usersDatabase = sql.AddDatabase("innoshop-users");
 var productsDatabase = sql.AddDatabase("innoshop-products");
 
-var minio = builder.AddMinioContainer("minio")
-    .WithDataVolume()
-    .WithLifetime(ContainerLifetime.Persistent);
+var userAvatarsBlob = builder.AddAzureStorage("storage")
+    .RunAsEmulator(azurite => { azurite.WithLifetime(ContainerLifetime.Persistent); })
+    .AddBlobContainer("user-avatars");
 
 var mailpit = builder.AddMailPit("mailpit");
 
@@ -29,18 +29,14 @@ var productsApi = builder.AddProject<Projects.InnoShop_ProductManagement_Api>("p
 
 builder.AddProject<Projects.InnoShop_UserManagement_Api>("users-api")
     .WithExternalHttpEndpoints()
-
     .WithReference(rabbit)
-    .WithReference(minio)
+    .WithReference(userAvatarsBlob)
     .WithReference(cache)
     .WithReference(mailpit)
-
     .WithReference(usersDatabase)
     .WaitFor(usersDatabase)
-
     .WithReference(productsApi)
-     .WaitFor(productsDatabase)
-
+    .WaitFor(productsDatabase)
     .WithEnvironment("AppUrl", "https://localhost:7152")
     .WithEnvironment("WebAppUrl", "http://localhost:5173");
 

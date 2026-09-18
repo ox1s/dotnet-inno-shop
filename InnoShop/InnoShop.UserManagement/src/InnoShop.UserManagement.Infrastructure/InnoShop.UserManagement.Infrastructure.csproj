@@ -5,6 +5,7 @@
   </ItemGroup>
   <ItemGroup>
 	<!-- <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" /> -->
+	<PackageReference Include="Aspire.Azure.Storage.Blobs" />
 	<PackageReference Include="Aspire.RabbitMQ.Client" />
 	<PackageReference Include="BCrypt.Net-Next" />
 	<PackageReference Include="FluentEmail.Core" />

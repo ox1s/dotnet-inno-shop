@@ -26,7 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.AddSqlServerClient("innoshop-users");
     builder.AddRabbitMQClient("messaging");
-    builder.AddMinioClient("minio");
+    builder.AddAzureBlobServiceClient(connectionName: "user-avatars");
 
     builder.Services
         .AddApplication()

@@ -27,7 +27,7 @@ var productsApi = builder.AddProject<Projects.InnoShop_ProductManagement_Api>("p
     .WithReference(productsDatabase)
     .WaitFor(productsDatabase);
 
-builder.AddProject<Projects.InnoShop_UserManagement_Api>("users-api")
+var usersApi = builder.AddProject<Projects.InnoShop_UserManagement_Api>("users-api")
     .WithExternalHttpEndpoints()
     .WithReference(rabbit)
     .WithReference(userAvatarsBlob)
@@ -40,5 +40,8 @@ builder.AddProject<Projects.InnoShop_UserManagement_Api>("users-api")
     .WithEnvironment("AppUrl", "https://localhost:7152")
     .WithEnvironment("WebAppUrl", "http://localhost:5173");
 
+var clientApp = builder.AddViteApp("client", "../InnoShop.Client/inno-shop-client")
+    .WithNpm()
+    .WithReference(usersApi);
 
 builder.Build().Run();
